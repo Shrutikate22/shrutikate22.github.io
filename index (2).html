@@ -1,0 +1,1453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shruti Sameer Kate - Learning & Development & Research</title>
+    
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNK6WB7J2J"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-LNK6WB7J2J');
+    </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #2d3436;
+            background: #fafbfc;
+            scroll-behavior: smooth;
+        }
+
+        /* HEADER */
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #2563EB, #3B82F6);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* HERO SECTION */
+        .hero {
+            background: linear-gradient(135deg, #0F3460 0%, #1E40AF 50%, #2563EB 100%);
+            color: white;
+            padding: 5rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) translateX(0); }
+            50% { transform: translateY(-30px) translateX(-30px); }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            animation: slideInLeft 0.8s ease-out;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            color: white;
+            animation: fadeInUp 0.8s ease-out 0.1s both;
+        }
+
+        .hero-text h1 .highlight {
+            font-style: italic;
+            color: #fef3c7;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.95);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        .hero-subtitle:nth-of-type(2) {
+            color: #fef3c7;
+            margin-top: 1rem;
+        }
+
+        .skills-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 2.5rem;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        .skill-pill {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.6rem 1.3rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .skill-pill:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+        }
+
+        .btn {
+            padding: 1rem 2.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #1E40AF;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .hero-image {
+            position: relative;
+            animation: fadeInRight 0.8s ease-out;
+        }
+
+        @keyframes fadeInRight {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .image-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+            aspect-ratio: 1;
+        }
+
+        .image-wrapper::before {
+            content: '';
+            position: absolute;
+            inset: -20px;
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #e0f2fe 100%);
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+            clip-path: circle(50%);
+        }
+
+        .image-wrapper img:hover {
+            transform: scale(1.02);
+        }
+
+        .status-badge {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: white;
+            color: #2563EB;
+            padding: 0.7rem 1.3rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+
+        /* SKILLS TICKER - AT TOP */
+        .skills-ticker {
+            background: linear-gradient(90deg, #1E40AF 0%, #2563EB 100%);
+            padding: 1.2rem 0;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 3px solid #fef3c7;
+            margin: 0;
+        }
+
+        .ticker-label {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0F3460;
+            color: white;
+            padding: 0.4rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 10;
+            white-space: nowrap;
+            letter-spacing: 1px;
+        }
+
+        .ticker-content {
+            display: flex;
+            gap: 2.5rem;
+            padding: 0 2rem 0 200px;
+            animation: scroll 35s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-content:hover {
+            animation-play-state: paused;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        .ticker-item-icon {
+            font-size: 1.4rem;
+        }
+
+        @keyframes scroll {
+            0% {
+                transform: translateX(0);
+            }
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        /* SECTIONS - FULL WIDTH BACKGROUNDS */
+        section {
+            position: relative;
+        }
+
+        section::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+
+        section > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-content {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #1a202c;
+        }
+
+        /* ABOUT SECTION */
+        .about {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border-top: 5px solid #2563EB;
+        }
+
+        .about h2 {
+            color: #1E40AF;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            color: white;
+            transition: all 0.3s;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .about-text p:nth-child(1) {
+            background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+        }
+
+        .about-text p:nth-child(2) {
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+        }
+
+        .about-text p:nth-child(3) {
+            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+        }
+
+        .about-text p:hover {
+            color: white;
+            padding-left: 1.8rem;
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.2);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #2563EB;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.2);
+            border-left-color: #1E40AF;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2563EB;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        /* TIMELINE SECTION */
+        .timeline {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-top: 5px solid #3B82F6;
+        }
+
+        .timeline h2 {
+            color: #1E40AF;
+        }
+
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            animation: fadeInUp 0.8s ease-out both;
+        }
+
+        .timeline-item:nth-child(1) { animation-delay: 0.1s; }
+        .timeline-item:nth-child(2) { animation-delay: 0.2s; }
+        .timeline-item:nth-child(3) { animation-delay: 0.3s; }
+        .timeline-item:nth-child(4) { animation-delay: 0.4s; }
+        .timeline-item:nth-child(5) { animation-delay: 0.5s; }
+        .timeline-item:nth-child(6) { animation-delay: 0.6s; }
+        .timeline-item:nth-child(7) { animation-delay: 0.7s; }
+
+        .timeline-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3B82F6;
+            flex: 1;
+            transition: all 0.3s;
+        }
+
+        .timeline-content:hover {
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+            transform: translateX(5px);
+        }
+
+        .timeline-year {
+            font-size: 0.85rem;
+            color: #2563EB;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            color: #1E40AF;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        /* WORK SECTION */
+        .work {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f9fafb 100%);
+            border-top: 5px solid #60A5FA;
+        }
+
+        .work h2 {
+            color: #1E40AF;
+        }
+
+        .work-intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #60A5FA;
+            margin-bottom: 3rem;
+            box-shadow: 0 2px 8px rgba(96, 165, 250, 0.1);
+        }
+
+        .work-intro h3 {
+            color: #1E40AF;
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .work-intro p {
+            color: #666;
+            line-height: 1.8;
+            margin-bottom: 0.8rem;
+        }
+
+        .work-grid-container {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            padding-right: 2rem;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            scrollbar-width: thin;
+            scrollbar-color: #60A5FA #f0f0f0;
+        }
+
+        .work-grid::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .work-grid::-webkit-scrollbar-track {
+            background: #f0f0f0;
+            border-radius: 10px;
+        }
+
+        .work-grid::-webkit-scrollbar-thumb {
+            background: #60A5FA;
+            border-radius: 10px;
+        }
+
+        .work-grid::-webkit-scrollbar-thumb:hover {
+            background: #3B82F6;
+        }
+
+        .work-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(96, 165, 250, 0.1);
+            transition: all 0.3s;
+            border: 1px solid #e0f2fe;
+            border-top: 4px solid #60A5FA;
+            min-width: 320px;
+            flex-shrink: 0;
+        }
+
+        .work-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(96, 165, 250, 0.15);
+            border-top-color: #3B82F6;
+        }
+
+        .work-header {
+            padding: 2rem;
+            border-bottom: 1px solid #e0f2fe;
+        }
+
+        .work-type {
+            display: inline-block;
+            background: linear-gradient(135deg, #60A5FA 0%, #93C5FD 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .work-card h3 {
+            font-size: 1.3rem;
+            color: #1E40AF;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .work-body {
+            padding: 2rem;
+        }
+
+        .work-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .work-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .work-link {
+            flex: 1;
+            padding: 0.8rem;
+            text-align: center;
+            background: linear-gradient(135deg, #60A5FA 0%, #93C5FD 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .work-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(96, 165, 250, 0.3);
+        }
+
+        /* RESEARCHER SECTION */
+        .researcher {
+            background: linear-gradient(135deg, #f0fdf4 0%, #f9fafb 100%);
+            border-top: 5px solid #16a34a;
+        }
+
+        .researcher h2 {
+            color: #15803d;
+        }
+
+        .research-category {
+            margin-bottom: 3rem;
+        }
+
+        .research-category h3 {
+            font-size: 1.5rem;
+            color: #15803d;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid #86efac;
+            font-weight: 700;
+        }
+
+        .research-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #16a34a;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(22, 163, 74, 0.1);
+        }
+
+        .research-item:hover {
+            box-shadow: 0 8px 25px rgba(22, 163, 74, 0.15);
+            transform: translateX(5px);
+        }
+
+        .research-title {
+            font-size: 1.1rem;
+            color: #15803d;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .research-meta {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        .research-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .research-link {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.6rem 1.2rem;
+            background: #16a34a;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .research-link:hover {
+            background: #15803d;
+            transform: translateY(-2px);
+        }
+
+        /* APPROACH SECTION */
+        .approach {
+            background: linear-gradient(135deg, #f5f9ff 0%, #f9fafb 100%);
+            border-top: 5px solid #93C5FD;
+        }
+
+        .approach h2 {
+            color: #1E40AF;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.5rem;
+            margin-top: 3rem;
+        }
+
+        .pillar {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid #e0f2fe;
+            border-top: 4px solid #93C5FD;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(147, 197, 253, 0.1);
+        }
+
+        .pillar:hover {
+            transform: translateY(-8px);
+            border-top-color: #60A5FA;
+            box-shadow: 0 15px 40px rgba(147, 197, 253, 0.2);
+        }
+
+        .pillar-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .pillar h3 {
+            font-size: 1.3rem;
+            color: #1E40AF;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .pillar p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.7;
+        }
+
+        /* CONTACT SECTION */
+        .contact {
+            background: linear-gradient(135deg, #0F3460 0%, #1E40AF 50%, #2563EB 100%);
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact h2 {
+            color: white;
+        }
+
+        .contact p {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .contact-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contact-btn {
+            padding: 1rem 2.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 2px solid white;
+            background: white;
+            color: #2563EB;
+        }
+
+        .contact-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+        }
+
+        /* FOOTER */
+        footer {
+            background: #1e293b;
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .ticker-label {
+                padding: 0.4rem 1rem;
+                font-size: 0.75rem;
+                width: 120px;
+            }
+
+            .ticker-content {
+                padding: 0 2rem 0 120px;
+                gap: 2rem;
+            }
+
+            .ticker-item {
+                font-size: 0.95rem;
+                gap: 0.4rem;
+            }
+
+            .ticker-item-icon {
+                font-size: 1rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-image {
+                order: -1;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                gap: 1.5rem;
+                font-size: 0.85rem;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+                overflow-x: visible;
+            }
+
+            .work-card {
+                min-width: 100%;
+            }
+
+            .stat-card {
+                text-align: center;
+            }
+
+            .skills-pills {
+                justify-content: center;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                text-align: center;
+            }
+
+            .contact-buttons {
+                flex-direction: column;
+            }
+
+            .contact-btn {
+                width: 100%;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            .pillars-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline-item {
+                gap: 1rem;
+            }
+
+            .timeline-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- SKILLS TICKER - AT TOP -->
+    <div class="skills-ticker">
+        <div class="ticker-label">🎯 EXPERTISE & FLUENCY</div>
+        <div class="ticker-content">
+            <div class="ticker-item"><span class="ticker-item-icon">📚</span> Articulate Storyline</div>
+            <div class="ticker-item"><span class="ticker-item-icon">📖</span> Articulate Rise</div>
+            <div class="ticker-item"><span class="ticker-item-icon">💼</span> Cornerstone OnDemand</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🎨</span> Adobe Creative Suite</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🎓</span> Moodle</div>
+            <div class="ticker-item"><span class="ticker-item-icon">📊</span> Qualtrics</div>
+            <div class="ticker-item"><span class="ticker-item-icon">📈</span> R & SPSS</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🎬</span> Vyond</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🧠</span> Mouse Tracking</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🤖</span> Copilot & AI Tools</div>
+            <div class="ticker-item"><span class="ticker-item-icon">📝</span> Notion</div>
+            <div class="ticker-item"><span class="ticker-item-icon">✨</span> Generative AI</div>
+            <div class="ticker-item"><span class="ticker-item-icon">📚</span> Articulate Storyline</div>
+            <div class="ticker-item"><span class="ticker-item-icon">📖</span> Articulate Rise</div>
+            <div class="ticker-item"><span class="ticker-item-icon">💼</span> Cornerstone OnDemand</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🎨</span> Adobe Creative Suite</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🧠</span> Mouse Tracking</div>
+            <div class="ticker-item"><span class="ticker-item-icon">🤖</span> Copilot & AI</div>
+            <div class="ticker-item"><span class="ticker-item-icon">📝</span> Notion</div>
+            <div class="ticker-item"><span class="ticker-item-icon">✨</span> Generative AI</div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header>
+        <nav>
+            <a href="#" class="logo">SK ✨</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#work">Work</a></li>
+                <li><a href="#research">Research</a></li>
+                <li><a href="#approach">Approach</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="badge">✨ OPEN TO OPPORTUNITIES</div>
+            
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Hi, I'm Shruti — <span class="highlight">I make learning actually work.</span></h1>
+                    <p class="hero-subtitle">PhD in Learning Sciences. Behavioral scientist. Learning designer.</p>
+                    <p class="hero-subtitle">I bridge the gap between how humans actually learn and the systems that need them to grow.</p>
+                    
+                    <div class="skills-pills">
+                        <div class="skill-pill">Learning Design</div>
+                        <div class="skill-pill">Behavioral Science</div>
+                        <div class="skill-pill">Data-Driven Strategy</div>
+                        <div class="skill-pill">Blended Learning</div>
+                    </div>
+
+                    <div class="cta-buttons">
+                        <a href="#work" class="btn btn-primary">Explore My Work</a>
+                        <a href="#contact" class="btn btn-secondary">Let's Connect →</a>
+                    </div>
+                </div>
+
+                <div class="hero-image">
+                    <div class="image-wrapper">
+                        <img src="profile.jpg" alt="Shruti Sameer Kate" />
+                    </div>
+                    <div class="status-badge">👩‍💼 BEHAVIORAL SCIENTIST</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="about" id="about">
+        <div class="section-content">
+            <h2>What I Do</h2>
+            <div class="about-grid">
+                <div class="about-text">
+                    <p>I design training programs that actually change behavior. Not just teach information—transform how people work.</p>
+                    <p>My approach is grounded in learning science, psychology, and data. I measure everything. Every program ties to business outcomes. Every decision is backed by evidence.</p>
+                    <p>I've worked across industries—manufacturing to tech, engineers to educators—building training at scale while maintaining quality, consistency, and impact.</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">8+</div>
+                        <div class="stat-label">Years of Training Design & Development</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">15%</div>
+                        <div class="stat-label">Reduction in New-Hire Ramp-Up</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">65%</div>
+                        <div class="stat-label">Average Engagement Uplift</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">4.46/5</div>
+                        <div class="stat-label">Training Satisfaction Rating</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CAREER TIMELINE -->
+    <section class="timeline" id="timeline">
+        <div class="section-content">
+            <h2>Career Journey</h2>
+            <div class="timeline-container">
+                <div class="timeline-item">
+                    <div class="timeline-icon">🎓</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2018</div>
+                        <div class="timeline-title">Bachelor of Arts in Psychology</div>
+                        <div class="timeline-desc">Savitribai Phule Pune University, India. Foundation in behavioral science and research methodologies.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">📚</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2020</div>
+                        <div class="timeline-title">Master of Arts in Clinical Psychology</div>
+                        <div class="timeline-desc">Savitribai Phule Pune University. Specialized in applied psychology and psychometric assessment.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">💡</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2020-2022</div>
+                        <div class="timeline-title">Instructional Designer & Researcher</div>
+                        <div class="timeline-desc">The Dream Director, Mumbai. Built AI-integrated simulations and designed evidence-based learning interventions. 30% engagement increase, 60% course completion improvement.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">🔬</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2021-2024</div>
+                        <div class="timeline-title">Graduate Researcher & Lab Manager</div>
+                        <div class="timeline-desc">Kent State University. Conducted behavioral science research using R, SPSS, mouse-tracking, and psychometric design. Published in peer-reviewed journals.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">🏭</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">2025</div>
+                        <div class="timeline-title">Learning Specialist Co-op</div>
+                        <div class="timeline-desc">ASML, Wilton CT. Designed blended learning at scale (4 global sites). 15% ramp-up reduction, 40% adoption, 65% engagement uplift. Built KPI framework tied to business outcomes.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">🎯</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">March 2026</div>
+                        <div class="timeline-title">PhD in Learning Sciences</div>
+                        <div class="timeline-desc">Kent State University. Defense completed. Dissertation on provisional language, trust, and behavioral change. 6 conference presentations, 2+ published papers.</div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-icon">🚀</div>
+                    <div class="timeline-content">
+                        <div class="timeline-year">Now</div>
+                        <div class="timeline-title">Active Job Search</div>
+                        <div class="timeline-desc">Seeking roles in L&D, Instructional Design, and AI-powered learning at forward-thinking organizations. H1B sponsorship required.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- WORK -->
+    <section class="work" id="work">
+        <div class="section-content">
+            <h2>Work & Resources</h2>
+            
+            <div class="work-intro">
+                <h3>🎯 Featured Work & Strategic Resources</h3>
+                <p>These projects and job aids demonstrate my approach to designing practical, visually sophisticated training resources and strategic solutions.</p>
+                <p><strong>What you'll see:</strong> Complex systems thinking, ADDIE process design, Kirkpatrick measurement frameworks, and data-driven impact measurement.</p>
+            </div>
+
+            <div class="work-grid-container">
+                <div class="work-grid">
+                    <!-- WORK 1 -->
+                    <div class="work-card">
+                        <div class="work-header">
+                            <span class="work-type">Interactive Course</span>
+                            <h3>New Manager Onboarding</h3>
+                        </div>
+                        <div class="work-body">
+                            <p class="work-desc">90-day blended program for newly promoted managers with scenario simulations and 1:1 coaching.</p>
+                            <div class="work-links">
+                                <a href="#" class="work-link">View</a>
+                                <a href="#" class="work-link">Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORK 2 -->
+                    <div class="work-card">
+                        <div class="work-header">
+                            <span class="work-type">Training Program</span>
+                            <h3>Sales Enablement</h3>
+                        </div>
+                        <div class="work-body">
+                            <p class="work-desc">Scenario-based training for revenue teams. Discovery, objection handling, deal closure.</p>
+                            <div class="work-links">
+                                <a href="#" class="work-link">View</a>
+                                <a href="#" class="work-link">Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORK 3 -->
+                    <div class="work-card">
+                        <div class="work-header">
+                            <span class="work-type">Framework</span>
+                            <h3>Kirkpatrick Measurement</h3>
+                        </div>
+                        <div class="work-body">
+                            <p class="work-desc">Levels 1-4 evaluation approach. Bridges training delivery to organizational ROI and impact.</p>
+                            <div class="work-links">
+                                <a href="Kirkpatrick_Levels_Job_Aid.png" class="work-link">View</a>
+                                <a href="Kirkpatrick_Levels_Job_Aid.png" class="work-link">Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORK 4 -->
+                    <div class="work-card">
+                        <div class="work-header">
+                            <span class="work-type">Job Aid</span>
+                            <h3>Security Threat Remediation</h3>
+                        </div>
+                        <div class="work-body">
+                            <p class="work-desc">Complex systems approach to closing mission-critical behavior gaps with targeted interventions.</p>
+                            <div class="work-links">
+                                <a href="Internal_Threat_Job_Aid.png" class="work-link">View</a>
+                                <a href="Internal_Threat_Job_Aid.png" class="work-link">Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORK 5 -->
+                    <div class="work-card">
+                        <div class="work-header">
+                            <span class="work-type">Process Framework</span>
+                            <h3>Training Design Process</h3>
+                        </div>
+                        <div class="work-body">
+                            <p class="work-desc">Complete ADDIE lifecycle from analysis through evaluation and measurement.</p>
+                            <div class="work-links">
+                                <a href="Job_Aid_Process.png" class="work-link">View</a>
+                                <a href="Job_Aid_Process.png" class="work-link">Download</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- WORK 6 -->
+                    <div class="work-card">
+                        <div class="work-header">
+                            <span class="work-type">Strategic Guide</span>
+                            <h3>Measuring for Impact</h3>
+                        </div>
+                        <div class="work-body">
+                            <p class="work-desc">Strategic roadmap for measuring training impact with real case study metrics (34% ramp-up reduction, 44% engagement uplift).</p>
+                            <div class="work-links">
+                                <a href="Measuring_For_Impact_Job_Aid.png" class="work-link">View</a>
+                                <a href="Measuring_For_Impact_Job_Aid.png" class="work-link">Download</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RESEARCHER -->
+    <section class="researcher" id="research">
+        <div class="section-content">
+            <h2>Research & Publications</h2>
+
+            <div class="research-category">
+                <h3>📄 Dissertation</h3>
+                <div class="research-item">
+                    <div class="research-title">How Do Pragmatic Forms of Provisional Language Shift the Interpretation of Facts and Myths?</div>
+                    <div class="research-meta">Advisor: Dr. Jennifer Roche | Defense Completed: March 6, 2026</div>
+                    <div class="research-desc">Doctoral research on provisional language framing, trust, and behavioral change using mouse-tracking methodology and mixed-effects modeling in R. Directly applicable to training effectiveness, misconception correction, and AI output evaluation.</div>
+                </div>
+            </div>
+
+            <div class="research-category">
+                <h3>📰 Published Papers</h3>
+                <div class="research-item">
+                    <div class="research-title">A comparative study of resilience, life satisfaction and adjustment amongst parents</div>
+                    <div class="research-meta">Kate, S. (2020) | International Journal of Advance Research, Ideas and Innovations in Technology</div>
+                    <div class="research-desc">Psychological resilience and life satisfaction research. Foundation for training design focused on individual differences and adaptive learning.</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Stress, uncertainty, and resilience during COVID-19</div>
+                    <div class="research-meta">Joshi, K., Kate, S., et al. (2020) | International Journal of Advance Research, Ideas and Innovations in Technology</div>
+                    <div class="research-desc">Multi-author study on perceived stress and coping mechanisms during crisis. Informs design of resilience and stress-management training.</div>
+                </div>
+            </div>
+
+            <div class="research-category">
+                <h3>📚 Manuscripts in Progress</h3>
+                <div class="research-item">
+                    <div class="research-title">Impact of Provisional Language on Scientific Fact and Myth Endorsement</div>
+                    <div class="research-meta">Kate, S., Roche, M., Morris, B. (in progress)</div>
+                    <div class="research-desc">Behavioral change through language framing. Critical for training on controversial topics, misconception correction, and learner trust.</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Do people have a prototype of an "average"?</div>
+                    <div class="research-meta">Kate, S., Morris, B. (in progress)</div>
+                    <div class="research-desc">Cognitive science research on prototype effects and statistical reasoning. Applicable to data literacy and analytics training design.</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Foreign Accent & Social Judgments of Stuttering: A Mouse-Tracking Task</div>
+                    <div class="research-meta">Yassin, H., Roche, M., Noguchi, K., Kate, S., Arnold, H. (in progress)</div>
+                    <div class="research-desc">Social perception and communication research. Relevant to inclusive training design and bias mitigation.</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Navigating Uncertainty: Cognitive & Non-cognitive Factors in Provisional Language</div>
+                    <div class="research-meta">Kate, S., Asaro, K., Roche, M. (in progress)</div>
+                    <div class="research-desc">Science communication and behavioral decision-making. Foundational for training in uncertain environments and evidence-based practice.</div>
+                </div>
+            </div>
+
+            <div class="research-category">
+                <h3>🎤 Conference Presentations</h3>
+                <div class="research-item">
+                    <div class="research-title">Prosody, Knowledge, and Misconceptions: Vocal Cues in Real-Time Decision Making</div>
+                    <div class="research-meta">Fall 2025 | Auditory Perception, Cognition, and Action Society (24th Annual Meeting)</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Do people have a prototype of an "average"?</div>
+                    <div class="research-meta">Spring 2025 | Midwestern Psychological Association (Chicago, IL)</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Navigating Uncertainty: The Influence of Cognitive & Non-cognitive Factors on Provisional Language</div>
+                    <div class="research-meta">Fall 2024 | Auditory Perception, Cognition, and Action Society (23rd Annual Meeting)</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Interaction Between Mathematical Affect and Feedback During Computation: Mouse-Tracking Task</div>
+                    <div class="research-meta">Summer 2024 | Cognitive Science Society (Rotterdam, Netherlands) - Poster</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Impact of Probabilistic Language on Scientific Fact and Myth Endorsement</div>
+                    <div class="research-meta">Spring 2023 | Graduate Research Symposium (Kent State) & Midwestern Psychological Association (Chicago) - Poster</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Hedging: The Impact of Imprecise Communication on Health & Scientific Fact Endorsement</div>
+                    <div class="research-meta">Spring 2023 | Education, Health & Human Services Research Gallery (Kent State University)</div>
+                </div>
+            </div>
+
+            <div class="research-category">
+                <h3>🏆 Honors & Awards</h3>
+                <div class="research-item">
+                    <div class="research-title">International Travel Grant</div>
+                    <div class="research-meta">June 2024 | Graduate Student Senate, Kent State University | $1,500</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Best Graduate Student Poster Award</div>
+                    <div class="research-meta">April 2023 | Graduate Research Symposium, Kent State University | $200</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Domestic Travel Grant</div>
+                    <div class="research-meta">April 2023 | Graduate Student Senate, Kent State University | $500</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APPROACH -->
+    <section class="approach" id="approach">
+        <div class="section-content">
+            <h2>My Approach</h2>
+            <div class="pillars-grid">
+                <div class="pillar">
+                    <div class="pillar-icon">🎤</div>
+                    <h3>Facilitation Excellence</h3>
+                    <p>Engaging delivery in-person and virtually. Adaptive to learning styles. Psychologically safe spaces where people feel comfortable learning and applying skills.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">✨</div>
+                    <h3>Quality by Design</h3>
+                    <p>Grounded in learning science principles. Continuous feedback loops. Trainer development. Iterative improvement based on real data.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">📊</div>
+                    <h3>Data-Driven Decisions</h3>
+                    <p>Measuring effectiveness across 4 levels. Insights drive continuous improvement. Always connecting training to business outcomes and ROI.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">🌍</div>
+                    <h3>Consistency at Scale</h3>
+                    <p>Scaled training across global teams. Quality standards + trainer alignment maintained. Consistency is intentional—not rigid.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact" id="contact">
+        <div class="section-content">
+            <h2>Let's Work Together</h2>
+            <p>I'm passionate about designing training that transforms organizations. Let's talk about how I can support your team's growth and drive measurable impact.</p>
+            <div class="contact-buttons">
+                <a href="mailto:skate@kent.edu" class="contact-btn">Email Me</a>
+                <a href="https://linkedin.com/in/shruti-sameer-kate" target="_blank" class="contact-btn">LinkedIn</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Shruti Sameer Kate. Learning & Development Specialist & Researcher.</p>
+    </footer>
+
+</body>
+</html>
