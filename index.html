@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shruti Sameer Kate - L&D Portfolio</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; background: #f9f9f9; }
+        header { background: white; padding: 2rem 0; border-bottom: 1px solid #eee; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        nav { max-width: 1200px; margin: 0 auto; padding: 0 2rem; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: bold; color: #FF5A5F; text-decoration: none; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { text-decoration: none; color: #333; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: #FF5A5F; }
+        .hero { background: linear-gradient(135deg, #FF5A5F 0%, #FF7A7F 100%); color: white; padding: 6rem 2rem; text-align: center; }
+        .hero-content { max-width: 800px; margin: 0 auto; }
+        .hero h1 { font-size: 3.5rem; margin-bottom: 1rem; font-weight: 700; }
+        .hero .subtitle { font-size: 1.5rem; margin-bottom: 1.5rem; opacity: 0.95; }
+        .hero p { font-size: 1.1rem; margin-bottom: 2rem; line-height: 1.8; opacity: 0.9; }
+        .cta-button { display: inline-block; background: white; color: #FF5A5F; padding: 0.8rem 2rem; border-radius: 5px; text-decoration: none; font-weight: 600; transition: transform 0.3s, box-shadow 0.3s; margin: 0 0.5rem; }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 2rem; }
+        section { padding: 5rem 0; }
+        section h2 { font-size: 2.5rem; margin-bottom: 3rem; text-align: center; color: #222; }
+        .about { background: white; }
+        .about-content { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+        .about-text h3 { font-size: 1.5rem; margin-bottom: 1rem; color: #FF5A5F; }
+        .about-text p { margin-bottom: 1rem; line-height: 1.8; color: #555; }
+        .stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; }
+        .stat { background: #f5f5f5; padding: 1.5rem; border-radius: 8px; border-left: 4px solid #FF5A5F; }
+        .stat h4 { color: #FF5A5F; font-size: 2rem; margin-bottom: 0.5rem; }
+        .stat p { color: #666; font-size: 0.9rem; }
+        .projects { background: #f9f9f9; }
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2rem; }
+        .project-card { background: white; padding: 2rem; border-radius: 8px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); transition: transform 0.3s, box-shadow 0.3s; }
+        .project-card:hover { transform: translateY(-5px); box-shadow: 0 8px 20px rgba(0,0,0,0.15); }
+        .project-card h3 { color: #FF5A5F; font-size: 1.3rem; margin-bottom: 1rem; }
+        .project-card .type { display: inline-block; background: #FF5A5F; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; margin-bottom: 1rem; }
+        .project-card p { color: #666; margin-bottom: 1rem; font-size: 0.95rem; }
+        .project-card .results { background: #f0f0f0; padding: 1rem; border-radius: 5px; margin: 1rem 0; font-size: 0.9rem; color: #555; }
+        .project-card .links { display: flex; gap: 1rem; margin-top: 1.5rem; }
+        .project-card a { flex: 1; text-align: center; padding: 0.7rem; background: #FF5A5F; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9rem; transition: background 0.3s; }
+        .project-card a:hover { background: #E84A50; }
+        .project-card a.secondary { background: #ddd; color: #333; }
+        .project-card a.secondary:hover { background: #ccc; }
+        .approach { background: white; }
+        .pillars { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .pillar { text-align: center; padding: 2rem; background: #f9f9f9; border-radius: 8px; border-top: 4px solid #FF5A5F; }
+        .pillar h3 { color: #FF5A5F; font-size: 1.3rem; margin-bottom: 1rem; }
+        .pillar p { color: #666; font-size: 0.95rem; line-height: 1.6; }
+        .contact { background: linear-gradient(135deg, #FF5A5F 0%, #FF7A7F 100%); color: white; text-align: center; }
+        .contact h2 { color: white; }
+        .contact p { font-size: 1.1rem; margin-bottom: 2rem; opacity: 0.9; }
+        .contact-links { display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap; }
+        .contact-links a { color: white; text-decoration: none; padding: 0.8rem 1.5rem; border: 2px solid white; border-radius: 5px; transition: all 0.3s; font-weight: 600; }
+        .contact-links a:hover { background: white; color: #FF5A5F; }
+        footer { background: #222; color: white; text-align: center; padding: 2rem; }
+        @media (max-width: 768px) { .hero h1 { font-size: 2.5rem; } .hero .subtitle { font-size: 1.2rem; } .about-content { grid-template-columns: 1fr; } .nav-links { gap: 1rem; font-size: 0.9rem; } .projects-grid { grid-template-columns: 1fr; } section h2 { font-size: 1.8rem; } .pillars { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="#" class="logo">Shruti Sameer Kate</a>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#projects">Portfolio</a></li>
+                <li><a href="#approach">Approach</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Shruti Sameer Kate</h1>
+            <p class="subtitle">Learning & Development Specialist | Training Design & Facilitation Excellence</p>
+            <p>I design and deliver transformative training programs that measurably improve organizational performance. My approach combines learning science rigor with strategic business thinking to create lasting impact.</p>
+            <a href="#projects" class="cta-button">View My Work</a>
+            <a href="#contact" class="cta-button">Get In Touch</a>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+            <h2>About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <h3>Learning Science Meets Strategic Impact</h3>
+                    <p>I hold a PhD in Learning Sciences and bring deep expertise in designing training that actually changes behavior and drives business outcomes.</p>
+                    <p>My background spans multiple industries—from manufacturing to education to tech. I've designed and delivered training for engineers, educators, and customer-facing teams across global organizations.</p>
+                    <p>What sets my approach apart: I measure everything. Every training program ties to business metrics. Every curriculum is grounded in learning science principles. Every facilitator conversation is strategic.</p>
+                    <p>I believe training isn't about content delivery—it's about transformation. It's about equipping people with skills they'll actually use, measuring whether they do, and continuously improving based on data.</p>
+                </div>
+                <div class="stats">
+                    <div class="stat">
+                        <h4>5+</h4>
+                        <p>Years designing & delivering training programs</p>
+                    </div>
+                    <div class="stat">
+                        <h4>15%</h4>
+                        <p>Reduction in new-hire ramp-up time</p>
+                    </div>
+                    <div class="stat">
+                        <h4>65%</h4>
+                        <p>Engagement uplift across programs</p>
+                    </div>
+                    <div class="stat">
+                        <h4>4.46/5</h4>
+                        <p>Average training satisfaction rating</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2>Training Programs & Portfolio</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <span class="type">Interactive Course</span>
+                    <h3>New Manager Onboarding</h3>
+                    <p>A comprehensive 90-day blended program equipping newly promoted managers with leadership skills they need to confidently lead teams.</p>
+                    <div class="results"><strong>Approach:</strong> Combines live virtual training, self-paced learning, scenario-based simulations, and 1:1 coaching.</div>
+                    <p><strong>Outcomes:</strong> 95% completion rate, 4.5/5 satisfaction, managers report 60% increase in confidence.</p>
+                    <div class="links">
+                        <a href="#">View Course</a>
+                        <a href="#" class="secondary">Download Overview</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <span class="type">Sales Training</span>
+                    <h3>Sales Enablement Program</h3>
+                    <p>Scenario-based training for sales and customer-facing teams to drive revenue outcomes through skill development and confidence building.</p>
+                    <div class="results"><strong>Focus:</strong> Discovery conversations, objection handling, deal closure, customer relationship building.</div>
+                    <p><strong>Impact:</strong> Designed to improve deal velocity and customer satisfaction scores.</p>
+                    <div class="links">
+                        <a href="#">View Course</a>
+                        <a href="#" class="secondary">Download Outline</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <span class="type">Framework</span>
+                    <h3>Training Evaluation Framework</h3>
+                    <p>A comprehensive measurement approach using Kirkpatrick Levels 1-4 to ensure every training program delivers measurable business impact.</p>
+                    <div class="results"><strong>Includes:</strong> Reaction, Learning, Behavior, and Results metrics with implementation timelines and dashboards.</div>
+                    <p><strong>Purpose:</strong> Bridges the gap between training delivery and organizational ROI.</p>
+                    <div class="links">
+                        <a href="#">View Framework</a>
+                        <a href="#" class="secondary">Download PDF</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <span class="type">Coaching</span>
+                    <h3>Coaching & Mentoring Framework</h3>
+                    <p>A structured approach to developing talent through coaching conversations, mentoring relationships, and peer learning communities.</p>
+                    <div class="results"><strong>Components:</strong> 1:1 coaching models, feedback frameworks, development conversations, peer cohorts.</div>
+                    <p><strong>Outcome:</strong> Accelerates development and builds leadership bench strength.</p>
+                    <div class="links">
+                        <a href="#">View Framework</a>
+                        <a href="#" class="secondary">Download Guide</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <span class="type">Case Study</span>
+                    <h3>Global Training Implementation</h3>
+                    <p>A real-world case study showing how I designed and deployed blended learning across 4 global sites while maintaining consistency and quality.</p>
+                    <div class="results"><strong>Results:</strong> 15% reduction in ramp-up time, 40% adoption rate, 65% engagement uplift, maintained regulatory compliance.</div>
+                    <p><strong>Scale:</strong> Multi-site coordination, diverse audiences, regulatory environment.</p>
+                    <div class="links">
+                        <a href="#">Read Case Study</a>
+                        <a href="#" class="secondary">Download PDF</a>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <span class="type">Presentation</span>
+                    <h3>Training Excellence at Scale</h3>
+                    <p>A strategic portfolio piece showing my approach to building consistent, high-quality training globally while measuring impact rigorously.</p>
+                    <div class="results"><strong>Covers:</strong> Framework, proof points, differentiators, application, and strategic value proposition.</div>
+                    <p><strong>Use Case:</strong> Shared with hiring managers and executives to demonstrate approach.</p>
+                    <div class="links">
+                        <a href="#">View Presentation</a>
+                        <a href="#" class="secondary">Download PDF</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="approach" id="approach">
+        <div class="container">
+            <h2>My Approach to Training Excellence</h2>
+            <div class="pillars">
+                <div class="pillar">
+                    <h3>Facilitation Excellence</h3>
+                    <p>I deliver engaging training in-person and virtually, adapting to diverse learning styles and creating psychological safety where people feel comfortable learning and applying new skills.</p>
+                </div>
+                <div class="pillar">
+                    <h3>Quality by Design</h3>
+                    <p>Every program is grounded in learning science principles with continuous feedback loops, trainer development, and iterative improvement based on data.</p>
+                </div>
+                <div class="pillar">
+                    <h3>Data-Driven Decisions</h3>
+                    <p>I measure training effectiveness across four levels—reaction, learning, behavior, and business results—using insights to drive continuous improvement and demonstrate ROI.</p>
+                </div>
+                <div class="pillar">
+                    <h3>Consistency at Scale</h3>
+                    <p>I've scaled training across global teams while maintaining quality standards, trainer alignment, and regulatory compliance. Consistency doesn't mean rigid—it means intentional.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2>Let's Build Something Great Together</h2>
+            <p>I'm passionate about designing training that transforms organizations. Let's talk about how I can support your team's growth and drive measurable impact.</p>
+            <div class="contact-links">
+                <a href="mailto:skate@kent.edu">Email Me</a>
+                <a href="https://linkedin.com/in/shruti-sameer-kate" target="_blank">LinkedIn</a>
+                <a href="https://shruti-kate-portfolio2026.netlify.app" target="_blank">My Work</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 Shruti Sameer Kate. Learning & Development Specialist.</p>
+    </footer>
+
+</body>
+</html>
