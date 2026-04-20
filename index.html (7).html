@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shruti Sameer Kate - Learning & Development & Research</title>
+    
+       <!-- Google tag (gtag.js) -->
+   <script async src="https://www.googletagmanager.com/gtag/js?id=G-WY2D6LRELG"></script>
+   <script>
+     window.dataLayer = window.dataLayer || [];
+     function gtag(){dataLayer.push(arguments);}
+     gtag('js', new Date());
+     gtag('config', 'G-WY2D6LRELG');
+     gtag('config', 'G-LNK6WB7J2J');
+   </script>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            line-height: 1.6;
+            color: #2d3436;
+            background: #fafbfc;
+            scroll-behavior: smooth;
+        }
+
+        header {
+            background: white;
+            padding: 1.5rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+        }
+
+        .page-nav {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .page-nav button {
+            padding: 0.6rem 1.2rem;
+            border: 2px solid #2563EB;
+            background: white;
+            color: #2563EB;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            white-space: nowrap;
+        }
+
+        .page-nav button:hover {
+            background: #f0f9ff;
+            transform: translateY(-2px);
+        }
+
+        .page-nav button.active {
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2563EB;
+        }
+
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .skills-ticker {
+            background: linear-gradient(90deg, #1E40AF 0%, #2563EB 100%);
+            padding: 1.2rem 0;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 3px solid #fef3c7;
+        }
+
+        .ticker-label {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #0F3460;
+            color: white;
+            padding: 0.4rem 1.5rem;
+            font-weight: 700;
+            font-size: 0.85rem;
+            z-index: 10;
+            white-space: nowrap;
+        }
+
+        .ticker-content {
+            display: flex;
+            gap: 2.5rem;
+            padding: 0 2rem 0 200px;
+            animation: scroll 35s linear infinite;
+            white-space: nowrap;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: white;
+            font-weight: 600;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .section-content {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        section h2 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin-bottom: 3rem;
+            color: #1a202c;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #0F3460 0%, #1E40AF 50%, #2563EB 100%);
+            color: white;
+            padding: 5rem 2rem;
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #92400e;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.2;
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .skills-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .skill-pill {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.6rem 1.3rem;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border: 1px solid rgba(255,255,255,0.3);
+            transition: all 0.3s;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .btn {
+            padding: 1rem 2.2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary {
+            background: white;
+            color: #1E40AF;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-2px);
+        }
+
+        .image-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 6px solid white;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            clip-path: circle(50%);
+        }
+
+        .about {
+            background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+            border-top: 5px solid #2563EB;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .about::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=1600&h=900&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.1;
+            pointer-events: none;
+        }
+
+        .about h2 {
+            color: #1E40AF;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about .section-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .about-text p {
+            font-size: 1.2rem;
+            line-height: 1.9;
+            margin-bottom: 1.5rem;
+            color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+        }
+
+        .about-text p:nth-child(1) {
+            background: linear-gradient(135deg, #1E40AF 0%, #2563EB 100%);
+        }
+
+        .about-text p:nth-child(2) {
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+        }
+
+        .about-text p:nth-child(3) {
+            background: linear-gradient(135deg, #3B82F6 0%, #60A5FA 100%);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #2563EB;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #2563EB;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.95rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .timeline {
+            background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+            border-top: 5px solid #3B82F6;
+            position: relative;
+        }
+
+        .timeline h2 {
+            color: #1E40AF;
+        }
+
+        .timeline-container {
+            position: relative;
+            padding: 3rem 0;
+        }
+
+        /* Journey Road Line */
+        .timeline-container::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 4px;
+            background: linear-gradient(180deg, #2563EB 0%, #60A5FA 50%, #93C5FD 100%);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+            align-items: stretch;
+        }
+
+        .timeline-item:nth-child(odd) {
+            flex-direction: row;
+            justify-content: flex-end;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            text-align: right;
+            margin-right: 3rem;
+            width: 45%;
+        }
+
+        .timeline-item:nth-child(even) {
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            text-align: left;
+            margin-left: 3rem;
+            width: 45%;
+        }
+
+        .timeline-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563EB 0%, #3B82F6 100%);
+            border-radius: 50%;
+            color: white;
+            font-size: 2rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+            border: 4px solid #f3f4f6;
+            position: relative;
+            z-index: 10;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .timeline-item:hover .timeline-icon {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.4);
+        }
+
+        .timeline-content {
+            background: white;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            border-left: 4px solid #3B82F6;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .timeline-item:hover .timeline-content {
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .timeline-year {
+            font-size: 0.85rem;
+            color: #2563EB;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .timeline-title {
+            font-size: 1.2rem;
+            color: #1E40AF;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .timeline-desc {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .approach {
+            background: linear-gradient(135deg, #f5f9ff 0%, #f9fafb 100%);
+            border-top: 5px solid #93C5FD;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .approach::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1600&h=900&q=80');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            pointer-events: none;
+        }
+
+        .approach h2 {
+            color: #1E40AF;
+            position: relative;
+            z-index: 1;
+        }
+
+        .approach .section-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .pillars-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.5rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .pillar {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            border: 1px solid #e0f2fe;
+            border-top: 4px solid #93C5FD;
+            text-align: center;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(147, 197, 253, 0.1);
+        }
+
+        .pillar:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(147, 197, 253, 0.2);
+        }
+
+        .pillar-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .pillar h3 {
+            font-size: 1.3rem;
+            color: #1E40AF;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .work {
+            background: linear-gradient(135deg, #f0f9ff 0%, #f9fafb 100%);
+            border-top: 5px solid #60A5FA;
+        }
+
+        .work h2 {
+            color: #1E40AF;
+        }
+
+        .work-intro {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #60A5FA;
+            margin-bottom: 3rem;
+            box-shadow: 0 2px 8px rgba(96, 165, 250, 0.1);
+        }
+
+        .work-subsection {
+            margin-bottom: 4rem;
+        }
+
+        .work-subsection h3 {
+            font-size: 1.8rem;
+            color: #1E40AF;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #60A5FA;
+        }
+
+        .work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .work-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 12px rgba(96, 165, 250, 0.1);
+            transition: all 0.3s;
+            border: 1px solid #e0f2fe;
+        }
+
+        .work-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(96, 165, 250, 0.15);
+        }
+
+        .work-visual {
+            height: 200px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-color: #e0f2fe;
+            overflow: hidden;
+        }
+
+        .work-header {
+            padding: 2rem;
+        }
+
+        .work-type {
+            display: inline-block;
+            background: linear-gradient(135deg, #60A5FA 0%, #93C5FD 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .work-card h3 {
+            font-size: 1.3rem;
+            color: #1E40AF;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .work-body {
+            padding: 2rem;
+        }
+
+        .work-desc {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .work-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .work-link {
+            flex: 1;
+            padding: 0.8rem;
+            text-align: center;
+            background: linear-gradient(135deg, #60A5FA 0%, #93C5FD 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+        }
+
+        .work-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(96, 165, 250, 0.3);
+        }
+
+        .training-placeholder {
+            background: #f0f9ff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 2px dashed #60A5FA;
+            text-align: center;
+            color: #2563EB;
+            font-style: italic;
+            margin-top: 1rem;
+        }
+
+        .researcher {
+            background: linear-gradient(135deg, #f0fdf4 0%, #f9fafb 100%);
+            border-top: 5px solid #16a34a;
+        }
+
+        .researcher h2 {
+            color: #15803d;
+        }
+
+        .research-tabs {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 3rem;
+        }
+
+        .research-tab-btn {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #16a34a;
+            background: white;
+            color: #15803d;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+
+        .research-tab-btn:hover {
+            background: #f0fdf4;
+            transform: translateY(-2px);
+        }
+
+        .research-tab-btn.active {
+            background: linear-gradient(135deg, #16a34a 0%, #22c55e 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.3);
+        }
+
+        .research-content {
+            display: none;
+        }
+
+        .research-content.active {
+            display: block;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dissertation-item {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            padding: 2.5rem;
+            border-radius: 12px;
+            border-left: 6px solid #16a34a;
+            box-shadow: 0 4px 15px rgba(22, 163, 74, 0.15);
+        }
+
+        .dissertation-item h3 {
+            font-size: 1.4rem;
+            color: #15803d;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .dissertation-meta {
+            font-size: 0.9rem;
+            color: #16a34a;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .paper-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #3B82F6;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.1);
+        }
+
+        .paper-item:hover {
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.15);
+            transform: translateX(5px);
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            color: #1E40AF;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .paper-meta {
+            font-size: 0.85rem;
+            color: #2563EB;
+            margin-bottom: 0.8rem;
+            font-style: italic;
+        }
+
+        .presentation-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #7C3AED;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(124, 58, 237, 0.1);
+        }
+
+        .presentation-item:hover {
+            box-shadow: 0 8px 25px rgba(124, 58, 237, 0.15);
+            transform: translateX(5px);
+        }
+
+        .presentation-title {
+            font-size: 1.1rem;
+            color: #6D28D9;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .presentation-meta {
+            font-size: 0.85rem;
+            color: #7C3AED;
+            font-style: italic;
+        }
+
+        .award-item {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #F59E0B;
+            margin-bottom: 1.5rem;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(245, 158, 11, 0.1);
+        }
+
+        .award-item:hover {
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.15);
+            transform: translateX(5px);
+        }
+
+        .award-title {
+            font-size: 1.1rem;
+            color: #92400e;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .award-meta {
+            font-size: 0.85rem;
+            color: #D97706;
+            font-style: italic;
+        }
+
+        .connect {
+            background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+            border-top: 5px solid #F59E0B;
+        }
+
+        .connect-content {
+            padding: 5rem 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .connect h2 {
+            color: #92400e;
+            margin-bottom: 1.5rem;
+        }
+
+        .connect > div > p:first-of-type {
+            font-size: 1.1rem;
+            color: #78350f;
+            margin-bottom: 3rem;
+            line-height: 1.8;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .contact-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            border-top: 5px solid #F59E0B;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.15);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(245, 158, 11, 0.25);
+        }
+
+        .contact-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-card h3 {
+            font-size: 1.3rem;
+            color: #92400e;
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .contact-card p {
+            color: #78350f;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .contact-card a {
+            display: inline-block;
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, #F59E0B 0%, #FBBF24 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .contact-card a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        footer {
+            background: #0F3460;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+            }
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+
+            section h2 {
+                font-size: 2rem;
+            }
+
+            .hero-text h1 {
+                font-size: 2.2rem;
+            }
+
+            /* Timeline on mobile */
+            .timeline-container::before {
+                left: 30px;
+            }
+
+            .timeline-item {
+                flex-direction: column !important;
+                margin-bottom: 2rem;
+            }
+
+            .timeline-item:nth-child(odd) .timeline-content,
+            .timeline-item:nth-child(even) .timeline-content {
+                width: 100%;
+                margin: 0 !important;
+                margin-top: 1rem !important;
+                text-align: left !important;
+            }
+
+            .timeline-icon {
+                width: 70px;
+                height: 70px;
+                font-size: 1.5rem;
+                margin-left: -5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER & NAVIGATION -->
+    <header>
+        <nav>
+            <a href="#" class="logo">Shruti Kate</a>
+            <div class="page-nav">
+                <button class="page-btn active" onclick="showPage(0)">Home</button>
+                <button class="page-btn" onclick="showPage(1)">Work</button>
+                <button class="page-btn" onclick="showPage(2)">Research</button>
+                <button class="page-btn" onclick="showPage(3)">Let's Connect!</button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- SKILLS TICKER -->
+    <section class="skills-ticker">
+        <div class="ticker-label">CORE SKILLS</div>
+        <div class="ticker-content">
+            <span class="ticker-item">📊 Kirkpatrick Evaluation</span>
+            <span class="ticker-item">🎓 ADDIE & SAM</span>
+            <span class="ticker-item">🎬 Articulate 360 & Adobe Suite</span>
+            <span class="ticker-item">💻 Learning Science & AI/LLM Integration</span>
+            <span class="ticker-item">📈 ROI Measurement & Behavioral Design</span>
+            <span class="ticker-item">📊 Kirkpatrick Evaluation</span>
+            <span class="ticker-item">🎓 ADDIE & SAM</span>
+            <span class="ticker-item">🎬 Articulate 360 & Adobe Suite</span>
+            <span class="ticker-item">💻 Learning Science & AI/LLM Integration</span>
+            <span class="ticker-item">📈 ROI Measurement & Behavioral Design</span>
+        </div>
+    </section>
+
+    <!-- PAGE 1: HOME -->
+    <div class="page active" id="page-0">
+        <!-- HERO -->
+        <section class="hero">
+            <div class="hero-container">
+                <div class="badge">🎓 PhD in Learning Sciences (Kent State, March 2026)</div>
+                <div class="hero-content">
+                    <div class="hero-text">
+                        <h1>Hi! I'm <strong style="color: #EF4444;">Shruti</strong></h1>
+                        <p class="hero-subtitle">I design behavioral training interventions backed by learning science, measure impact rigorously, and drive organizational change through evidence-based L&D.</p>
+                        <div class="skills-pills">
+                            <span class="skill-pill">Learning Science</span>
+                            <span class="skill-pill">Instructional Design</span>
+                            <span class="skill-pill">Behavioral Intervention</span>
+                            <span class="skill-pill">ROI Measurement</span>
+                            <span class="skill-pill">AI Integration</span>
+                        </div>
+                        <div class="cta-buttons">
+                            <button class="btn btn-primary" onclick="showPage(1)">View My Work</button>
+                            <button class="btn btn-secondary" onclick="showPage(3)">Get in Touch</button>
+                        </div>
+                    </div>
+                    <div class="image-wrapper">
+                        <img src="profile.jpg" alt="Shruti Kate">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="about">
+            <div class="section-content">
+                <h2>About Me</h2>
+                <div class="about-grid">
+                    <div class="about-text">
+                        <p>I treat training as behavioral intervention, not content delivery. My MA in Clinical Psychology combined with a PhD in Learning Sciences gives me a unique lens for understanding how people learn, believe, and change.</p>
+                        <p>At ASML, I led enterprise-scale blended learning initiatives: designed a global functional learning program that reduced new-hire ramp-up time by 15%, increased adoption by 40%, and drove engagement up 65%.</p>
+                        <p>My dissertation research examined how provisional language and prosodic cues affect veridicality judgments using mouse-tracking and mixed-effects modeling—a deep dive into the cognitive science behind persuasion and trust.</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-number">15%</div>
+                            <div class="stat-label">Reduction in new-hire ramp-up time</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">40%</div>
+                            <div class="stat-label">Increase in program adoption</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">65%</div>
+                            <div class="stat-label">Engagement uplift</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-number">6+</div>
+                            <div class="stat-label">Conference presentations</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- WHAT I DO / APPROACH -->
+        <section class="approach">
+            <div class="section-content">
+                <h2>What I Do</h2>
+                <div class="pillars-grid">
+                    <div class="pillar">
+                        <div class="pillar-icon">🧠</div>
+                        <h3>Learning Science</h3>
+                        <p>Root all design in cognitive science: spaced repetition, retrieval practice, interleaving, and behavioral intervention frameworks. Training that sticks.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-icon">📊</div>
+                        <h3>Measure Impact</h3>
+                        <p>Kirkpatrick Levels 3–4 evaluation, ROI modeling, and mixed-effects analytics. Prove your training moves the needle on business outcomes.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-icon">🎬</div>
+                        <h3>Design & Deliver</h3>
+                        <p>Articulate 360, Adobe Creative Suite, Vyond, SCORM—build engaging, accessible, mobile-friendly learning experiences at scale.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-icon">🤖</div>
+                        <h3>AI Integration</h3>
+                        <p>Harness LLMs for scenario design, personalized learning paths, and AI-powered simulations. The future of training is here.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-icon">🌍</div>
+                        <h3>Blended & Scalable</h3>
+                        <p>Multi-site rollouts, learning management systems (Cornerstone OnDemand, Qualtrics), and enterprise learning infrastructure.</p>
+                    </div>
+                    <div class="pillar">
+                        <div class="pillar-icon">💡</div>
+                        <h3>Strategic Partner</h3>
+                        <p>Align L&D with business goals. Speak the language of leadership while staying grounded in learning science rigor.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 2: WORK -->
+    <div class="page" id="page-1">
+        <section class="work">
+            <div class="section-content">
+                <h2>My Work</h2>
+                <div class="work-intro">
+                    <p>A portfolio of learning experiences designed to drive behavior change, engagement, and measurable outcomes. Each project reflects a commitment to learning science, design excellence, and strategic impact.</p>
+                </div>
+
+                <!-- VIDEO PROJECT -->
+                <div class="work-subsection">
+                    <h3>🎬 Video Project</h3>
+                    <div class="work-grid" style="grid-template-columns: 1fr;">
+                        <div class="work-card" style="max-width: 800px;">
+                            <div style="padding: 0; line-height: 0;">
+                                <video width="100%" controls preload="metadata" poster="" style="border-radius: 12px 12px 0 0; display: block; background: #0a0a0f;">
+                                    <source src="behavior-change-video.mp4" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                            <div class="work-header">
+                                <span class="work-type">Animated Explainer + Articulate Storyline</span>
+                                <h3>From Content Delivery to Behavior Change</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">A 2-minute video exploring why traditional training fails and what behavior-first instructional design looks like in practice. Features animated concept scenes and a live walkthrough of a branching scenario built in Articulate Storyline.</p>
+                                <p class="work-desc" style="margin-top: 0.5rem; font-weight: 600; color: #1E40AF;">Built with: ElevenLabs (AI voiceover) · CapCut (video editing) · Camtasia (screen recording) · HTML/CSS animation</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TRAINING COURSES SUBSECTION -->
+                <div class="work-subsection">
+                    <h3>🎓 Training Courses</h3>
+                    <div class="work-grid">
+                        <!-- EXISTING ARTICULATE COURSE -->
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&h=300&q=80');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Articulate Rise</span>
+                                <h3>Data Center Safety Essentials</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">Comprehensive online module for field technicians covering hazard identification, safety protocols, and emergency response in data center environments.</p>
+                                <div class="work-links">
+                                    <a href="https://share.articulate.com/E-t8XPY-d5hjScLbGBhto" class="work-link" target="_blank">Take Course</a>
+                                    <a href="https://share.articulate.com/E-t8XPY-d5hjScLbGBhto" class="work-link" target="_blank">Preview</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PLACEHOLDER TRAININGS -->
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&h=300&q=80');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Articulate Storyline</span>
+                                <h3>Onboarding Excellence</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">A comprehensive 4-week onboarding program designed to accelerate new hire productivity, build organizational culture awareness, and establish strong peer connections. Combines video modules, interactive scenarios, and knowledge checks built in Articulate Storyline to ensure retention and application.</p>
+                                <div class="training-placeholder">
+                                    📧 Reach out to me for early access to this training module!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+    <div class="work-visual" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&h=300&q=80');"></div>
+    <div class="work-header">
+        <span class="work-type">Articulate Storyline</span>
+        <h3>Reading the Room: Responsive Facilitation Decisions</h3>
+    </div>
+    <div class="work-body">
+        <p class="work-desc">Face three realistic workshop scenarios where your choices determine learner engagement, trust, and outcomes. Learn how great facilitators read the room and adapt in real time.</p>
+        <div class="work-links">
+            <a href="https://kent-state-university-0823.reach360.com/share/course/5eb5514e-0983-4baa-9b13-1affe83f232e" class="work-link" target="_blank">Take Course</a>
+            <a href="https://kent-state-university-0823.reach360.com/share/course/5eb5514e-0983-4baa-9b13-1affe83f232e" class="work-link" target="_blank">Preview</a>
+        </div>
+    </div>
+</div>
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.unsplash.com/photo-1552975739-41822bda5d74?auto=format&fit=crop&w=600&h=300&q=80');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Articulate Rise</span>
+                                <h3>Effective Delegation for First-Time Managers</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">Manager-level training focused on delegation, micromanagement avoidance, and empowering team members. Built with branching scenarios that reflect real workplace challenges, this course uses behavioral modeling and coaching feedback to develop confident leaders in high-growth organizations.</p>
+                                <div class="training-placeholder">
+                                    📧 Reach out to me for early access to this training module!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&h=300&q=80');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Vyond + Articulate</span>
+                                <h3>Sales Negotiation & Objection Handling</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">Sales and business development teams need smart, practical frameworks for handling objections. This animated training (Vyond) paired with interactive decision simulations (Articulate) teaches real-world negotiation tactics, active listening, and closing techniques across sectors including B2B SaaS, finance, and retail.</p>
+                                <div class="training-placeholder">
+                                    📧 Reach out to me for early access to this training module!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&h=300&q=80');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Interactive HTML5</span>
+                                <h3>Compliance & Risk Management</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">Essential for regulated industries like healthcare, finance, and manufacturing. This adaptive compliance training covers regulatory requirements, audit readiness, risk mitigation, and incident reporting. Includes case studies, quizzes, and certification tracking—all critical for organizational risk management.</p>
+                                <div class="training-placeholder">
+                                    📧 Reach out to me for early access to this training module!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.unsplash.com/photo-1552664730-d307ca884978?auto=format&fit=crop&w=600&h=300&q=80');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Articulate + Video</span>
+                                <h3>Digital Skills & Software Mastery</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">In-demand across every sector: training employees on new software tools, cloud platforms, and digital workflows. This modular course combines video demonstrations, step-by-step guides, practice environments, and performance support to ensure quick adoption and reduce help desk calls.</p>
+                                <div class="training-placeholder">
+                                    📧 Reach out to me for early access to this training module!
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JOB AIDS & RESOURCES SUBSECTION -->
+                <div class="work-subsection">
+                    <h3>📋 Job Aids & Resources</h3>
+                    <div class="work-grid">
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=600');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Process</span>
+                                <h3>Training Design Process</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">Complete ADDIE lifecycle from analysis through measurement.</p>
+                                <div class="work-links">
+                                    <a href="Job_Aid_Process.png" class="work-link" target="_blank">View</a>
+                                    <a href="Job_Aid_Process.png" class="work-link" download>Download</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="work-card">
+                            <div class="work-visual" style="background-image: url('https://images.pexels.com/photos/669996/pexels-photo-669996.jpeg?auto=compress&cs=tinysrgb&w=600');"></div>
+                            <div class="work-header">
+                                <span class="work-type">Strategy</span>
+                                <h3>Measuring for Impact</h3>
+                            </div>
+                            <div class="work-body">
+                                <p class="work-desc">Strategic roadmap with real case study metrics and ROI proof.</p>
+                                <div class="work-links">
+                                    <a href="Measuring_For_Impact_Job_Aid.png" class="work-link" target="_blank">View</a>
+                                    <a href="Measuring_For_Impact_Job_Aid.png" class="work-link" download>Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <div class="page" id="page-2">
+        <section class="researcher">
+            <div class="section-content">
+                <h2>Research & Publications</h2>
+                
+                <div class="research-tabs">
+                    <button class="research-tab-btn active" onclick="showResearchTab(0)">📄 Dissertation</button>
+                    <button class="research-tab-btn" onclick="showResearchTab(1)">📰 Published</button>
+                    <button class="research-tab-btn" onclick="showResearchTab(2)">📚 Manuscripts</button>
+                    <button class="research-tab-btn" onclick="showResearchTab(3)">🎤 Presentations</button>
+                    <button class="research-tab-btn" onclick="showResearchTab(4)">🏆 Awards</button>
+                </div>
+
+                <div class="research-content active" id="research-0">
+                    <div class="dissertation-item">
+                        <h3>📖 How Do Pragmatic Forms of Provisional Language Shift the Interpretation of Facts and Myths?</h3>
+                        <div class="dissertation-meta">Advisor: Dr. Jennifer Roche | Defense: March 6, 2026</div>
+                        <div class="dissertation-desc">Doctoral research on provisional language framing, trust, and behavioral change using mouse-tracking methodology and mixed-effects modeling in R. 6 conference presentations, 2+ published papers, 3 awards.</div>
+                    </div>
+                </div>
+
+                <div class="research-content" id="research-1">
+                    <div class="paper-item">
+                        <div class="paper-title">📄 A comparative study of resilience, life satisfaction and adjustment amongst parents</div>
+                        <div class="paper-meta">Kate, S. (2020) | International Journal of Advance Research, Ideas and Innovations in Technology</div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">📄 Stress, uncertainty, and resilience during COVID-19</div>
+                        <div class="paper-meta">Joshi, K., Kate, S., et al. (2020) | International Journal of Advance Research, Ideas and Innovations in Technology</div>
+                    </div>
+                </div>
+
+                <div class="research-content" id="research-2">
+                    <div class="paper-item">
+                        <div class="paper-title">Impact of Provisional Language on Scientific Fact and Myth Endorsement</div>
+                        <div class="paper-meta">Kate, S., Roche, M., Morris, B. | In progress</div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">Do people have a prototype of an "average"?</div>
+                        <div class="paper-meta">Kate, S., Morris, B. | In progress</div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">Foreign Accent & Social Judgments of Stuttering: Mouse-Tracking Task</div>
+                        <div class="paper-meta">Yassin, H., Roche, M., Noguchi, K., Kate, S., Arnold, H. | In progress</div>
+                    </div>
+                    <div class="paper-item">
+                        <div class="paper-title">Navigating Uncertainty: Cognitive & Non-cognitive Factors in Provisional Language</div>
+                        <div class="paper-meta">Kate, S., Asaro, K., Roche, M. | In progress</div>
+                    </div>
+                </div>
+
+                <div class="research-content" id="research-3">
+                    <div class="presentation-item">
+                        <div class="presentation-title">🎤 Prosody, Knowledge, and Misconceptions: Vocal Cues in Real-Time Decision Making</div>
+                        <div class="presentation-meta">Fall 2025 | Auditory Perception, Cognition, and Action Society</div>
+                    </div>
+                    <div class="presentation-item">
+                        <div class="presentation-title">🎤 Do people have a prototype of an "average"?</div>
+                        <div class="presentation-meta">Spring 2025 | Midwestern Psychological Association, Chicago IL</div>
+                    </div>
+                    <div class="presentation-item">
+                        <div class="presentation-title">🎤 Navigating Uncertainty: Influence of Cognitive & Non-cognitive Factors on Provisional Language</div>
+                        <div class="presentation-meta">Fall 2024 | Auditory Perception, Cognition, and Action Society</div>
+                    </div>
+                    <div class="presentation-item">
+                        <div class="presentation-title">🎤 Interaction Between Mathematical Affect and Feedback During Computation</div>
+                        <div class="presentation-meta">Summer 2024 | Cognitive Science Society, Rotterdam Netherlands (Poster)</div>
+                    </div>
+                    <div class="presentation-item">
+                        <div class="presentation-title">🎤 Impact of Probabilistic Language on Scientific Fact and Myth Endorsement</div>
+                        <div class="presentation-meta">Spring 2023 | Graduate Research Symposium & Midwestern Psychological Association (Poster)</div>
+                    </div>
+                    <div class="presentation-item">
+                        <div class="presentation-title">🎤 Hedging: Impact of Imprecise Communication on Health & Scientific Fact Endorsement</div>
+                        <div class="presentation-meta">Spring 2023 | Education, Health & Human Services Research Gallery, Kent State</div>
+                    </div>
+                </div>
+
+                <div class="research-content" id="research-4">
+                    <div class="award-item">
+                        <div class="award-title">🏆 International Travel Grant</div>
+                        <div class="award-meta">June 2024 | Graduate Student Senate, Kent State University | $1,500</div>
+                    </div>
+                    <div class="award-item">
+                        <div class="award-title">🏆 Best Graduate Student Poster Award</div>
+                        <div class="award-meta">April 2023 | Graduate Research Symposium, Kent State University | $200</div>
+                    </div>
+                    <div class="award-item">
+                        <div class="award-title">🏆 Domestic Travel Grant</div>
+                        <div class="award-meta">April 2023 | Graduate Student Senate, Kent State University | $500</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- PAGE 4: LET'S CONNECT -->
+    <div class="page" id="page-3">
+        <section class="connect">
+            <div class="connect-content">
+                <h2>Let's Work Together!</h2>
+                <p>I'm passionate about designing training that transforms organizations and drives measurable impact. I'd love to chat about how I can support your team's growth and help you achieve your learning and development goals.</p>
+                
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">📧</div>
+                        <h3>Email</h3>
+                        <p>Send me a direct message or let's schedule a call.</p>
+                        <a href="/cdn-cgi/l/email-protection#66150d071203260d03081248030213">Send Email</a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">💼</div>
+                        <h3>LinkedIn</h3>
+                        <p>Let's connect and stay updated on what I'm working on.</p>
+                        <a href="https://www.linkedin.com/in/shruti-sameer-kate" target="_blank">Visit My Profile</a>
+                    </div>
+                </div>
+
+                <p style="margin-top: 3rem; font-size: 0.95rem; opacity: 0.9;">Looking forward to connecting with you!</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <p>&copy; 2026 Shruti Sameer Kate. Learning & Development Specialist.</p>
+    </footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        function showPage(pageIndex) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            document.getElementById(`page-${pageIndex}`).classList.add('active');
+
+            const buttons = document.querySelectorAll('.page-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+            buttons[pageIndex].classList.add('active');
+
+            if (pageIndex === 2) {
+                showResearchTab(0);
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        function showResearchTab(tabIndex) {
+            const contents = document.querySelectorAll('.research-content');
+            contents.forEach(content => content.classList.remove('active'));
+            document.getElementById(`research-${tabIndex}`).classList.add('active');
+            document.querySelectorAll('.research-tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.research-tab-btn')[tabIndex].classList.add('active');
+        }
+    </script>
+</body>
+</html>
