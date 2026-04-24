@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onboarding Quest: Your First Day | Shruti Kate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { margin: 0; background: #0c0c1d; font-family: 'Outfit', sans-serif; }
+        #root { min-height: 100vh; }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 20% { transform: translateX(-8px); } 40% { transform: translateX(8px); } 60% { transform: translateX(-5px); } 80% { transform: translateX(5px); } }
+        @keyframes popIn { 0% { transform: scale(0.8); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+        @keyframes floatUp { 0% { opacity: 1; transform: translateY(0) scale(1); } 100% { opacity: 0; transform: translateY(-80px) scale(1.4); } }
+        @keyframes confettiFall { 0% { transform: translateY(-20px) rotate(0deg); opacity: 1; } 100% { transform: translateY(100vh) rotate(720deg); opacity: 0; } }
+        @keyframes orb1 { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(40px, -60px) scale(1.1); } 66% { transform: translate(-30px, 40px) scale(0.95); } }
+        @keyframes orb2 { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(-50px, 30px) scale(0.9); } 66% { transform: translate(60px, -40px) scale(1.05); } }
+    </style>
+</head>
+<body>
+<div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.9/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useEffect, useCallback, useRef } = React;
+
+const CHALLENGES = { INTRO:"intro", TOOL_MATCH:"tool_match", ORG_CHART:"org_chart", SPEED_ROUND:"speed_round", RESULTS:"results" };
+
+const TOOLS_DATA = [
+  { id:"slack", name:"Slack", icon:"💬", purpose:"Team Communication", desc:"Real-time messaging & channels" },
+  { id:"jira", name:"Jira", icon:"📋", purpose:"Project Tracking", desc:"Tasks, sprints & bug tracking" },
+  { id:"confluence", name:"Confluence", icon:"📖", purpose:"Documentation", desc:"Team wikis & knowledge base" },
+  { id:"figma", name:"Figma", icon:"🎨", purpose:"Design Collaboration", desc:"UI mockups & prototyping" },
+  { id:"github", name:"GitHub", icon:"🐙", purpose:"Code Repository", desc:"Version control & code review" },
+  { id:"zoom", name:"Zoom", icon:"📹", purpose:"Video Meetings", desc:"Virtual calls & webinars" },
+];
+
+const TEAM_DATA = [
+  { id:"alex", name:"Alex Chen", role:"Writes code & builds features", dept:"Engineering", avatar:"👨‍💻" },
+  { id:"maya", name:"Maya Patel", role:"Creates UI mockups & user flows", dept:"Design", avatar:"👩‍🎨" },
+  { id:"jordan", name:"Jordan Lee", role:"Plans campaigns & brand strategy", dept:"Marketing", avatar:"📣" },
+  { id:"sam", name:"Sam Torres", role:"Manages hiring & team culture", dept:"People Ops", avatar:"🤝" },
+  { id:"riley", name:"Riley Kim", role:"Handles customer issues & support tickets", dept:"Customer Success", avatar:"🎧" },
+  { id:"casey", name:"Casey Nguyen", role:"Analyzes data & builds dashboards", dept:"Analytics", avatar:"📊" },
+];
+
+const DEPARTMENTS = ["Engineering","Design","Marketing","People Ops","Customer Success","Analytics"];
+
+const POLICY_QUESTIONS = [
+  { q:"How many PTO days do new hires get per year?", options:["10","15","20","Unlimited"], correct:2 },
+  { q:"What's the policy on remote work?", options:["No remote","Fridays only","3 days in office","Fully flexible"], correct:3 },
+  { q:"When should you report a security incident?", options:["End of day","Weekly report","Immediately","When convenient"], correct:2 },
+  { q:"What's the expense approval threshold?", options:["$25","$50","$100","$200"], correct:2 },
+  { q:"How often are performance reviews?", options:["Monthly","Quarterly","Bi-annually","Annually"], correct:1 },
+  { q:"Who do you contact for IT issues?", options:["Your manager","IT Help Desk","HR","Office admin"], correct:1 },
+  { q:"What's the dress code?", options:["Business formal","Business casual","Smart casual","No dress code"], correct:2 },
+  { q:"How do you book a meeting room?", options:["Email admin","Slack #rooms","Google Calendar","Walk-in only"], correct:2 },
+];
+
+const shuffle = a => [...a].sort(() => Math.random() - 0.5);
+
+function Confetti({ active }) {
+  const [particles, setParticles] = useState([]);
+  useEffect(() => {
+    if (!active) return;
+    const colors = ["#fbbf24","#f59e0b","#22c55e","#3b82f6","#ec4899","#8b5cf6","#ef4444","#06b6d4"];
+    const p = Array.from({ length: 60 }, (_, i) => ({
+      id:i, x:Math.random()*100, color:colors[Math.floor(Math.random()*colors.length)],
+      delay:Math.random(), duration:1.8+Math.random()*2.5, size:6+Math.random()*10,
+      rotation:Math.random()*360, shape:Math.random()>0.5?"circle":"rect",
+    }));
+    setParticles(p);
+    const t = setTimeout(() => setParticles([]), 5000);
+    return () => clearTimeout(t);
+  }, [active]);
+  if (!particles.length) return null;
+  return React.createElement("div", { style:{ position:"fixed", top:0, left:0, width:"100%", height:"100%", pointerEvents:"none", zIndex:999 }},
+    particles.map(p => React.createElement("div", { key:p.id, style:{
+      position:"absolute", left:p.x+"%", top:-20, width:p.size, height:p.shape==="circle"?p.size:p.size*0.6,
+      background:p.color, borderRadius:p.shape==="circle"?"50%":"2px", transform:"rotate("+p.rotation+"deg)",
+      animation:"confettiFall "+p.duration+"s ease-in "+p.delay+"s forwards",
+    }}))
+  );
+}
+
+function FloatingPoints({ points, x, y }) {
+  if (!points) return null;
+  return React.createElement("div", { style:{
+    position:"fixed", left:x-30, top:y-20, pointerEvents:"none", zIndex:998,
+    fontFamily:"'Syne', sans-serif", fontWeight:800, fontSize:32,
+    color:points>0?"#22c55e":"#ef4444", animation:"floatUp 1.2s ease-out forwards",
+    textShadow:"0 2px 12px rgba(0,0,0,0.5)",
+  }}, points>0?"+"+points:points);
+}
+
+function ChallengeTransition({ icon, title, onDone }) {
+  const [phase, setPhase] = useState(0);
+  useEffect(() => {
+    setTimeout(() => setPhase(1), 50);
+    setTimeout(() => setPhase(2), 1200);
+    setTimeout(() => onDone(), 1600);
+  }, []);
+  return React.createElement("div", { style:{
+    position:"fixed", inset:0, zIndex:900, display:"flex", alignItems:"center", justifyContent:"center",
+    background:"rgba(12,12,29,0.9)", backdropFilter:"blur(8px)",
+    opacity:phase===0?0:phase===2?0:1, transition:"opacity 0.4s ease",
+  }}, React.createElement("div", { style:{ textAlign:"center", transform:phase===1?"scale(1)":"scale(0.7)", transition:"transform 0.5s cubic-bezier(0.34,1.56,0.64,1)" }},
+    React.createElement("div", { style:{ fontSize:64, marginBottom:12 }}, icon),
+    React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontSize:28, fontWeight:800, color:"#fbbf24", letterSpacing:"0.05em" }}, title)
+  ));
+}
+
+function StarRating({ score, max }) {
+  const pct = score/max;
+  const stars = pct>=0.9?3:pct>=0.6?2:pct>0?1:0;
+  return React.createElement("div", { style:{ display:"flex", gap:8, justifyContent:"center", margin:"10px 0" }},
+    [1,2,3].map(s => React.createElement("span", { key:s, style:{
+      fontSize:32, filter:s<=stars?"none":"grayscale(1) opacity(0.3)",
+      transform:s<=stars?"scale(1.1)":"scale(0.85)", transition:"all 0.5s cubic-bezier(0.34,1.56,0.64,1)",
+      transitionDelay:s*0.2+"s",
+    }}, "⭐"))
+  );
+}
+
+function ProgressBar({ current, total }) {
+  return React.createElement("div", { style:{ display:"flex", alignItems:"center", gap:12, marginBottom:28 }},
+    React.createElement("div", { style:{ flex:1, height:10, background:"rgba(255,255,255,0.08)", borderRadius:99, overflow:"hidden" }},
+      React.createElement("div", { style:{ height:"100%", width:(current/total)*100+"%", background:"linear-gradient(90deg,#fbbf24,#f59e0b,#f472b6)", borderRadius:99, transition:"width 0.8s cubic-bezier(0.34,1.56,0.64,1)" }})
+    ),
+    React.createElement("span", { style:{ fontFamily:"'Syne', sans-serif", fontSize:15, fontWeight:700, color:"#fbbf24" }}, current+"/3")
+  );
+}
+
+function IntroScreen({ onStart }) {
+  const [show, setShow] = useState(false);
+  useEffect(() => { setTimeout(() => setShow(true), 100); }, []);
+  const challenges = [
+    { icon:"🎯", title:"Tool Match", desc:"Drag tools to their purpose", pts:"60 pts" },
+    { icon:"🏢", title:"Meet Your Team", desc:"Place people in the right department", pts:"60 pts" },
+    { icon:"⚡", title:"Policy Speed Round", desc:"Answer fast before time runs out", pts:"60 pts" },
+  ];
+  return React.createElement("div", { style:{ textAlign:"center", padding:"48px 24px", opacity:show?1:0, transform:show?"translateY(0)":"translateY(30px)", transition:"all 0.8s cubic-bezier(0.16,1,0.3,1)" }},
+    React.createElement("div", { style:{ fontSize:80, marginBottom:20, animation:"float 3s ease-in-out infinite" }}, "🚀"),
+    React.createElement("h1", { style:{ fontFamily:"'Syne', sans-serif", fontSize:"clamp(36px,7vw,56px)", fontWeight:800, color:"#fbbf24", lineHeight:1.05, margin:"0 0 10px", letterSpacing:"-0.03em" }}, "ONBOARDING QUEST"),
+    React.createElement("p", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:"clamp(16px,3vw,20px)", color:"#a78bfa", fontWeight:600, letterSpacing:"0.2em", textTransform:"uppercase", margin:"0 0 40px" }}, "Your First Day Survival Guide"),
+    React.createElement("div", { style:{ background:"rgba(255,255,255,0.04)", borderRadius:20, padding:"28px 24px", marginBottom:40, textAlign:"left", border:"1px solid rgba(255,255,255,0.07)", backdropFilter:"blur(10px)" }},
+      React.createElement("p", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:18, color:"#d1d5db", lineHeight:1.7, margin:"0 0 24px" }},
+        "Welcome to ", React.createElement("strong", { style:{ color:"#fff", fontWeight:700 }}, "NovaCorp"), "! Before you settle in, complete three challenges to prove you're ready for Day 1."
+      ),
+      challenges.map((c, i) => React.createElement("div", { key:i, style:{ display:"flex", alignItems:"center", gap:16, padding:"16px 0", borderTop:i>0?"1px solid rgba(255,255,255,0.06)":"none" }},
+        React.createElement("div", { style:{ width:52, height:52, borderRadius:14, background:"rgba(251,191,36,0.1)", display:"flex", alignItems:"center", justifyContent:"center", fontSize:28, flexShrink:0 }}, c.icon),
+        React.createElement("div", { style:{ flex:1 }},
+          React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:18, color:"#fff" }}, c.title),
+          React.createElement("div", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:15, color:"#6b7280" }}, c.desc)
+        ),
+        React.createElement("span", { style:{ fontFamily:"'Syne', sans-serif", fontSize:14, fontWeight:700, color:"#fbbf24", background:"rgba(251,191,36,0.1)", padding:"5px 12px", borderRadius:99 }}, c.pts)
+      ))
+    ),
+    React.createElement("button", { onClick:onStart, style:{ fontFamily:"'Syne', sans-serif", fontWeight:800, fontSize:20, padding:"18px 60px", background:"linear-gradient(135deg,#fbbf24,#f59e0b)", color:"#1a1a2e", border:"none", borderRadius:99, cursor:"pointer", letterSpacing:"0.06em", transition:"all 0.3s", boxShadow:"0 6px 32px rgba(251,191,36,0.35)" },
+      onMouseEnter:e=>{e.target.style.transform="scale(1.06)";e.target.style.boxShadow="0 8px 40px rgba(251,191,36,0.5)"},
+      onMouseLeave:e=>{e.target.style.transform="scale(1)";e.target.style.boxShadow="0 6px 32px rgba(251,191,36,0.35)"}
+    }, "START QUEST →")
+  );
+}
+
+function ToolMatchChallenge({ onComplete }) {
+  const [tools] = useState(() => shuffle(TOOLS_DATA));
+  const [purposes] = useState(() => shuffle(TOOLS_DATA.map(t=>({id:t.id,purpose:t.purpose,desc:t.desc}))));
+  const [matches, setMatches] = useState({});
+  const [dragging, setDragging] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [feedback, setFeedback] = useState(null);
+  const [show, setShow] = useState(false);
+  const [shakeSlot, setShakeSlot] = useState(null);
+  const [correctFlash, setCorrectFlash] = useState(null);
+  const [floatingPts, setFloatingPts] = useState(null);
+
+  useEffect(() => { setTimeout(() => setShow(true), 100); }, []);
+
+  const handleTouchTap = id => { if(submitted) return; dragging===id?setDragging(null):setDragging(id); };
+  const handleSlotTap = pid => {
+    if(!dragging||submitted) return;
+    setMatches(prev => { const n={...prev}; Object.keys(n).forEach(k=>{if(n[k]===dragging)delete n[k]}); n[pid]=dragging; return n; });
+    setDragging(null);
+  };
+  const handleDrop = pid => { if(dragging&&!submitted){ setMatches(prev=>{const n={...prev};Object.keys(n).forEach(k=>{if(n[k]===dragging)delete n[k]});n[pid]=dragging;return n}); setDragging(null); }};
+
+  const checkAnswers = e => {
+    const score = purposes.reduce((a,p)=>a+(matches[p.id]===p.id?1:0),0);
+    setFeedback(score); setSubmitted(true);
+    purposes.forEach((p,i)=>{
+      if(matches[p.id]===p.id){setTimeout(()=>setCorrectFlash(p.id),i*200);setTimeout(()=>setCorrectFlash(null),i*200+600)}
+      else if(matches[p.id]){setTimeout(()=>setShakeSlot(p.id),i*200);setTimeout(()=>setShakeSlot(null),i*200+500)}
+    });
+    setFloatingPts({pts:score*10,x:e?.clientX||window.innerWidth/2,y:e?.clientY||300});
+    setTimeout(()=>setFloatingPts(null),1200);
+    setTimeout(()=>onComplete(score,tools.length),2500);
+  };
+
+  const allPlaced = Object.keys(matches).length===tools.length;
+  const isToolPlaced = id => Object.values(matches).includes(id);
+  const getToolInSlot = pid => { const tid=matches[pid]; return tid?tools.find(t=>t.id===tid):null; };
+  const isMobile = typeof window!=='undefined' && window.innerWidth<=600;
+
+  return React.createElement("div", { style:{ padding:"24px 20px", opacity:show?1:0, transform:show?"translateY(0)":"translateY(20px)", transition:"all 0.6s ease" }},
+    floatingPts && React.createElement(FloatingPoints, floatingPts),
+    React.createElement("div", { style:{ textAlign:"center", marginBottom:24 }},
+      React.createElement("span", { style:{ fontSize:40 }}, "🎯"),
+      React.createElement("h2", { style:{ fontFamily:"'Syne', sans-serif", fontSize:30, fontWeight:800, color:"#fbbf24", margin:"6px 0" }}, "TOOL MATCH"),
+      React.createElement("p", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:17, color:"#94a3b8", margin:0 }}, isMobile?"Tap a tool, then tap where it belongs":"Drag each tool to its matching purpose")
+    ),
+    React.createElement("div", { style:{ display:"flex", gap:10, flexWrap:"wrap", justifyContent:"center", marginBottom:28 }},
+      tools.map(t => React.createElement("div", { key:t.id, draggable:!submitted&&!isToolPlaced(t.id),
+        onDragStart:()=>setDragging(t.id), onClick:()=>handleTouchTap(t.id),
+        style:{ padding:"12px 18px", borderRadius:14, cursor:submitted?"default":"grab",
+          background:dragging===t.id?"rgba(251,191,36,0.2)":isToolPlaced(t.id)?"rgba(255,255,255,0.02)":"rgba(255,255,255,0.06)",
+          border:dragging===t.id?"2px solid #fbbf24":"2px solid transparent",
+          opacity:isToolPlaced(t.id)?0.3:1, transition:"all 0.25s ease", userSelect:"none",
+          display:"flex", alignItems:"center", gap:8, transform:dragging===t.id?"scale(1.08)":"scale(1)",
+        }},
+        React.createElement("span", { style:{ fontSize:24 }}, t.icon),
+        React.createElement("span", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:16, fontWeight:600, color:"#fff" }}, t.name)
+      ))
+    ),
+    React.createElement("div", { style:{ display:"grid", gap:10 }},
+      purposes.map(p => {
+        const placed=getToolInSlot(p.id); const isCorrect=submitted&&matches[p.id]===p.id;
+        const isWrong=submitted&&matches[p.id]&&matches[p.id]!==p.id;
+        return React.createElement("div", { key:p.id, onDragOver:e=>e.preventDefault(), onDrop:()=>handleDrop(p.id), onClick:()=>handleSlotTap(p.id),
+          style:{ display:"flex", alignItems:"center", gap:14, padding:"16px 18px", borderRadius:16, minHeight:60,
+            background:correctFlash===p.id?"rgba(34,197,94,0.25)":isCorrect?"rgba(34,197,94,0.1)":isWrong?"rgba(239,68,68,0.1)":"rgba(255,255,255,0.03)",
+            border:isCorrect?"1px solid rgba(34,197,94,0.4)":isWrong?"1px solid rgba(239,68,68,0.4)":"1px dashed rgba(255,255,255,0.12)",
+            transition:"all 0.3s ease", animation:shakeSlot===p.id?"shake 0.4s ease":"none",
+          }},
+          React.createElement("div", { style:{ flex:1 }},
+            React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontSize:16, fontWeight:700, color:"#e2e8f0" }}, p.purpose),
+            React.createElement("div", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:14, color:"#6b7280" }}, p.desc)
+          ),
+          React.createElement("div", { style:{ minWidth:100, textAlign:"center", padding:"8px 14px", borderRadius:12,
+            background:placed?"rgba(255,255,255,0.07)":"transparent",
+            fontFamily:"'Outfit', sans-serif", fontSize:15, fontWeight:600, color:placed?"#fff":"#4b5563", transition:"all 0.3s ease",
+          }}, placed?placed.icon+" "+placed.name:"· · ·"),
+          submitted && React.createElement("span", { style:{ fontSize:22 }}, isCorrect?"✅":isWrong?"❌":"")
+        );
+      })
+    ),
+    !submitted && React.createElement("div", { style:{ textAlign:"center", marginTop:28 }},
+      React.createElement("button", { onClick:checkAnswers, disabled:!allPlaced, style:{
+        fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:17, padding:"15px 44px",
+        background:allPlaced?"linear-gradient(135deg,#fbbf24,#f59e0b)":"rgba(255,255,255,0.08)",
+        color:allPlaced?"#1a1a2e":"#4b5563", border:"none", borderRadius:99,
+        cursor:allPlaced?"pointer":"not-allowed", transition:"all 0.3s",
+        boxShadow:allPlaced?"0 4px 20px rgba(251,191,36,0.3)":"none",
+      }}, "CHECK ANSWERS")
+    ),
+    submitted && feedback!==null && React.createElement("div", { style:{ textAlign:"center", marginTop:24, animation:"popIn 0.5s cubic-bezier(0.34,1.56,0.64,1)" }},
+      React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontSize:24, fontWeight:800, color:"#fff" }},
+        feedback+"/"+tools.length+" correct · ", React.createElement("span", { style:{ color:"#fbbf24" }}, feedback*10+" pts")
+      ),
+      React.createElement(StarRating, { score:feedback, max:tools.length })
+    )
+  );
+}
+
+function OrgChartChallenge({ onComplete }) {
+  const [people] = useState(() => shuffle(TEAM_DATA));
+  const [placements, setPlacements] = useState({});
+  const [selected, setSelected] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
+  const [feedback, setFeedback] = useState(null);
+  const [show, setShow] = useState(false);
+  const [hoverDept, setHoverDept] = useState(null);
+  const [floatingPts, setFloatingPts] = useState(null);
+  const [shakeSlot, setShakeSlot] = useState(null);
+
+  useEffect(() => { setTimeout(() => setShow(true), 100); }, []);
+
+  const handlePersonClick = id => { if(submitted) return; selected===id?setSelected(null):setSelected(id); };
+  const handleDeptClick = dept => {
+    if(!selected||submitted) return;
+    setPlacements(prev=>{const n={...prev};Object.keys(n).forEach(k=>{if(n[k]===selected)delete n[k]});n[dept]=selected;return n});
+    setSelected(null);
+  };
+  const isPlaced = id => Object.values(placements).includes(id);
+  const getPersonInDept = dept => { const pid=placements[dept]; return pid?people.find(p=>p.id===pid):null; };
+
+  const checkAnswers = e => {
+    const score = DEPARTMENTS.reduce((a,d)=>{const pid=placements[d];const p=TEAM_DATA.find(x=>x.id===pid);return a+(p&&p.dept===d?1:0)},0);
+    setFeedback(score); setSubmitted(true);
+    DEPARTMENTS.forEach((d,i)=>{const pid=placements[d];const p=TEAM_DATA.find(x=>x.id===pid);if(p&&p.dept!==d){setTimeout(()=>setShakeSlot(d),i*150);setTimeout(()=>setShakeSlot(null),i*150+500)}});
+    setFloatingPts({pts:score*10,x:e?.clientX||window.innerWidth/2,y:e?.clientY||300});
+    setTimeout(()=>setFloatingPts(null),1200);
+    setTimeout(()=>onComplete(score,DEPARTMENTS.length),2500);
+  };
+  const allPlaced = Object.keys(placements).length===DEPARTMENTS.length;
+
+  return React.createElement("div", { style:{ padding:"24px 20px", opacity:show?1:0, transform:show?"translateY(0)":"translateY(20px)", transition:"all 0.6s ease" }},
+    floatingPts && React.createElement(FloatingPoints, floatingPts),
+    React.createElement("div", { style:{ textAlign:"center", marginBottom:24 }},
+      React.createElement("span", { style:{ fontSize:40 }}, "🏢"),
+      React.createElement("h2", { style:{ fontFamily:"'Syne', sans-serif", fontSize:30, fontWeight:800, color:"#fbbf24", margin:"6px 0" }}, "MEET YOUR TEAM"),
+      React.createElement("p", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:17, color:"#94a3b8", margin:0 }}, "Read each role, then place them in the right department")
+    ),
+    React.createElement("div", { style:{ display:"grid", gap:10, marginBottom:24 }},
+      people.map(p => React.createElement("div", { key:p.id, onClick:()=>handlePersonClick(p.id), style:{
+        display:"flex", alignItems:"center", gap:14, padding:"16px 18px", borderRadius:16,
+        background:selected===p.id?"rgba(251,191,36,0.15)":"rgba(255,255,255,0.04)",
+        border:selected===p.id?"2px solid #fbbf24":"2px solid transparent",
+        opacity:isPlaced(p.id)&&selected!==p.id?0.25:1, cursor:submitted?"default":"pointer",
+        transition:"all 0.25s ease", userSelect:"none", transform:selected===p.id?"scale(1.02)":"scale(1)",
+      }},
+        React.createElement("span", { style:{ fontSize:34 }}, p.avatar),
+        React.createElement("div", null,
+          React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontSize:17, fontWeight:700, color:"#fff" }}, p.name),
+          React.createElement("div", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:15, color:"#94a3b8", lineHeight:1.5 }}, p.role)
+        )
+      ))
+    ),
+    React.createElement("div", { style:{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:10 }},
+      DEPARTMENTS.map(dept => {
+        const placed=getPersonInDept(dept);
+        const isCorrect=submitted&&placed&&TEAM_DATA.find(p=>p.id===placements[dept])?.dept===dept;
+        const isWrong=submitted&&placed&&!isCorrect;
+        return React.createElement("div", { key:dept, onClick:()=>handleDeptClick(dept),
+          onMouseEnter:()=>!submitted&&setHoverDept(dept), onMouseLeave:()=>setHoverDept(null),
+          style:{ padding:"18px 16px", borderRadius:16, textAlign:"center", minHeight:90,
+            background:isCorrect?"rgba(34,197,94,0.12)":isWrong?"rgba(239,68,68,0.1)":hoverDept===dept&&selected?"rgba(251,191,36,0.1)":"rgba(255,255,255,0.03)",
+            border:isCorrect?"1px solid rgba(34,197,94,0.4)":isWrong?"1px solid rgba(239,68,68,0.4)":hoverDept===dept&&selected?"1px solid rgba(251,191,36,0.3)":"1px dashed rgba(255,255,255,0.12)",
+            cursor:selected&&!submitted?"pointer":"default", transition:"all 0.3s ease",
+            animation:shakeSlot===dept?"shake 0.4s ease":"none",
+          }},
+          React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontSize:15, fontWeight:700, color:"#e2e8f0", marginBottom:8 }}, dept),
+          placed?React.createElement("div", { style:{ fontSize:15, color:"#94a3b8", fontFamily:"'Outfit', sans-serif" }}, placed.avatar+" "+placed.name):React.createElement("div", { style:{ fontSize:28, color:"#374151" }}, "+"),
+          submitted && React.createElement("span", { style:{ fontSize:20, display:"block", marginTop:4 }}, isCorrect?"✅":isWrong?"❌":"")
+        );
+      })
+    ),
+    !submitted && React.createElement("div", { style:{ textAlign:"center", marginTop:28 }},
+      React.createElement("button", { onClick:checkAnswers, disabled:!allPlaced, style:{
+        fontFamily:"'Syne', sans-serif", fontWeight:700, fontSize:17, padding:"15px 44px",
+        background:allPlaced?"linear-gradient(135deg,#fbbf24,#f59e0b)":"rgba(255,255,255,0.08)",
+        color:allPlaced?"#1a1a2e":"#4b5563", border:"none", borderRadius:99,
+        cursor:allPlaced?"pointer":"not-allowed", transition:"all 0.3s",
+        boxShadow:allPlaced?"0 4px 20px rgba(251,191,36,0.3)":"none",
+      }}, "CHECK ANSWERS")
+    ),
+    submitted && feedback!==null && React.createElement("div", { style:{ textAlign:"center", marginTop:24, animation:"popIn 0.5s cubic-bezier(0.34,1.56,0.64,1)" }},
+      React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontSize:24, fontWeight:800, color:"#fff" }},
+        feedback+"/"+DEPARTMENTS.length+" correct · ", React.createElement("span", { style:{ color:"#fbbf24" }}, feedback*10+" pts")
+      ),
+      React.createElement(StarRating, { score:feedback, max:DEPARTMENTS.length })
+    )
+  );
+}
+
+function SpeedRoundChallenge({ onComplete }) {
+  const [questions] = useState(() => shuffle(POLICY_QUESTIONS).slice(0,6));
+  const [currentQ, setCurrentQ] = useState(0);
+  const [score, setScore] = useState(0);
+  const [streak, setStreak] = useState(0);
+  const [timeLeft, setTimeLeft] = useState(12);
+  const [answered, setAnswered] = useState(null);
+  const [show, setShow] = useState(false);
+  const [floatingPts, setFloatingPts] = useState(null);
+  const timerRef = useRef(null);
+
+  useEffect(() => { setTimeout(() => setShow(true), 100); }, []);
+
+  useEffect(() => {
+    if(answered!==null||currentQ>=questions.length) return;
+    setTimeLeft(12);
+    timerRef.current = setInterval(() => {
+      setTimeLeft(prev => {
+        if(prev<=1){ clearInterval(timerRef.current); setAnswered(-1); setStreak(0);
+          setTimeout(()=>{ if(currentQ<questions.length-1){setCurrentQ(c=>c+1);setAnswered(null)}else{onComplete(score,questions.length)} },1200);
+          return 0;
+        }
+        return prev-1;
+      });
+    }, 1000);
+    return () => clearInterval(timerRef.current);
+  }, [currentQ, answered]);
+
+  const handleAnswer = (idx, e) => {
+    if(answered!==null) return;
+    clearInterval(timerRef.current);
+    const isCorrect = idx===questions[currentQ].correct;
+    const newStreak = isCorrect?streak+1:0;
+    const bonus = isCorrect&&newStreak>=3?5:0;
+    const pts = isCorrect?10+bonus:0;
+    if(isCorrect) setScore(s=>s+1);
+    setStreak(newStreak); setAnswered(idx);
+    if(pts>0){setFloatingPts({pts,x:e?.clientX||window.innerWidth/2,y:e?.clientY||300});setTimeout(()=>setFloatingPts(null),1200)}
+    setTimeout(()=>{ if(currentQ<questions.length-1){setCurrentQ(c=>c+1);setAnswered(null)}else{onComplete(score+(isCorrect?1:0),questions.length)} },1200);
+  };
+
+  if(currentQ>=questions.length) return null;
+  const q = questions[currentQ];
+  const timerPct = (timeLeft/12)*100;
+  const timerColor = timeLeft<=3?"#ef4444":timeLeft<=6?"#f59e0b":"#22c55e";
+
+  return React.createElement("div", { style:{ padding:"24px 20px", opacity:show?1:0, transform:show?"translateY(0)":"translateY(20px)", transition:"all 0.6s ease" }},
+    floatingPts && React.createElement(FloatingPoints, floatingPts),
+    React.createElement("div", { style:{ textAlign:"center", marginBottom:24 }},
+      React.createElement("span", { style:{ fontSize:40 }}, "⚡"),
+      React.createElement("h2", { style:{ fontFamily:"'Syne', sans-serif", fontSize:30, fontWeight:800, color:"#fbbf24", margin:"6px 0" }}, "SPEED ROUND"),
+      React.createElement("p", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:17, color:"#94a3b8", margin:0 }}, "Question "+(currentQ+1)+" of "+questions.length)
+    ),
+    React.createElement("div", { style:{ width:"100%", height:10, background:"rgba(255,255,255,0.08)", borderRadius:99, overflow:"hidden", marginBottom:24 }},
+      React.createElement("div", { style:{ height:"100%", width:timerPct+"%", background:timerColor, borderRadius:99, transition:"width 1s linear, background 0.3s ease" }})
+    ),
+    React.createElement("div", { style:{ display:"flex", justifyContent:"space-between", alignItems:"center", marginBottom:24 }},
+      React.createElement("span", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:16, fontWeight:600, color:"#94a3b8" }}, "Score: "+score),
+      streak>=2 && React.createElement("span", { style:{ fontFamily:"'Syne', sans-serif", fontSize:15, fontWeight:700, color:"#f472b6", animation:"pulse 0.6s ease-in-out infinite", background:"rgba(244,114,182,0.1)", padding:"6px 14px", borderRadius:99 }}, "🔥 "+streak+"x STREAK"),
+      React.createElement("span", { style:{ fontFamily:"'Syne', sans-serif", fontSize:32, fontWeight:800, color:timerColor, transition:"color 0.3s ease", animation:timeLeft<=3?"pulse 0.5s ease-in-out infinite":"none" }}, timeLeft+"s")
+    ),
+    React.createElement("div", { style:{ background:"rgba(255,255,255,0.05)", borderRadius:20, padding:"28px 24px", marginBottom:24, border:"1px solid rgba(255,255,255,0.07)" }},
+      React.createElement("p", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:20, fontWeight:600, color:"#fff", margin:0, lineHeight:1.5 }}, q.q)
+    ),
+    React.createElement("div", { style:{ display:"grid", gap:10 }},
+      q.options.map((opt, idx) => {
+        const isCorrect=answered!==null&&idx===q.correct; const isChosen=answered===idx;
+        const isWrong=isChosen&&idx!==q.correct;
+        return React.createElement("button", { key:idx, onClick:e=>handleAnswer(idx,e), style:{
+          padding:"18px 20px", borderRadius:16, border:"none", textAlign:"left",
+          fontFamily:"'Outfit', sans-serif", fontSize:17, fontWeight:500,
+          background:isCorrect?"rgba(34,197,94,0.15)":isWrong?"rgba(239,68,68,0.15)":"rgba(255,255,255,0.05)",
+          color:isCorrect?"#4ade80":isWrong?"#f87171":"#e2e8f0",
+          cursor:answered!==null?"default":"pointer", transition:"all 0.2s ease",
+          borderWidth:1, borderStyle:"solid",
+          borderColor:isCorrect?"rgba(34,197,94,0.5)":isWrong?"rgba(239,68,68,0.5)":"rgba(255,255,255,0.06)",
+          animation:isWrong?"shake 0.4s ease":isCorrect?"popIn 0.3s ease":"none",
+        },
+          onMouseEnter:e=>{if(answered===null){e.target.style.background="rgba(255,255,255,0.1)";e.target.style.transform="translateX(4px)"}},
+          onMouseLeave:e=>{if(answered===null){e.target.style.background="rgba(255,255,255,0.05)";e.target.style.transform="translateX(0)"}},
+        }, opt);
+      })
+    ),
+    answered===-1 && React.createElement("div", { style:{ textAlign:"center", marginTop:20, fontFamily:"'Syne', sans-serif", fontSize:20, fontWeight:700, color:"#ef4444", animation:"shake 0.4s ease" }}, "⏰ Time's up!")
+  );
+}
+
+function ResultsScreen({ scores, onRestart }) {
+  const [show, setShow] = useState(false);
+  const [countUp, setCountUp] = useState(0);
+  const [confetti, setConfetti] = useState(false);
+  const totalScore = scores.reduce((a,s)=>a+s.score,0);
+  const totalMax = scores.reduce((a,s)=>a+s.max,0);
+  const pct = Math.round((totalScore/totalMax)*100);
+  const badge = pct>=90?"🏆 Gold Badge":pct>=70?"🥈 Silver Badge":pct>=50?"🥉 Bronze Badge":"📝 Keep Practicing";
+  const badgeColor = pct>=90?"#fbbf24":pct>=70?"#c0c0c0":pct>=50?"#cd7f32":"#64748b";
+  const names=["Tool Match","Meet Your Team","Speed Round"], icons=["🎯","🏢","⚡"];
+
+  useEffect(() => {
+    setTimeout(()=>setShow(true),100);
+    setTimeout(()=>setConfetti(true),600);
+    let current=0; const inc=pct/30;
+    const iv=setInterval(()=>{current+=inc;if(current>=pct){setCountUp(pct);clearInterval(iv)}else setCountUp(Math.round(current))},40);
+    return()=>clearInterval(iv);
+  }, []);
+
+  return React.createElement("div", { style:{ textAlign:"center", padding:"48px 24px", opacity:show?1:0, transform:show?"translateY(0)":"translateY(30px)", transition:"all 0.8s cubic-bezier(0.16,1,0.3,1)" }},
+    React.createElement(Confetti, { active:confetti }),
+    React.createElement("div", { style:{ fontSize:88, marginBottom:16, animation:"float 3s ease-in-out infinite" }}, pct>=90?"🏆":pct>=70?"🥈":pct>=50?"🥉":"📋"),
+    React.createElement("h2", { style:{ fontFamily:"'Syne', sans-serif", fontSize:36, fontWeight:800, color:"#fff", margin:"0 0 8px" }}, "DAY 1 COMPLETE!"),
+    React.createElement("p", { style:{ fontFamily:"'Syne', sans-serif", fontSize:20, fontWeight:700, color:badgeColor, margin:"0 0 28px" }}, badge),
+    React.createElement("div", { style:{ fontFamily:"'Syne', sans-serif", fontSize:72, fontWeight:800, color:"#fbbf24", margin:"12px 0", textShadow:"0 0 50px rgba(251,191,36,0.3)" }}, countUp+"%"),
+    React.createElement("p", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:18, color:"#6b7280", margin:"0 0 36px" }}, totalScore*10+" / "+totalMax*10+" total points"),
+    React.createElement("div", { style:{ background:"rgba(255,255,255,0.03)", borderRadius:20, padding:"20px 24px", marginBottom:40, border:"1px solid rgba(255,255,255,0.06)", textAlign:"left" }},
+      scores.map((s,i) => React.createElement("div", { key:i, style:{ display:"flex", alignItems:"center", justifyContent:"space-between", padding:"16px 0", borderTop:i>0?"1px solid rgba(255,255,255,0.06)":"none" }},
+        React.createElement("div", { style:{ display:"flex", alignItems:"center", gap:12 }},
+          React.createElement("span", { style:{ fontSize:28 }}, icons[i]),
+          React.createElement("span", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:17, fontWeight:600, color:"#e2e8f0" }}, names[i])
+        ),
+        React.createElement("div", { style:{ display:"flex", alignItems:"center", gap:10 }},
+          React.createElement("span", { style:{ fontFamily:"'Outfit', sans-serif", fontSize:16, fontWeight:600, color:"#94a3b8" }}, s.score+"/"+s.max),
+          React.createElement(StarRating, { score:s.score, max:s.max })
+        )
+      ))
+    ),
+    React.createElement("button", { onClick:onRestart, style:{
+      fontFamily:"'Syne', sans-serif", fontWeight:800, fontSize:20, padding:"18px 52px",
+      background:"linear-gradient(135deg,#fbbf24,#f59e0b)", color:"#1a1a2e", border:"none", borderRadius:99,
+      cursor:"pointer", transition:"all 0.3s", boxShadow:"0 6px 32px rgba(251,191,36,0.35)",
+    }, onMouseEnter:e=>e.target.style.transform="scale(1.06)", onMouseLeave:e=>e.target.style.transform="scale(1)"
+    }, "PLAY AGAIN 🔄"),
+    React.createElement("div", { style:{ marginTop:24 }},
+      React.createElement("a", { href:"index.html", style:{ fontFamily:"'Outfit', sans-serif", fontSize:14, color:"#64748b", textDecoration:"none" }}, "← Back to Portfolio")
+    )
+  );
+}
+
+function App() {
+  const [phase, setPhase] = useState(CHALLENGES.INTRO);
+  const [scores, setScores] = useState([]);
+  const [transition, setTransition] = useState(null);
+  const ci = phase===CHALLENGES.TOOL_MATCH?0:phase===CHALLENGES.ORG_CHART?1:phase===CHALLENGES.SPEED_ROUND?2:-1;
+
+  const advancePhase = useCallback((score,max) => {
+    setScores(prev=>[...prev,{score,max}]);
+    const next = phase===CHALLENGES.TOOL_MATCH?CHALLENGES.ORG_CHART:phase===CHALLENGES.ORG_CHART?CHALLENGES.SPEED_ROUND:CHALLENGES.RESULTS;
+    const td = { [CHALLENGES.ORG_CHART]:{icon:"🏢",title:"MEET YOUR TEAM"}, [CHALLENGES.SPEED_ROUND]:{icon:"⚡",title:"SPEED ROUND"} };
+    const t = td[next];
+    if(t) setTimeout(()=>setTransition({...t,onDone:()=>{setTransition(null);setPhase(next)}}),500);
+    else setTimeout(()=>setPhase(next),500);
+  }, [phase]);
+
+  const restart = () => { setPhase(CHALLENGES.INTRO); setScores([]); };
+
+  return React.createElement("div", { style:{
+    minHeight:"100vh", background:"linear-gradient(160deg,#0c0c1d 0%,#1a1033 35%,#0d1b2a 65%,#0c0c1d 100%)",
+    fontFamily:"'Outfit', sans-serif", display:"flex", flexDirection:"column", alignItems:"center",
+    position:"relative", overflow:"hidden",
+  }},
+    React.createElement("div", { style:{ position:"fixed", top:"10%", left:"15%", width:320, height:320, borderRadius:"50%", background:"radial-gradient(circle,rgba(139,92,246,0.12) 0%,transparent 70%)", animation:"orb1 15s ease-in-out infinite", pointerEvents:"none", zIndex:0 }}),
+    React.createElement("div", { style:{ position:"fixed", bottom:"20%", right:"10%", width:260, height:260, borderRadius:"50%", background:"radial-gradient(circle,rgba(251,191,36,0.08) 0%,transparent 70%)", animation:"orb2 18s ease-in-out infinite", pointerEvents:"none", zIndex:0 }}),
+    React.createElement("div", { style:{ position:"fixed", top:"55%", right:"25%", width:200, height:200, borderRadius:"50%", background:"radial-gradient(circle,rgba(244,114,182,0.06) 0%,transparent 70%)", animation:"orb1 12s ease-in-out infinite reverse", pointerEvents:"none", zIndex:0 }}),
+    transition && React.createElement(ChallengeTransition, { icon:transition.icon, title:transition.title, onDone:transition.onDone }),
+    React.createElement("div", { style:{ width:"100%", maxWidth:580, padding:"0 12px", position:"relative", zIndex:1 }},
+      phase!==CHALLENGES.INTRO && phase!==CHALLENGES.RESULTS && React.createElement("div", { style:{ padding:"24px 20px 0" }}, React.createElement(ProgressBar, { current:ci+1, total:3 })),
+      phase===CHALLENGES.INTRO && React.createElement(IntroScreen, { onStart:()=>setTransition({icon:"🎯",title:"TOOL MATCH",onDone:()=>{setTransition(null);setPhase(CHALLENGES.TOOL_MATCH)}}) }),
+      phase===CHALLENGES.TOOL_MATCH && React.createElement(ToolMatchChallenge, { onComplete:advancePhase }),
+      phase===CHALLENGES.ORG_CHART && React.createElement(OrgChartChallenge, { onComplete:advancePhase }),
+      phase===CHALLENGES.SPEED_ROUND && React.createElement(SpeedRoundChallenge, { onComplete:advancePhase }),
+      phase===CHALLENGES.RESULTS && React.createElement(ResultsScreen, { scores, onRestart:restart }),
+      React.createElement("div", { style:{ textAlign:"center", padding:"28px 20px 36px", fontFamily:"'Outfit', sans-serif", fontSize:13, color:"#374151", fontWeight:500 }}, "Designed by Shruti Kate · Gamified Microlearning Portfolio Project")
+    )
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(App));
+</script>
+</body>
+</html>
