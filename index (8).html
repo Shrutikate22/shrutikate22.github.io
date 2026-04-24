@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shruti Kate | Learning Experience Designer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-WY2D6LRELG"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date()); gtag('config', 'G-WY2D6LRELG'); gtag('config', 'G-LNK6WB7J2J');
+    </script>
+    <style>
+        :root {
+            --navy: #0f1b2d;
+            --deep: #162236;
+            --teal: #0d9488;
+            --teal-light: #ccfbf1;
+            --gold: #f59e0b;
+            --warm: #fef3c7;
+            --bg: #f5f0eb;
+            --bg-warm: #faf6f1;
+            --bg-section: #eee8e0;
+            --white: #ffffff;
+            --gray-50: #f8f6f3;
+            --gray-100: #efe9e1;
+            --gray-200: #ddd5cb;
+            --gray-300: #c4b8aa;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-600: #475569;
+            --gray-800: #1e293b;
+            --fd: 'Syne', sans-serif;
+            --fb: 'Outfit', sans-serif;
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family:var(--fb); color:var(--gray-800); background:var(--bg); line-height:1.7; -webkit-font-smoothing:antialiased; }
+
+        /* ===== HEADER ===== */
+        header { background:var(--white); padding:1rem 2rem; position:sticky; top:0; z-index:100; box-shadow:0 1px 0 rgba(0,0,0,0.06); }
+        nav { max-width:1100px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+        .logo { font-family:var(--fd); font-weight:800; font-size:1.3rem; color:var(--navy); text-decoration:none; letter-spacing:-0.02em; }
+        .nav-tabs { display:flex; gap:0.4rem; list-style:none; }
+        .nav-tabs button { font-family:var(--fb); font-weight:600; font-size:0.95rem; padding:0.55rem 1.3rem; border:none; border-radius:99px; background:transparent; color:var(--gray-500); cursor:pointer; transition:all 0.3s; }
+        .nav-tabs button:hover { color:var(--navy); background:var(--gray-100); }
+        .nav-tabs button.active { background:var(--navy); color:var(--white); }
+
+        /* ===== TICKER ===== */
+        .ticker { background:var(--navy); padding:0.9rem 0; overflow:hidden; position:relative; }
+        .ticker-track { display:flex; gap:3rem; animation:tickerScroll 35s linear infinite; white-space:nowrap; }
+        .ticker-item { color:rgba(255,255,255,0.9); font-weight:600; font-size:1rem; display:flex; align-items:center; gap:0.5rem; flex-shrink:0; }
+        .ticker-item span { font-size:1.1rem; }
+        @keyframes tickerScroll { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+        /* ===== PAGE SYSTEM ===== */
+        .page { display:none; animation:fadeIn 0.5s ease; }
+        .page.active { display:block; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+        .wrap { max-width:1100px; margin:0 auto; padding:4rem 2rem; }
+
+        /* ===== HOME HERO ===== */
+        .hero { padding:5rem 2rem 4rem; background:var(--bg-warm); }
+        .hero-inner { max-width:1100px; margin:0 auto; display:grid; grid-template-columns:1.1fr 0.9fr; gap:4rem; align-items:center; }
+        .hero-text h1 { font-family:var(--fd); font-weight:800; font-size:clamp(2.8rem,6vw,4rem); line-height:1.15; color:var(--navy); margin-bottom:1.5rem; letter-spacing:-0.03em; }
+        .hero-text h1 span { color:var(--teal); }
+        .hero-tagline { font-size:1.35rem; font-weight:400; color:var(--gray-600); line-height:1.7; margin-bottom:2.5rem; max-width:520px; }
+        .hero-cta { display:flex; gap:1rem; }
+        .btn { font-family:var(--fb); font-weight:600; font-size:1rem; padding:0.9rem 2.2rem; border-radius:99px; text-decoration:none; cursor:pointer; transition:all 0.3s; border:none; display:inline-block; }
+        .btn-primary { background:var(--navy); color:var(--white); }
+        .btn-primary:hover { background:var(--deep); transform:translateY(-2px); box-shadow:0 6px 20px rgba(15,27,45,0.2); }
+        .btn-outline { background:transparent; color:var(--navy); border:2px solid var(--gray-200); }
+        .btn-outline:hover { border-color:var(--navy); transform:translateY(-2px); }
+        .hero-photo img { width:100%; max-width:380px; border-radius:50%; border:6px solid var(--white); box-shadow:0 24px 60px rgba(0,0,0,0.1); display:block; margin:0 auto; }
+
+        /* ===== PILLARS ===== */
+        .pillars { background:var(--bg); }
+        .pillars-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2rem; }
+        .pillar-card { text-align:center; padding:2.8rem 2rem; background:var(--white); border-radius:18px; border:1px solid var(--gray-200); transition:all 0.3s; }
+        .pillar-card:hover { transform:translateY(-6px); box-shadow:0 14px 40px rgba(0,0,0,0.06); }
+        .pillar-icon { width:68px; height:68px; margin:0 auto 1.2rem; background:var(--teal-light); border-radius:18px; display:flex; align-items:center; justify-content:center; font-size:2rem; }
+        .pillar-card h3 { font-family:var(--fd); font-weight:700; font-size:1.05rem; color:var(--navy); margin-bottom:0.8rem; letter-spacing:0.03em; text-transform:uppercase; }
+        .pillar-card p { font-size:1rem; color:var(--gray-500); line-height:1.7; }
+
+        /* ===== PORTFOLIO ===== */
+        .portfolio-header { text-align:center; margin-bottom:3.5rem; }
+        .portfolio-header h2 { font-family:var(--fd); font-weight:800; font-size:2.6rem; color:var(--navy); margin-bottom:0.6rem; }
+        .portfolio-header p { font-size:1.15rem; color:var(--gray-500); max-width:600px; margin:0 auto; }
+
+        .project-card { display:grid; grid-template-columns:1fr 1fr; background:var(--white); border-radius:18px; overflow:hidden; border:1px solid var(--gray-200); margin-bottom:2.5rem; transition:all 0.3s; }
+        .project-card:hover { box-shadow:0 14px 40px rgba(0,0,0,0.06); transform:translateY(-4px); }
+        .project-card.reverse { direction:rtl; }
+        .project-card.reverse > * { direction:ltr; }
+        .project-img { min-height:340px; background-size:cover; background-position:center; background-color:var(--gray-100); }
+        .project-info { padding:2.8rem; display:flex; flex-direction:column; justify-content:center; }
+        .project-label { font-family:var(--fd); font-weight:700; font-size:0.78rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); margin-bottom:0.6rem; }
+        .project-info h3 { font-family:var(--fd); font-weight:800; font-size:1.6rem; color:var(--navy); margin-bottom:1rem; line-height:1.25; }
+        .project-info p { font-size:1.05rem; color:var(--gray-500); line-height:1.7; margin-bottom:1.2rem; }
+        .project-tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin-bottom:1.5rem; }
+        .project-tags span { font-size:0.82rem; font-weight:600; padding:0.35rem 0.85rem; background:var(--gray-50); color:var(--gray-600); border-radius:99px; border:1px solid var(--gray-200); }
+        .project-links { display:flex; gap:0.8rem; flex-wrap:wrap; }
+        .project-links a { font-family:var(--fb); font-weight:600; font-size:0.92rem; padding:0.75rem 1.6rem; border-radius:99px; text-decoration:none; transition:all 0.3s; }
+        .link-primary { background:var(--navy); color:var(--white); }
+        .link-primary:hover { background:var(--deep); }
+        .link-secondary { background:transparent; color:var(--navy); border:1.5px solid var(--gray-200); }
+        .link-secondary:hover { border-color:var(--navy); }
+
+        .subsection-title { font-family:var(--fd); font-weight:800; font-size:1.5rem; color:var(--navy); margin:3.5rem 0 1.5rem; padding-bottom:0.8rem; border-bottom:2px solid var(--gray-200); }
+        .aids-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+        .aid-card { background:var(--white); border-radius:14px; padding:2rem; border:1px solid var(--gray-200); transition:all 0.3s; }
+        .aid-card:hover { transform:translateY(-4px); box-shadow:0 8px 30px rgba(0,0,0,0.05); }
+        .aid-card h4 { font-family:var(--fd); font-weight:700; font-size:1.1rem; color:var(--navy); margin-bottom:0.5rem; }
+        .aid-card p { font-size:0.95rem; color:var(--gray-500); margin-bottom:1rem; }
+        .aid-links { display:flex; gap:0.6rem; }
+        .aid-links a { font-size:0.85rem; font-weight:600; padding:0.5rem 1rem; border-radius:99px; text-decoration:none; background:var(--gray-50); color:var(--navy); border:1px solid var(--gray-200); transition:all 0.3s; }
+        .aid-links a:hover { background:var(--navy); color:var(--white); }
+
+        .in-progress-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem; }
+        .ip-card { background:var(--white); border-radius:14px; padding:2rem; border:2px dashed var(--gray-200); opacity:0.85; }
+        .ip-badge { display:inline-block; font-size:0.75rem; font-weight:700; padding:0.25rem 0.7rem; background:var(--warm); color:#92400e; border-radius:99px; margin-bottom:0.6rem; }
+        .ip-card h4 { font-family:var(--fd); font-weight:700; font-size:1.05rem; color:var(--gray-600); margin-bottom:0.4rem; }
+        .ip-card p { font-size:0.92rem; color:var(--gray-500); }
+
+        /* ===== ABOUT ===== */
+        .about-hero { text-align:center; padding-bottom:3rem; border-bottom:1px solid var(--gray-200); margin-bottom:3.5rem; }
+        .about-hero .label { font-family:var(--fd); font-weight:800; font-size:1rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--gray-400); margin-bottom:0.5rem; }
+        .about-hero h3 { font-family:var(--fd); font-weight:800; font-size:2.8rem; color:var(--navy); margin-bottom:1.2rem; }
+        .about-hero p { font-size:1.2rem; color:var(--gray-500); line-height:1.8; max-width:660px; margin:0 auto 1.8rem; }
+
+        .how-section { margin-bottom:3.5rem; }
+        .how-section > h3 { font-family:var(--fd); font-weight:800; font-size:1.8rem; color:var(--navy); margin-bottom:1.5rem; }
+        .how-grid { display:grid; grid-template-columns:1fr 1fr; gap:2rem; margin-bottom:2rem; }
+        .how-card { background:var(--white); border-radius:16px; padding:2.2rem; border:1px solid var(--gray-200); }
+        .how-card .card-icon { font-size:2rem; margin-bottom:0.8rem; }
+        .how-card h4 { font-family:var(--fd); font-weight:700; font-size:1.15rem; color:var(--navy); margin-bottom:0.8rem; }
+        .how-card ul { list-style:none; padding:0; }
+        .how-card ul li { font-size:1rem; color:var(--gray-500); padding:0.35rem 0; padding-left:1.5rem; position:relative; }
+        .how-card ul li::before { content:"→"; position:absolute; left:0; color:var(--teal); font-weight:700; }
+        .tools-wrap { display:flex; flex-wrap:wrap; gap:0.5rem; }
+        .tools-wrap span { font-size:0.88rem; font-weight:600; padding:0.45rem 1rem; background:var(--white); border:1px solid var(--gray-200); border-radius:99px; color:var(--gray-600); }
+
+        .journey-title { font-family:var(--fd); font-weight:800; font-size:1.8rem; color:var(--navy); margin:3rem 0 2rem; padding-top:3rem; border-top:1px solid var(--gray-200); }
+        .journey-timeline { position:relative; padding-left:3.5rem; }
+        .journey-timeline::before { content:''; position:absolute; left:15px; top:0; bottom:0; width:3px; background:linear-gradient(180deg,var(--teal),var(--gray-200)); border-radius:99px; }
+        .j-step { position:relative; margin-bottom:3rem; }
+        .j-num { position:absolute; left:-3.5rem; top:0; width:32px; height:32px; border-radius:50%; background:var(--teal); color:var(--white); font-family:var(--fd); font-weight:800; font-size:0.85rem; display:flex; align-items:center; justify-content:center; z-index:2; }
+        .j-step h4 { font-family:var(--fd); font-weight:700; font-size:1.25rem; color:var(--navy); margin-bottom:0.2rem; }
+        .j-sub { font-size:0.92rem; font-weight:600; color:var(--teal); margin-bottom:0.8rem; text-transform:uppercase; letter-spacing:0.04em; }
+        .j-step p { font-size:1.05rem; color:var(--gray-500); line-height:1.7; }
+        .j-stats { display:flex; gap:2rem; margin-top:1rem; flex-wrap:wrap; }
+        .j-stat { background:var(--white); border-radius:12px; padding:0.8rem 1.2rem; border:1px solid var(--gray-200); text-align:center; }
+        .j-stat .num { font-family:var(--fd); font-weight:800; font-size:1.3rem; color:var(--navy); }
+        .j-stat .lbl { font-size:0.78rem; color:var(--gray-400); }
+
+        /* ===== CONTACT ===== */
+        .contact-page { min-height:60vh; display:flex; align-items:center; justify-content:center; text-align:center; }
+        .contact-inner { max-width:520px; }
+        .contact-inner h2 { font-family:var(--fd); font-weight:800; font-size:2.8rem; color:var(--navy); margin-bottom:1rem; }
+        .contact-inner p { font-size:1.15rem; color:var(--gray-500); margin-bottom:3rem; line-height:1.7; }
+        .c-cards { display:flex; flex-direction:column; gap:1.2rem; }
+        .c-card { display:flex; align-items:center; gap:1.2rem; padding:1.5rem 2rem; background:var(--white); border:1px solid var(--gray-200); border-radius:16px; text-decoration:none; color:var(--navy); transition:all 0.3s; }
+        .c-card:hover { border-color:var(--teal); transform:translateY(-3px); box-shadow:0 10px 30px rgba(0,0,0,0.06); }
+        .c-icon-box { width:56px; height:56px; border-radius:14px; background:var(--teal-light); display:flex; align-items:center; justify-content:center; font-size:1.6rem; flex-shrink:0; }
+        .c-card .c-label { font-family:var(--fd); font-weight:700; font-size:1.15rem; }
+        .c-card .c-hint { font-size:0.92rem; color:var(--gray-500); }
+
+        footer { background:var(--navy); color:var(--gray-400); text-align:center; padding:2rem; font-size:0.88rem; }
+
+        @media (max-width:768px) {
+            .hero-inner { grid-template-columns:1fr; text-align:center; }
+            .hero-tagline { margin:0 auto 2rem; }
+            .hero-cta { justify-content:center; }
+            .hero-photo { order:-1; }
+            .hero-photo img { max-width:250px; }
+            .pillars-grid { grid-template-columns:1fr; }
+            .project-card,.project-card.reverse { grid-template-columns:1fr; direction:ltr; }
+            .project-img { min-height:220px; }
+            .how-grid { grid-template-columns:1fr; }
+            .nav-tabs button { padding:0.4rem 0.8rem; font-size:0.82rem; }
+            .hero-text h1 { font-size:2.4rem; }
+            .j-stats { gap:1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <nav>
+        <a href="#" class="logo" onclick="showPage(0);return false;">Shruti Kate</a>
+        <div class="nav-tabs">
+            <button class="page-btn active" onclick="showPage(0)">Home</button>
+            <button class="page-btn" onclick="showPage(1)">Portfolio</button>
+            <button class="page-btn" onclick="showPage(2)">About</button>
+            <button class="page-btn" onclick="showPage(3)">Contact</button>
+        </div>
+    </nav>
+</header>
+
+<!-- ==================== PAGE 0: HOME ==================== -->
+<div class="page active" id="page-0">
+
+    <!-- TICKER -->
+    <section class="ticker">
+        <div class="ticker-track">
+            <span class="ticker-item"><span>📊</span> Kirkpatrick Evaluation</span>
+            <span class="ticker-item"><span>🎓</span> ADDIE & SAM</span>
+            <span class="ticker-item"><span>🎬</span> Articulate 360 & Adobe Suite</span>
+            <span class="ticker-item"><span>💻</span> Learning Science & AI Integration</span>
+            <span class="ticker-item"><span>📈</span> ROI Measurement & Behavioral Design</span>
+            <span class="ticker-item"><span>🧠</span> Cognitive Load Theory</span>
+            <span class="ticker-item"><span>🛠️</span> Cornerstone OnDemand</span>
+            <span class="ticker-item"><span>📋</span> Action Mapping</span>
+            <span class="ticker-item"><span>📊</span> Kirkpatrick Evaluation</span>
+            <span class="ticker-item"><span>🎓</span> ADDIE & SAM</span>
+            <span class="ticker-item"><span>🎬</span> Articulate 360 & Adobe Suite</span>
+            <span class="ticker-item"><span>💻</span> Learning Science & AI Integration</span>
+            <span class="ticker-item"><span>📈</span> ROI Measurement & Behavioral Design</span>
+            <span class="ticker-item"><span>🧠</span> Cognitive Load Theory</span>
+            <span class="ticker-item"><span>🛠️</span> Cornerstone OnDemand</span>
+            <span class="ticker-item"><span>📋</span> Action Mapping</span>
+        </div>
+    </section>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-text">
+                <h1>Hi, I'm <span>Shruti.</span></h1>
+                <p class="hero-tagline">I design learning experiences that inspire action and support lasting change.</p>
+                <div class="hero-cta">
+                    <button class="btn btn-primary" onclick="showPage(1)">Explore My Work</button>
+                    <button class="btn btn-outline" onclick="showPage(3)">Contact Me</button>
+                </div>
+            </div>
+            <div class="hero-photo">
+                <img src="profile.jpg" alt="Shruti Kate">
+            </div>
+        </div>
+    </section>
+
+    <!-- 3 PILLARS -->
+    <section class="pillars">
+        <div class="wrap">
+            <div class="pillars-grid">
+                <div class="pillar-card">
+                    <div class="pillar-icon">🎯</div>
+                    <h3>Learner-Centered Design</h3>
+                    <p>Effective learning meets people where they are. I design with the learner in mind so the experience is accessible, meaningful, &amp; empowering.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">✨</div>
+                    <h3>Immersive &amp; Engaging Experiences</h3>
+                    <p>Active engagement leads to better recall &amp; real-world use. I design learning that pulls people in &amp; gets them thinking, deciding, &amp; doing.</p>
+                </div>
+                <div class="pillar-card">
+                    <div class="pillar-icon">🚀</div>
+                    <h3>Purpose-Driven Impact</h3>
+                    <p>Impact starts with intention. I design learning that aligns with organizational goals &amp; drives meaningful results for real people.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- ==================== PAGE 1: PORTFOLIO ==================== -->
+<div class="page" id="page-1">
+    <div class="wrap">
+        <div class="portfolio-header">
+            <h2>Portfolio</h2>
+            <p>Learning experiences designed to drive behavior change, engagement, and measurable outcomes.</p>
+        </div>
+
+        <!-- PROJECT 1: Reading the Room -->
+        <div class="project-card">
+            <div class="project-img" style="background-image:url('https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=700&q=80');"></div>
+            <div class="project-info">
+                <div class="project-label">Case Study · Articulate Storyline</div>
+                <h3>Reading the Room: Responsive Facilitation Decisions</h3>
+                <p>A scenario-based branching course where learners face three realistic workshop moments. Each decision impacts engagement, trust, and outcomes — teaching facilitators to adapt in real time.</p>
+                <div class="project-tags">
+                    <span>Branching Logic</span><span>Behavioral Design</span><span>Scenario-Based</span>
+                </div>
+                <div class="project-links">
+                    <a href="case-study-reading-the-room.html" class="link-primary">View Case Study</a>
+                    <a href="https://kent-state-university-0823.reach360.com/share/course/5eb5514e-0983-4baa-9b13-1affe83f232e" class="link-secondary" target="_blank">Take Course ↗</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJECT 2: Data Center Safety -->
+        <div class="project-card reverse">
+            <div class="project-img" style="background-image:url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=700&q=80');"></div>
+            <div class="project-info">
+                <div class="project-label">Case Study · Articulate Rise</div>
+                <h3>Data Center Safety Essentials</h3>
+                <p>A compliance training module for field technicians covering hazard identification, safety protocols, and emergency response in data center environments.</p>
+                <div class="project-tags">
+                    <span>Compliance</span><span>Technical Audience</span><span>Microlearning</span>
+                </div>
+                <div class="project-links">
+                    <a href="case-study-data-center.html" class="link-primary">View Case Study</a>
+                    <a href="https://share.articulate.com/E-t8XPY-d5hjScLbGBhto" class="link-secondary" target="_blank">Take Course ↗</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROJECT 3: Onboarding Quest -->
+        <div class="project-card">
+            <div class="project-img" style="background:linear-gradient(135deg,#1a1033,#0d1b2a); display:flex; align-items:center; justify-content:center; flex-direction:column; gap:0.8rem;">
+                <span style="font-size:3.5rem;">🎮</span>
+                <span style="font-family:var(--fd); font-weight:800; font-size:1.4rem; color:#fbbf24; letter-spacing:0.05em;">ONBOARDING QUEST</span>
+                <span style="font-size:0.9rem; color:rgba(255,255,255,0.5);">3 Challenges · Points · Badges</span>
+            </div>
+            <div class="project-info">
+                <div class="project-label">Case Study · HTML / CSS / React</div>
+                <h3>Onboarding Quest: Your First Day</h3>
+                <p>A gamified microlearning experience with three interactive challenges — tool matching, org chart placement, and a timed policy speed round. Features drag-and-drop, streak tracking, and confetti rewards.</p>
+                <div class="project-tags">
+                    <span>Gamification</span><span>Drag-and-Drop</span><span>Interactive</span><span>Custom Code</span>
+                </div>
+                <div class="project-links">
+                    <a href="case-study-onboarding-quest.html" class="link-primary">View Case Study</a>
+                    <a href="onboarding-quest.html" class="link-secondary" target="_blank">Play the Game ↗</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- VIDEO -->
+        <div class="project-card reverse">
+            <div class="project-img" style="background:var(--navy); display:flex; align-items:center; justify-content:center; padding:1.2rem;">
+                <video width="100%" style="border-radius:10px; max-height:300px;" controls preload="metadata">
+                    <source src="behavior-change-video.mp4" type="video/mp4">
+                </video>
+            </div>
+            <div class="project-info">
+                <div class="project-label">Video Project</div>
+                <h3>From Content Delivery to Behavior Change</h3>
+                <p>A 2-minute animated explainer exploring why traditional training fails and what behavior-first instructional design looks like. Features animated scenes and a live Storyline walkthrough.</p>
+                <div class="project-tags">
+                    <span>ElevenLabs</span><span>CapCut</span><span>Camtasia</span><span>HTML/CSS Animation</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- JOB AIDS -->
+        <h3 class="subsection-title">📋 Job Aids &amp; Resources</h3>
+        <div class="aids-grid">
+            <div class="aid-card">
+                <h4>Training Design Process</h4>
+                <p>Complete ADDIE lifecycle from analysis through measurement.</p>
+                <div class="aid-links">
+                    <a href="Job_Aid_Process.png" target="_blank">View</a>
+                    <a href="Job_Aid_Process.png" download>Download</a>
+                </div>
+            </div>
+            <div class="aid-card">
+                <h4>Measuring for Impact</h4>
+                <p>Strategic roadmap with real case study metrics and ROI proof.</p>
+                <div class="aid-links">
+                    <a href="Measuring_For_Impact_Job_Aid.png" target="_blank">View</a>
+                    <a href="Measuring_For_Impact_Job_Aid.png" download>Download</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- IN PROGRESS -->
+        <h3 class="subsection-title">🔨 Trainings In Progress</h3>
+        <div class="in-progress-grid">
+            <div class="ip-card"><div class="ip-badge">Coming Soon</div><h4>Onboarding Excellence</h4><p>4-week blended program with video modules, interactive scenarios, and knowledge checks.</p></div>
+            <div class="ip-card"><div class="ip-badge">Coming Soon</div><h4>Effective Delegation for First-Time Managers</h4><p>Branching scenarios and behavioral modeling for confident leadership.</p></div>
+            <div class="ip-card"><div class="ip-badge">Coming Soon</div><h4>Sales Negotiation &amp; Objection Handling</h4><p>Vyond animations paired with Articulate decision simulations.</p></div>
+            <div class="ip-card"><div class="ip-badge">Coming Soon</div><h4>Compliance &amp; Risk Management</h4><p>Adaptive training with case studies and certification tracking.</p></div>
+            <div class="ip-card"><div class="ip-badge">Coming Soon</div><h4>Digital Skills &amp; Software Mastery</h4><p>Video demos, step-by-step guides, and practice environments.</p></div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== PAGE 2: ABOUT ==================== -->
+<div class="page" id="page-2">
+    <div class="wrap">
+        <div class="about-hero">
+            <div class="label">About Me</div>
+            <h3>Hey, I'm Shruti! 👋</h3>
+            <p>I'm a learning experience designer with a PhD in Learning Sciences, an MA in Clinical Psychology, and a belief that training should change behavior — not just deliver content. I'm looking for my next role in learning design and excited to show you why I'd be a great addition to your team!</p>
+            <a href="https://www.linkedin.com/in/shruti-kate-phd-b6a122165" class="btn btn-primary" target="_blank">View My LinkedIn</a>
+        </div>
+
+        <div class="how-section">
+            <h3>🛠️ How I Work</h3>
+            <div class="how-grid">
+                <div class="how-card">
+                    <div class="card-icon">🧠</div>
+                    <h4>Design Philosophy</h4>
+                    <ul>
+                        <li>Training = behavioral intervention, not content delivery</li>
+                        <li>Design around how people actually learn &amp; change</li>
+                        <li>Spaced practice, retrieval, cognitive load management</li>
+                        <li>Evidence-based frameworks grounded in learning science</li>
+                    </ul>
+                </div>
+                <div class="how-card">
+                    <div class="card-icon">🎯</div>
+                    <h4>My Approach</h4>
+                    <ul>
+                        <li>Start with the performance gap, not the slide deck</li>
+                        <li>Collaborate with SMEs to diagnose real learner needs</li>
+                        <li>Build iterative, feedback-driven solutions</li>
+                        <li>Measure through Kirkpatrick Levels 3–4</li>
+                    </ul>
+                </div>
+            </div>
+            <h4 style="font-family:var(--fd); font-weight:700; font-size:1.05rem; color:var(--navy); margin-bottom:0.8rem;">Tools I Use</h4>
+            <div class="tools-wrap">
+                <span>Articulate Storyline 360</span><span>Articulate Rise</span><span>Adobe Creative Suite</span>
+                <span>Camtasia</span><span>Vyond</span><span>Cornerstone OnDemand</span><span>Qualtrics</span>
+                <span>R &amp; SPSS</span><span>Claude &amp; ChatGPT</span><span>CapCut</span><span>ElevenLabs</span><span>HTML/CSS/JS</span>
+            </div>
+        </div>
+
+        <h3 class="journey-title">📍 How I Got Here</h3>
+        <div class="journey-timeline">
+
+            <!-- 1: YOUR TEAM (latest first) -->
+            <div class="j-step">
+                <div class="j-num">1</div>
+                <h4>Your Team?</h4>
+                <div class="j-sub">The Next Chapter</div>
+                <p>I'm looking for a role where I can combine learning science rigor with practical design skills to build training that changes behavior. I bring curiosity, research depth, enterprise experience, and a love for this work.</p>
+                <div style="margin-top:1rem;">
+                    <button class="btn btn-primary" onclick="showPage(3)">Let's Talk</button>
+                </div>
+            </div>
+
+            <!-- 2: ASML -->
+            <div class="j-step">
+                <div class="j-num">2</div>
+                <h4>Learning Specialist Co-op — ASML</h4>
+                <div class="j-sub">Wilton, Connecticut · Global — 4 Sites</div>
+                <p>Designed and deployed blended learning programs across four global sites. Built training from needs analysis through Kirkpatrick L3–4 evaluation, managed the LMS, and drove measurable results at enterprise scale.</p>
+                <div class="j-stats">
+                    <div class="j-stat"><div class="num">15%</div><div class="lbl">Ramp-up reduction</div></div>
+                    <div class="j-stat"><div class="num">40%</div><div class="lbl">Adoption increase</div></div>
+                    <div class="j-stat"><div class="num">65%</div><div class="lbl">Engagement uplift</div></div>
+                    <div class="j-stat"><div class="num">4.46/5</div><div class="lbl">Facilitation rating</div></div>
+                </div>
+            </div>
+
+            <!-- 3: PhD -->
+            <div class="j-step">
+                <div class="j-num">3</div>
+                <h4>PhD in Learning Sciences &amp; Educational Psychology</h4>
+                <div class="j-sub">Kent State University · 2022–2026</div>
+                <p>Four years of research on how language shapes belief and behavior. Dissertation used mouse-tracking and mixed-effects modeling to study real-time cognitive processing. Also taught, mentored, and presented at international conferences.</p>
+                <div class="j-stats">
+                    <div class="j-stat"><div class="num">6+</div><div class="lbl">Conference talks</div></div>
+                    <div class="j-stat"><div class="num">2+</div><div class="lbl">Published papers</div></div>
+                    <div class="j-stat"><div class="num">3</div><div class="lbl">Research awards</div></div>
+                </div>
+            </div>
+
+            <!-- 4: Dream Director -->
+            <div class="j-step">
+                <div class="j-num">4</div>
+                <h4>Instructional Designer — The Dream Director</h4>
+                <div class="j-sub">Mumbai, India</div>
+                <p>First professional role in learning design. Developed curriculum and training materials for educational programs, translating complex ideas into engaging, learner-centered experiences.</p>
+            </div>
+
+            <!-- 5: MA -->
+            <div class="j-step">
+                <div class="j-num">5</div>
+                <h4>MA in Clinical Psychology</h4>
+                <div class="j-sub">Pune, India</div>
+                <p>Deep training in human behavior, motivation, and change. Learned to assess needs, design interventions, and evaluate outcomes — the foundation of my behavior-change lens in learning design.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ==================== PAGE 3: CONTACT ==================== -->
+<div class="page" id="page-3">
+    <div class="wrap contact-page">
+        <div class="contact-inner">
+            <h2>Let's Connect 👋</h2>
+            <p>I'm excited about opportunities in learning design, instructional design, and L&amp;D. I'd love to hear from you.</p>
+            <div class="c-cards">
+                <a href="https://www.linkedin.com/in/shruti-kate-phd-b6a122165" target="_blank" class="c-card">
+                    <div class="c-icon-box">💼</div>
+                    <div>
+                        <div class="c-label">LinkedIn</div>
+                        <div class="c-hint">Connect with me on LinkedIn</div>
+                    </div>
+                </a>
+                <a href="mailto:skate6@kent.edu" class="c-card">
+                    <div class="c-icon-box">📧</div>
+                    <div>
+                        <div class="c-label">Email</div>
+                        <div class="c-hint">Send me a message</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>&copy; 2026 Shruti Kate · Learning Experience Designer</p>
+</footer>
+
+<script>
+function showPage(i) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + i).classList.add('active');
+    document.querySelectorAll('.page-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.page-btn')[i].classList.add('active');
+    window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
