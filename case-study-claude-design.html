@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Building Training with Claude Design | Shruti Kate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --navy:#0f1b2d; --teal:#0d9488; --teal-light:#ccfbf1; --gold:#d4956a; --bg:#f5f0eb; --bg-warm:#faf6f1; --white:#ffffff; --gray-50:#f8f6f3; --gray-100:#efe9e1; --gray-200:#ddd5cb; --gray-400:#94a3b8; --gray-500:#64748b; --gray-600:#475569; --gray-800:#1e293b; --fd:'Syne',sans-serif; --fb:'Outfit',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:var(--fb); color:var(--gray-800); background:var(--bg); line-height:1.7; }
+        .back-bar { background:var(--white); padding:1rem 2rem; border-bottom:1px solid var(--gray-200); }
+        .back-bar a { font-family:var(--fb); font-weight:600; font-size:0.95rem; color:var(--navy); text-decoration:none; }
+        .back-bar a:hover { color:var(--teal); }
+        .hero-banner { background:linear-gradient(135deg,#0d1117,#0b2b3c); padding:5rem 2rem 4rem; text-align:center; }
+        .hero-banner .label { font-family:var(--fd); font-weight:700; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); margin-bottom:1rem; }
+        .hero-banner h1 { font-family:var(--fd); font-weight:800; font-size:clamp(2rem,5vw,3rem); color:var(--white); margin-bottom:1rem; max-width:700px; margin-left:auto; margin-right:auto; }
+        .hero-banner p { font-size:1.15rem; color:rgba(255,255,255,0.6); max-width:600px; margin:0 auto 2rem; }
+        .hero-banner .cta { display:inline-block; font-family:var(--fb); font-weight:600; font-size:1rem; padding:0.9rem 2.2rem; border-radius:99px; background:var(--gold); color:var(--white); text-decoration:none; transition:all 0.3s; }
+        .hero-banner .cta:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(212,149,106,0.3); }
+        .wrap { max-width:800px; margin:0 auto; padding:3rem 2rem; }
+        .section { margin-bottom:3rem; }
+        .section h2 { font-family:var(--fd); font-weight:800; font-size:1.6rem; color:var(--navy); margin-bottom:1rem; padding-bottom:0.6rem; border-bottom:2px solid var(--gray-200); }
+        .section p { font-size:1.05rem; color:var(--gray-600); margin-bottom:1rem; }
+        .section ul { list-style:none; padding:0; margin-bottom:1rem; }
+        .section ul li { font-size:1.05rem; color:var(--gray-600); padding:0.4rem 0 0.4rem 1.5rem; position:relative; }
+        .section ul li::before { content:"→"; position:absolute; left:0; color:var(--teal); font-weight:700; }
+        .highlight-box { background:var(--white); border-radius:14px; padding:2rem; border:1px solid var(--gray-200); margin:1.5rem 0; }
+        .highlight-box h4 { font-family:var(--fd); font-weight:700; font-size:1.1rem; color:var(--navy); margin-bottom:0.6rem; }
+        .phase-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1.2rem; margin:1.5rem 0; }
+        .phase-card { background:var(--white); border-radius:14px; padding:1.5rem; border:1px solid var(--gray-200); text-align:center; }
+        .phase-card .num { font-family:var(--fd); font-weight:800; font-size:1.8rem; color:var(--gold); margin-bottom:0.4rem; }
+        .phase-card h4 { font-family:var(--fd); font-weight:700; font-size:0.95rem; color:var(--navy); margin-bottom:0.4rem; }
+        .phase-card p { font-size:0.85rem; color:var(--gray-500); }
+        .tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0; }
+        .tags span { font-size:0.85rem; font-weight:600; padding:0.4rem 1rem; background:var(--gray-50); color:var(--gray-600); border-radius:99px; border:1px solid var(--gray-200); }
+        .stats-row { display:flex; gap:1.5rem; flex-wrap:wrap; margin:1.5rem 0; }
+        .stat-card { background:var(--white); border-radius:12px; padding:1.2rem 1.5rem; border:1px solid var(--gray-200); text-align:center; flex:1; min-width:140px; }
+        .stat-card .num { font-family:var(--fd); font-weight:800; font-size:1.5rem; color:var(--gold); }
+        .stat-card .lbl { font-size:0.82rem; color:var(--gray-500); margin-top:0.2rem; }
+        footer { background:var(--navy); color:var(--gray-400); text-align:center; padding:2rem; font-size:0.88rem; }
+        @media(max-width:768px) { .phase-grid, .stats-row { grid-template-columns:1fr; flex-direction:column; } }
+    </style>
+</head>
+<body>
+    <div class="back-bar"><a href="index.html">← Back to Portfolio</a></div>
+
+    <div class="hero-banner">
+        <div class="label">Process Guide · AI + Instructional Design</div>
+        <h1>How to Build Training with Claude Design</h1>
+        <p>A complete step-by-step guide blending instructional design thinking with AI-powered development — from needs analysis through impact measurement.</p>
+        <a href="claude-design-guide.html" class="cta">View Full Guide ↗</a>
+    </div>
+
+    <div class="wrap">
+        <div class="section">
+            <h2>The Problem</h2>
+            <p>AI tools like Claude Design have made it possible to generate interactive learning modules in minutes. But most tutorials skip the part that actually determines whether training works: the instructional design process. The result is a growing flood of polished content that doesn't solve real performance problems.</p>
+            <p>When Tim Slade demonstrated building a Rise-like authoring tool with a single prompt, the ID community lit up. The conversation quickly became: "Are authoring tools dead?" But I thought the more important question was: "What happens when anyone can build a course — but not everyone knows what makes a course effective?"</p>
+        </div>
+
+        <div class="section">
+            <h2>My Approach</h2>
+            <p>I created a comprehensive guide that treats AI as a production accelerator, not a replacement for design thinking. The guide walks through the full ADDIE-informed process — with exact Claude prompts at every step — showing how an instructional designer's expertise becomes more valuable, not less, when the tools get faster.</p>
+            <ul>
+                <li><strong>Process-first structure:</strong> Every phase starts with the ID thinking, then shows how Claude executes it</li>
+                <li><strong>Ready-to-use prompts:</strong> 16 detailed prompts that readers can adapt to their own projects immediately</li>
+                <li><strong>Design rationale:</strong> Each step explains why it matters, not just how to do it — connecting the prompt to the instructional principle behind it</li>
+                <li><strong>Measurement built in:</strong> The guide doesn't stop at "deploy" — it includes a full Kirkpatrick L1–4 evaluation framework</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>The Six Phases</h2>
+            <div class="phase-grid">
+                <div class="phase-card">
+                    <div class="num">01</div>
+                    <h4>Analyze</h4>
+                    <p>Performance problems, learner personas, learning objectives</p>
+                </div>
+                <div class="phase-card">
+                    <div class="num">02</div>
+                    <h4>Design</h4>
+                    <p>Modality selection, storyboarding, branching scripts</p>
+                </div>
+                <div class="phase-card">
+                    <div class="num">03</div>
+                    <h4>Develop</h4>
+                    <p>Claude-generated modules, interactions, assessments, visuals</p>
+                </div>
+                <div class="phase-card">
+                    <div class="num">04</div>
+                    <h4>Iterate</h4>
+                    <p>Content QA, accessibility audit, pilot testing</p>
+                </div>
+                <div class="phase-card">
+                    <div class="num">05</div>
+                    <h4>Deploy</h4>
+                    <p>Hosting options, SCORM wrapping, LMS integration</p>
+                </div>
+                <div class="phase-card">
+                    <div class="num">06</div>
+                    <h4>Measure</h4>
+                    <p>Kirkpatrick L1–4, surveys, behavior change tracking</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Tools & Methods</h2>
+            <div class="tags">
+                <span>Claude / Claude Design</span>
+                <span>ADDIE</span>
+                <span>Action Mapping</span>
+                <span>Bloom's Taxonomy</span>
+                <span>Kirkpatrick L1–4</span>
+                <span>WCAG 2.1 AA</span>
+                <span>SCORM</span>
+                <span>HTML/CSS/JS</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Design Decisions</h2>
+            <div class="highlight-box">
+                <h4>Why a process guide instead of a tutorial?</h4>
+                <p>Tutorials show you what buttons to click. Process guides show you how to think. The ID community doesn't need another "how to use Claude" walkthrough — they need a framework for integrating AI into their existing design practice without sacrificing instructional quality. That's the gap this guide fills.</p>
+            </div>
+            <div class="highlight-box">
+                <h4>Why include measurement?</h4>
+                <p>Most AI + learning content stops at "look what I built." That's the production mindset. An instructional designer's value is in asking "did it work?" Including Kirkpatrick L1–4 evaluation makes the point that the guide embodies: the thinking matters more than the tool.</p>
+            </div>
+            <div class="highlight-box">
+                <h4>Why now?</h4>
+                <p>Tim Slade's Claude Design demo sparked a critical conversation in the ID community about the future of authoring tools and the role of the instructional designer. I saw an opportunity to contribute a perspective grounded in learning science — not to argue against AI, but to show how design expertise and AI capability amplify each other.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Key Numbers</h2>
+            <div class="stats-row">
+                <div class="stat-card"><div class="num">6</div><div class="lbl">Phases</div></div>
+                <div class="stat-card"><div class="num">16</div><div class="lbl">Detailed steps</div></div>
+                <div class="stat-card"><div class="num">16</div><div class="lbl">Ready-to-use prompts</div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Impact</h2>
+            <p>The LinkedIn post that sparked this guide — where I built on Tim Slade's Claude Design demo — received direct engagement from Tim himself, who commented: "You're asking the EXACT right questions!" The post positioned me at the center of a trending conversation in the ID community about the intersection of AI and instructional design.</p>
+            <p>The guide now lives as both a portfolio piece demonstrating my design process and a practical resource for other instructional designers navigating the AI shift.</p>
+        </div>
+
+        <div class="section">
+            <h2>What I Learned</h2>
+            <p>Creating this guide reinforced something I've believed throughout my career: the most valuable skill in instructional design isn't knowing how to use a tool — it's knowing when and why to use it. AI didn't change that. It just made it more obvious.</p>
+            <p>I also learned that contributing to industry conversations — not just consuming them — is one of the most powerful ways to demonstrate expertise. Responding to Tim's demo with a thoughtful, structured perspective did more for my professional visibility than any application I've submitted.</p>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Shruti Kate · Learning Experience Designer</p></footer>
+</body>
+</html>
