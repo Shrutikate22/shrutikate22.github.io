@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Case Study: Reading the Room | Shruti Kate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --navy:#0f1b2d; --teal:#0d9488; --teal-light:#ccfbf1; --gold:#f59e0b; --bg:#f5f0eb; --bg-warm:#faf6f1; --white:#ffffff; --gray-50:#f8f6f3; --gray-100:#efe9e1; --gray-200:#ddd5cb; --gray-400:#94a3b8; --gray-500:#64748b; --gray-600:#475569; --gray-800:#1e293b; --fd:'Syne',sans-serif; --fb:'Outfit',sans-serif; }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        html { scroll-behavior:smooth; }
+        body { font-family:var(--fb); color:var(--gray-800); background:var(--bg); line-height:1.7; }
+        .back-bar { background:var(--white); padding:1rem 2rem; border-bottom:1px solid var(--gray-200); }
+        .back-bar a { font-family:var(--fb); font-weight:600; font-size:0.95rem; color:var(--navy); text-decoration:none; }
+        .back-bar a:hover { color:var(--teal); }
+        .hero-banner { background:var(--navy); padding:5rem 2rem 4rem; text-align:center; }
+        .hero-banner .label { font-family:var(--fd); font-weight:700; font-size:0.8rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); margin-bottom:1rem; }
+        .hero-banner h1 { font-family:var(--fd); font-weight:800; font-size:clamp(2rem,5vw,3rem); color:var(--white); margin-bottom:1rem; max-width:700px; margin-left:auto; margin-right:auto; }
+        .hero-banner p { font-size:1.15rem; color:rgba(255,255,255,0.6); max-width:600px; margin:0 auto 2rem; }
+        .hero-banner .cta { display:inline-block; font-family:var(--fb); font-weight:600; font-size:1rem; padding:0.9rem 2.2rem; border-radius:99px; background:var(--teal); color:var(--white); text-decoration:none; transition:all 0.3s; }
+        .hero-banner .cta:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(13,148,136,0.3); }
+        .wrap { max-width:800px; margin:0 auto; padding:3rem 2rem; }
+        .section { margin-bottom:3rem; }
+        .section h2 { font-family:var(--fd); font-weight:800; font-size:1.6rem; color:var(--navy); margin-bottom:1rem; padding-bottom:0.6rem; border-bottom:2px solid var(--gray-200); }
+        .section p { font-size:1.05rem; color:var(--gray-600); margin-bottom:1rem; }
+        .section ul { list-style:none; padding:0; margin-bottom:1rem; }
+        .section ul li { font-size:1.05rem; color:var(--gray-600); padding:0.4rem 0 0.4rem 1.5rem; position:relative; }
+        .section ul li::before { content:"→"; position:absolute; left:0; color:var(--teal); font-weight:700; }
+        .highlight-box { background:var(--white); border-radius:14px; padding:2rem; border:1px solid var(--gray-200); margin:1.5rem 0; }
+        .highlight-box h4 { font-family:var(--fd); font-weight:700; font-size:1.1rem; color:var(--navy); margin-bottom:0.6rem; }
+        .stats-row { display:flex; gap:1.5rem; flex-wrap:wrap; margin:1.5rem 0; }
+        .stat-card { background:var(--white); border-radius:12px; padding:1.2rem 1.5rem; border:1px solid var(--gray-200); text-align:center; flex:1; min-width:140px; }
+        .stat-card .num { font-family:var(--fd); font-weight:800; font-size:1.5rem; color:var(--teal); }
+        .stat-card .lbl { font-size:0.82rem; color:var(--gray-500); margin-top:0.2rem; }
+        .tags { display:flex; flex-wrap:wrap; gap:0.5rem; margin:1rem 0; }
+        .tags span { font-size:0.85rem; font-weight:600; padding:0.4rem 1rem; background:var(--gray-50); color:var(--gray-600); border-radius:99px; border:1px solid var(--gray-200); }
+        footer { background:var(--navy); color:var(--gray-400); text-align:center; padding:2rem; font-size:0.88rem; }
+        @media(max-width:768px) { .stats-row { flex-direction:column; } }
+    </style>
+</head>
+<body>
+    <div class="back-bar"><a href="index.html">← Back to Portfolio</a></div>
+
+    <div class="hero-banner">
+        <div class="label">Case Study · Articulate Storyline 360</div>
+        <h1>Reading the Room: Responsive Facilitation Decisions</h1>
+        <p>A scenario-based branching course that teaches facilitators to read group dynamics and adapt in real time.</p>
+        <a href="https://kent-state-university-0823.reach360.com/share/course/5eb5514e-0983-4baa-9b13-1affe83f232e" target="_blank" class="cta">Take the Course ↗</a>
+    </div>
+
+    <div class="wrap">
+        <div class="section">
+            <h2>The Challenge</h2>
+            <p>New facilitators often struggle to read the room during live workshops. They follow their script regardless of what's happening with the group — missing signs of disengagement, confusion, or resistance. Traditional facilitation training covers theory but rarely gives learners a chance to practice making real-time decisions in a safe environment.</p>
+            <p>The goal was to create a learning experience where facilitators could practice adaptive decision-making — not just learn about it.</p>
+        </div>
+
+        <div class="section">
+            <h2>My Approach</h2>
+            <p>I designed a branching scenario course using Articulate Storyline 360, grounded in behavioral design principles and Cathy Moore's Action Mapping framework.</p>
+            <ul>
+                <li><strong>Needs analysis:</strong> Identified three common facilitation moments where new facilitators consistently make poor choices</li>
+                <li><strong>Scenario design:</strong> Created three realistic workshop scenarios, each with a decision point that branches into different consequences</li>
+                <li><strong>Branching logic:</strong> Every choice leads to a different outcome — learners see the realistic impact of their decisions on group engagement, trust, and workshop outcomes</li>
+                <li><strong>Feedback design:</strong> Each branch includes tailored feedback explaining why the choice worked or didn't, connecting it to facilitation principles</li>
+                <li><strong>Iterative testing:</strong> Piloted with experienced facilitators to validate scenario realism before publishing</li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>Tools & Methods</h2>
+            <div class="tags">
+                <span>Articulate Storyline 360</span>
+                <span>Reach 360</span>
+                <span>Branching Scenarios</span>
+                <span>Action Mapping</span>
+                <span>Behavioral Design</span>
+                <span>ADDIE</span>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Design Decisions</h2>
+            <div class="highlight-box">
+                <h4>Why branching scenarios?</h4>
+                <p>Facilitation is a judgment skill, not a knowledge problem. Learners don't need more information — they need practice making decisions under realistic conditions. Branching scenarios force the learner to commit to a choice and experience the consequences, which is far more effective for behavior change than click-through content.</p>
+            </div>
+            <div class="highlight-box">
+                <h4>Why three scenarios instead of one long course?</h4>
+                <p>Each scenario targets a distinct facilitation skill: managing a dominant participant, recovering from a flat-energy moment, and handling pushback. Short, focused scenarios reduce cognitive load and allow learners to revisit specific skills they need to practice.</p>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Key Features</h2>
+            <div class="stats-row">
+                <div class="stat-card"><div class="num">3</div><div class="lbl">Realistic scenarios</div></div>
+                <div class="stat-card"><div class="num">9+</div><div class="lbl">Branching paths</div></div>
+                <div class="stat-card"><div class="num">100%</div><div class="lbl">Decision-based</div></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>What I Learned</h2>
+            <p>Writing realistic branching scenarios is harder than it looks. The key insight was that "wrong" answers can't be obviously wrong — they have to be choices a real facilitator might actually make. That's what makes the feedback meaningful. If the wrong answer is absurd, the learner learns nothing from choosing it.</p>
+            <p>I also learned the importance of SME validation for scenario realism. My first drafts were too "textbook" — it was feedback from experienced facilitators that made the scenarios feel authentic.</p>
+        </div>
+    </div>
+
+    <footer><p>&copy; 2026 Shruti Kate · Learning Experience Designer</p></footer>
+</body>
+</html>
