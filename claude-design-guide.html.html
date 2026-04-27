@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@200;300;400;500;600;700&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Outfit', sans-serif;
+    background: #0d1117;
+    color: #e6e1d8;
+    line-height: 1.7;
+  }
+
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 30% 50%, rgba(212, 149, 106, 0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 30%, rgba(100, 180, 200, 0.08) 0%, transparent 50%),
+      #0d1117;
+  }
+
+  .hero-badge {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: #d4956a;
+    background: rgba(212, 149, 106, 0.1);
+    border: 1px solid rgba(212, 149, 106, 0.25);
+    padding: 8px 24px;
+    border-radius: 100px;
+    margin-bottom: 40px;
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 64px;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.1;
+    max-width: 800px;
+    margin-bottom: 24px;
+  }
+  .hero h1 .gold { color: #d4956a; }
+
+  .hero-sub {
+    font-weight: 300;
+    font-size: 20px;
+    color: rgba(255,255,255,0.5);
+    max-width: 600px;
+    margin-bottom: 50px;
+  }
+
+  .hero-meta {
+    font-size: 13px;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  /* Container */
+  .container {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* Phase sections */
+  .phase {
+    padding: 80px 0;
+    border-bottom: 1px solid rgba(212, 149, 106, 0.1);
+  }
+
+  .phase-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 80px;
+    color: rgba(212, 149, 106, 0.12);
+    line-height: 1;
+    margin-bottom: -10px;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+
+  .phase-tag {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #d4956a;
+    white-space: nowrap;
+  }
+
+  .phase h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 20px;
+  }
+
+  .phase-intro {
+    font-weight: 300;
+    font-size: 17px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 40px;
+    max-width: 700px;
+  }
+
+  /* Steps */
+  .step {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+
+  .step-label {
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #d4956a;
+    margin-bottom: 10px;
+  }
+
+  .step h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: #fff;
+    margin-bottom: 14px;
+  }
+
+  .step p {
+    font-weight: 300;
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 16px;
+  }
+
+  .prompt-box {
+    background: rgba(212, 149, 106, 0.06);
+    border-left: 3px solid #d4956a;
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+
+  .prompt-label {
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #d4956a;
+    margin-bottom: 8px;
+  }
+
+  .prompt-text {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(255,255,255,0.75);
+    line-height: 1.8;
+    font-style: italic;
+  }
+
+  .tip-box {
+    background: rgba(100, 180, 200, 0.06);
+    border-left: 3px solid rgba(100, 180, 200, 0.5);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+
+  .tip-label {
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgb(100, 180, 200);
+    margin-bottom: 8px;
+  }
+
+  .tip-text {
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+  }
+
+  .output-box {
+    background: rgba(120, 200, 120, 0.06);
+    border-left: 3px solid rgba(120, 200, 120, 0.5);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin: 16px 0;
+  }
+
+  .output-label {
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgb(120, 200, 120);
+    margin-bottom: 8px;
+  }
+
+  .output-text {
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.7;
+  }
+
+  /* Workflow diagram */
+  .workflow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin: 50px 0;
+    flex-wrap: wrap;
+  }
+
+  .workflow-item {
+    background: rgba(212, 149, 106, 0.08);
+    border: 1px solid rgba(212, 149, 106, 0.2);
+    border-radius: 8px;
+    padding: 14px 22px;
+    text-align: center;
+  }
+
+  .workflow-item .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: #d4956a;
+    line-height: 1;
+  }
+
+  .workflow-item .label {
+    font-size: 11px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .workflow-arrow {
+    color: rgba(212, 149, 106, 0.3);
+    font-size: 20px;
+  }
+
+  /* Summary section */
+  .summary {
+    padding: 80px 0 100px;
+  }
+
+  .summary h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: #fff;
+    margin-bottom: 30px;
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .summary-card {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .summary-card h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: #d4956a;
+    margin-bottom: 10px;
+  }
+
+  .summary-card p {
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  .footer-note {
+    text-align: center;
+    padding: 40px;
+    font-weight: 300;
+    font-size: 14px;
+    color: rgba(255,255,255,0.25);
+    border-top: 1px solid rgba(212, 149, 106, 0.1);
+  }
+  .footer-note .gold { color: #d4956a; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">Practical Guide</div>
+  <h1>Build an <span class="gold">Amazing Training</span> with Claude Design</h1>
+  <p class="hero-sub">The complete process — from instructional design thinking to a finished, interactive learning experience. No authoring tool required.</p>
+  <p class="hero-meta">By Shruti Kate, Ph.D. &nbsp;|&nbsp; Learning Sciences & Instructional Design</p>
+</section>
+
+<!-- OVERVIEW -->
+<div class="container">
+  <div class="phase">
+    <p class="phase-intro" style="margin-bottom: 20px;">Most tutorials on AI + eLearning skip the part that matters: the design thinking. This guide covers both — the instructional design process that ensures your training actually works, AND the step-by-step Claude prompts that bring it to life.</p>
+
+    <div class="workflow">
+      <div class="workflow-item"><div class="num">1</div><div class="label">Analyze</div></div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-item"><div class="num">2</div><div class="label">Design</div></div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-item"><div class="num">3</div><div class="label">Develop</div></div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-item"><div class="num">4</div><div class="label">Iterate</div></div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-item"><div class="num">5</div><div class="label">Deploy</div></div>
+      <div class="workflow-arrow">→</div>
+      <div class="workflow-item"><div class="num">6</div><div class="label">Measure</div></div>
+    </div>
+  </div>
+
+  <!-- PHASE 1: ANALYZE -->
+  <section class="phase">
+    <div class="phase-number">01</div>
+    <div class="phase-header">
+      <span class="phase-tag">The ID Process</span>
+    </div>
+    <h2>Analyze the Problem</h2>
+    <p class="phase-intro">Before you open Claude, before you write a single prompt — stop. The #1 mistake people make with AI-generated training is skipping this step entirely. A beautiful module that solves the wrong problem is still a waste of everyone's time.</p>
+
+    <div class="step">
+      <div class="step-label">Step 1</div>
+      <h3>Define the Performance Problem</h3>
+      <p>Ask yourself: what is the actual behavior that needs to change? Not "what content do people need" but "what should someone do differently after this training?"</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"I'm designing a training for [audience]. The performance problem is [specific gap]. Help me clarify: Is this a knowledge gap, a skill gap, a motivation gap, or a process/environment gap? Ask me questions to help diagnose the root cause."</div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">ID Tip</div>
+        <div class="tip-text">If the root cause isn't a knowledge or skill gap, training isn't the solution. Claude can help you draft a recommendation memo to stakeholders explaining why a job aid, process fix, or tool change would be more effective.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 2</div>
+      <h3>Define Your Learner Persona</h3>
+      <p>Who is taking this training? What do they already know? What are their constraints (time, motivation, tech literacy)? The more specific you are, the better Claude's output will be.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"My learners are [role] at [company type]. They have [X level] of prior knowledge. Their biggest challenges are [pain points]. They have [X minutes] for training. Generate 2-3 detailed learner personas I can use to guide my design decisions."</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 3</div>
+      <h3>Write Performance-Based Learning Objectives</h3>
+      <p>Not "learners will understand X" — that's unmeasurable. Use Bloom's Taxonomy action verbs tied to observable behaviors.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Based on this performance problem: [gap], draft 3-5 learning objectives using Bloom's Taxonomy. Each should start with an action verb, describe an observable behavior, include conditions, and specify a success criterion. Make them measurable at Kirkpatrick Level 3 (on-the-job application)."</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">What You'll Get</div>
+        <div class="output-text">Tight, measurable objectives like: "Given a customer complaint scenario, the learner will identify the root cause and select the appropriate resolution path with 90% accuracy" — not vague filler like "understand customer service principles."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 2: DESIGN -->
+  <section class="phase">
+    <div class="phase-number">02</div>
+    <div class="phase-header">
+      <span class="phase-tag">The ID Process</span>
+    </div>
+    <h2>Design the Experience</h2>
+    <p class="phase-intro">This is where most AI-generated training fails. People jump straight to "build me a course" without designing the learner journey first. Claude is powerful, but it needs your instructional design brain to guide it.</p>
+
+    <div class="step">
+      <div class="step-label">Step 4</div>
+      <h3>Choose the Right Modality</h3>
+      <p>Not everything should be an eLearning module. Use Action Mapping to decide: does this need a branching scenario? A job aid? A video? A blended approach? Match the solution to the problem.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Here are my learning objectives: [paste them]. My learners are [persona]. They have [constraints]. Using Cathy Moore's Action Mapping framework, recommend the best modality for each objective. For each, explain why that format works better than alternatives."</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 5</div>
+      <h3>Create a Content Outline & Storyboard</h3>
+      <p>Structure your module before you build it. Think: what's the narrative arc? Where are the decision points? Where does the learner practice?</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Create a detailed storyboard for a [X-minute] interactive training on [topic]. Include: screen-by-screen breakdown, content on each screen, interaction type (click-to-reveal, drag-and-drop, branching decision, knowledge check), navigation flow, and where branching scenarios split based on learner choices. Format as a table."</div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">ID Tip</div>
+        <div class="tip-text">This is your blueprint. Review it carefully before moving to development. Every minute spent refining the storyboard saves 10 minutes of rework later. Share it with your SME for content validation.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 6</div>
+      <h3>Script the Branching Scenario</h3>
+      <p>If your training includes decision-based learning, script the full branching logic: decision points, consequences for each path, and feedback loops.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Write a branching scenario for [topic]. The learner plays [role]. Scene: [realistic workplace situation]. At each decision point, offer 3 choices — one correct, one partially correct, one incorrect. Each choice leads to a realistic consequence and tailored feedback that explains why. Include 3 decision points with full branching paths."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 3: DEVELOP -->
+  <section class="phase">
+    <div class="phase-number">03</div>
+    <div class="phase-header">
+      <span class="phase-tag">Claude Design</span>
+    </div>
+    <h2>Build It in Claude</h2>
+    <p class="phase-intro">Now comes the part Tim Slade demonstrated — turning your design into a functional, interactive learning experience using Claude's code generation. This is where the magic happens, but only because you did the thinking work first.</p>
+
+    <div class="step">
+      <div class="step-label">Step 7</div>
+      <h3>Generate the Interactive Module</h3>
+      <p>Use Claude to build a fully functional HTML/CSS/JS learning module based on your storyboard. Be specific about interactions, visual style, and structure.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Build an interactive training module as a single-page HTML/CSS/JS application. Topic: [topic]. Structure: [paste your storyboard outline]. Include: progress bar, navigation (next/back), a branching scenario with [X] decision points, knowledge check questions with immediate feedback, a completion summary with score. Visual style: modern, clean, [brand colors]. Make it mobile responsive. Use smooth transitions between screens."</div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">Pro Tip</div>
+        <div class="tip-text">Give Claude your full storyboard content in the same prompt. The more context you provide, the less you'll need to iterate. Include your exact text, scenario scripts, and quiz questions — don't make Claude guess.</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 8</div>
+      <h3>Add Rich Interactions</h3>
+      <p>Claude can build interactions that rival traditional authoring tools: drag-and-drop, click-to-reveal, tabbed content, accordion panels, flip cards, timelines, and interactive infographics.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Add these interactions to the module: 1) A drag-and-drop activity on screen 3 where learners match [X] to [Y]. 2) A flip-card review on screen 5 with 4 cards showing key concepts. 3) A branching scenario on screens 7-10 based on this script: [paste branching scenario]. Include animated transitions and immediate feedback for each interaction."</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 9</div>
+      <h3>Build the Assessment</h3>
+      <p>Create knowledge checks that test application, not recall. Claude can build scenario-based assessments with scoring, feedback, and retry logic.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Create a 5-question scenario-based assessment for this module. Each question should present a realistic workplace situation where the learner applies what they learned. Include: the scenario context, 4 answer options, correct answer with explanation, incorrect answer feedback that guides without giving away the answer, a running score counter, and a final results screen with pass/fail (80% threshold) and a personalized summary."</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 10</div>
+      <h3>Polish the Visual Design</h3>
+      <p>This is where Claude Design shines — creating production-quality visuals that look like they came from a design team, not a template.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Redesign the visual style of this module. Apply: [brand colors/hex codes], consistent typography (use Google Fonts), custom icons for navigation, a professional header with module title and progress indicator, smooth CSS animations between screens, and a cohesive color system. It should look like a professional LMS course, not a basic HTML page."</div>
+      </div>
+      <div class="output-box">
+        <div class="output-label">What You'll Get</div>
+        <div class="output-text">A polished, interactive training module that rivals Articulate Rise output — with branching logic, assessments, animations, and responsive design. All in a single HTML file you can host anywhere.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 4: ITERATE -->
+  <section class="phase">
+    <div class="phase-number">04</div>
+    <div class="phase-header">
+      <span class="phase-tag">Quality Assurance</span>
+    </div>
+    <h2>Iterate & Refine</h2>
+    <p class="phase-intro">Your first output won't be perfect. The real power of Claude is how fast you can iterate. This is where the ID process and the tool converge.</p>
+
+    <div class="step">
+      <div class="step-label">Step 11</div>
+      <h3>QA Check: Content Accuracy</h3>
+      <p>Review every screen against your storyboard. Check facts with your SME. Verify that branching paths lead to the right consequences.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Review this module for: 1) Content accuracy — flag anything that seems inconsistent with [topic area]. 2) Instructional soundness — are the interactions aligned with the learning objectives? 3) Flow — does the narrative make sense? 4) Accessibility — are there alt-text descriptions, keyboard navigation, sufficient color contrast?"</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 12</div>
+      <h3>QA Check: Accessibility (WCAG)</h3>
+      <p>Ensure your training is inclusive — screen reader compatible, keyboard navigable, high contrast, and readable at different zoom levels.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Audit this module for WCAG 2.1 AA compliance. Add: aria-labels to all interactive elements, keyboard navigation support (tab, enter, escape), focus indicators, alt text for any images, sufficient color contrast ratios (4.5:1 minimum for text), and a skip navigation link."</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 13</div>
+      <h3>Pilot Test with Real Learners</h3>
+      <p>Before full deployment, run your module with 3-5 representative learners. Watch them use it. Note where they get confused, stuck, or disengaged.</p>
+      <div class="tip-box">
+        <div class="tip-label">ID Tip</div>
+        <div class="tip-text">This step is non-negotiable. No amount of AI-generated polish replaces watching a real human interact with your training. Their confusion IS your redesign brief. Feed what you learn back into Claude for rapid fixes.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 5: DEPLOY -->
+  <section class="phase">
+    <div class="phase-number">05</div>
+    <div class="phase-header">
+      <span class="phase-tag">Distribution</span>
+    </div>
+    <h2>Deploy & Distribute</h2>
+    <p class="phase-intro">You've built a standalone HTML learning experience. Here's how to get it in front of learners.</p>
+
+    <div class="step">
+      <div class="step-label">Step 14</div>
+      <h3>Hosting Options</h3>
+      <p>Your Claude-built module is a single HTML file. That gives you flexibility traditional authoring tools don't.</p>
+      <div class="tip-box">
+        <div class="tip-label">Options</div>
+        <div class="tip-text">
+          <strong>Company intranet/SharePoint:</strong> Upload the HTML file directly. Learners access via link.<br><br>
+          <strong>LMS with SCORM:</strong> Ask Claude to wrap the module in a SCORM 1.2 or 2004 package with completion tracking. This is solvable — Tim Slade mentioned it too.<br><br>
+          <strong>GitHub Pages:</strong> Free hosting for public-facing training or portfolio pieces.<br><br>
+          <strong>Articulate Reach 360 / LMS:</strong> If your org uses these, export accordingly.
+        </div>
+      </div>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt (SCORM Wrapper)</div>
+        <div class="prompt-text">"Wrap this HTML module in a SCORM 1.2 compliant package. Include: imsmanifest.xml, SCO tracking for completion status (complete/incomplete), score reporting from the assessment, and a zip file structure I can upload directly to an LMS."</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 6: MEASURE -->
+  <section class="phase">
+    <div class="phase-number">06</div>
+    <div class="phase-header">
+      <span class="phase-tag">The Part Most People Skip</span>
+    </div>
+    <h2>Measure Impact</h2>
+    <p class="phase-intro">This is where 90% of training falls apart. You built something beautiful. Did it work? Claude can help you design the measurement strategy — but you need to build it in from the start, not bolt it on after.</p>
+
+    <div class="step">
+      <div class="step-label">Step 15</div>
+      <h3>Design Your Evaluation Framework</h3>
+      <p>Use Kirkpatrick's model, but don't stop at Level 1 (did they like it) or Level 2 (did they pass the quiz).</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Design a Kirkpatrick L1-L4 evaluation plan for this training. Include: L1 — a 5-question reaction survey with specific, actionable questions (not just 'did you enjoy it'). L2 — pre/post knowledge assessment design. L3 — a 30-day follow-up manager survey to assess on-the-job behavior change. L4 — business metrics to track (tie to the original performance problem). Give me specific survey questions for each level."</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-label">Step 16</div>
+      <h3>Build the Surveys in Claude</h3>
+      <p>Claude can generate interactive survey forms you can embed or distribute separately.</p>
+      <div class="prompt-box">
+        <div class="prompt-label">Claude Prompt</div>
+        <div class="prompt-text">"Build an interactive HTML survey for the L1 reaction evaluation. Include 5 questions: 3 Likert scale, 1 open-text, 1 NPS-style. Make it visually consistent with the training module. Include a submit button that shows a thank-you message. If possible, add the ability to export responses."</div>
+      </div>
+      <div class="tip-box">
+        <div class="tip-label">The Real Question</div>
+        <div class="tip-text">When you present results to stakeholders, they don't want to know completion rates. They want to know: did this training solve the problem we identified in Step 1? That's why the analysis phase matters so much — it defines what "success" means before you build anything.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUMMARY -->
+  <section class="summary">
+    <h2>The Big Picture</h2>
+    <div class="summary-grid">
+      <div class="summary-card">
+        <h4>What AI Does Best</h4>
+        <p>Content drafting, code generation, visual design, rapid prototyping, quiz generation, SCORM packaging, accessibility audits, survey creation — the production work that used to take days.</p>
+      </div>
+      <div class="summary-card">
+        <h4>What You Do Best</h4>
+        <p>Needs analysis, root cause diagnosis, learning objective design, modality selection, branching logic, stakeholder management, pilot testing, measurement strategy — the thinking work that makes training effective.</p>
+      </div>
+      <div class="summary-card">
+        <h4>The Combination</h4>
+        <p>When you bring ID expertise + Claude Design together, you can build in hours what used to take weeks — without sacrificing instructional quality. The tool is faster. But the designer makes it work.</p>
+      </div>
+      <div class="summary-card">
+        <h4>Portfolio Tip</h4>
+        <p>Document this entire process for your portfolio. Show not just the finished module, but the thinking behind it — the needs analysis, the storyboard, the design decisions. That's what separates you from someone who just typed a prompt.</p>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer-note">
+    Built by <span class="gold">Shruti Kate, Ph.D.</span> &nbsp;|&nbsp; Learning Sciences & Instructional Design &nbsp;|&nbsp; 2026
+    <br><br>
+    <a href="https://shrutikate22.github.io" style="color: #d4956a; text-decoration: none; font-weight: 500; letter-spacing: 1px; font-size: 14px; border: 1px solid rgba(212,149,106,0.3); padding: 10px 28px; border-radius: 100px; transition: all 0.3s ease;">← Back to Portfolio</a>
+  </div>
+</div>
+
+</body>
+</html>
