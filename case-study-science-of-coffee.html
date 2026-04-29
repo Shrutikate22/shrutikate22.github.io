@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case Study — The Science of Coffee | Shruti Kate</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --espresso:#2C1810;
+  --crema:#F5E6D3;
+  --roast:#8B4513;
+  --steam:#D4C5B2;
+  --foam:#FAF3EB;
+  --accent:#C85A2A;
+  --text:#3A2F2A;
+  --muted:#7A6E68;
+}
+body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--text);background:var(--foam);line-height:1.7}
+a{color:var(--accent);text-decoration:none}
+
+/* HERO */
+.hero{position:relative;height:70vh;min-height:480px;overflow:hidden;display:flex;align-items:flex-end}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1600&q=80') center/cover;filter:brightness(0.35)}
+.hero-content{position:relative;z-index:1;padding:3rem 2rem 3.5rem;max-width:760px;margin:0 auto;width:100%}
+.hero-label{font-size:.75rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--crema);opacity:.8;margin-bottom:.75rem}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,5vw,3.2rem);color:#fff;line-height:1.15;margin-bottom:1rem}
+.hero p{color:var(--steam);font-size:1.05rem;max-width:540px}
+
+/* NAV BACK */
+.back{position:fixed;top:1.5rem;left:1.5rem;z-index:100;background:rgba(44,24,16,.85);backdrop-filter:blur(8px);color:#fff;padding:.5rem 1rem;border-radius:50px;font-size:.8rem;font-weight:600;letter-spacing:.5px;transition:transform .2s}
+.back:hover{transform:scale(1.05);color:#fff}
+
+/* CONTENT */
+.wrap{max-width:720px;margin:0 auto;padding:0 1.5rem}
+
+/* SECTION BLOCKS */
+.section{padding:4rem 0}
+.section:nth-child(even){background:var(--crema)}
+.section-num{font-size:.7rem;letter-spacing:3px;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.5rem}
+.section h2{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--espresso);margin-bottom:1rem;line-height:1.25}
+.section p{color:var(--muted);margin-bottom:1rem;font-size:.95rem}
+.section p strong{color:var(--text);font-weight:600}
+
+/* PHOTO BLOCKS */
+.photo-row{display:grid;gap:12px;margin:1.5rem 0}
+.photo-row.two{grid-template-columns:1fr 1fr}
+.photo-row.three{grid-template-columns:1fr 1fr 1fr}
+.photo-row img{width:100%;height:200px;object-fit:cover;border-radius:10px}
+.photo-row .caption{font-size:.75rem;color:var(--muted);text-align:center;margin-top:6px;font-style:italic}
+
+/* FULL WIDTH IMAGE */
+.full-img{width:100%;margin:1.5rem 0;border-radius:12px;overflow:hidden}
+.full-img img{width:100%;height:auto;display:block}
+
+/* PROCESS CARDS */
+.process-track{display:flex;flex-direction:column;gap:0;margin:2rem 0;position:relative}
+.process-track::before{content:'';position:absolute;left:18px;top:20px;bottom:20px;width:2px;background:var(--steam)}
+.process-step{display:flex;gap:1.25rem;align-items:flex-start;padding:.75rem 0}
+.step-dot{width:38px;height:38px;min-width:38px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.8rem;font-weight:700;position:relative;z-index:1}
+.step-body h4{font-size:.95rem;color:var(--espresso);margin-bottom:.25rem}
+.step-body p{font-size:.85rem;color:var(--muted);margin:0}
+
+/* CALLOUT */
+.callout{background:var(--espresso);color:var(--crema);border-radius:12px;padding:1.75rem 2rem;margin:2rem 0;position:relative;overflow:hidden}
+.callout::before{content:'"';position:absolute;top:-10px;left:12px;font-size:6rem;font-family:'DM Serif Display',serif;color:rgba(255,255,255,.06)}
+.callout p{font-size:1rem;line-height:1.7;position:relative;z-index:1}
+
+/* STATS ROW */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:2rem 0}
+.stat{text-align:center;padding:1.25rem;background:white;border-radius:10px;border:1px solid var(--steam)}
+.stat .num{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--accent)}
+.stat .label{font-size:.75rem;color:var(--muted);margin-top:.25rem;text-transform:uppercase;letter-spacing:1px}
+
+/* TAG LIST */
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin:1rem 0}
+.tags span{padding:6px 14px;border-radius:50px;font-size:.75rem;font-weight:600;background:var(--crema);color:var(--roast);border:1px solid var(--steam)}
+
+/* CTA */
+.cta-block{text-align:center;padding:4rem 2rem;background:var(--espresso)}
+.cta-block h2{font-family:'DM Serif Display',serif;color:#fff;font-size:1.6rem;margin-bottom:.75rem}
+.cta-block p{color:var(--steam);margin-bottom:1.5rem;font-size:.95rem}
+.cta-btn{display:inline-block;padding:.85rem 2.5rem;background:var(--accent);color:#fff;border-radius:50px;font-weight:700;font-size:.9rem;transition:transform .2s,box-shadow .2s}
+.cta-btn:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(200,90,42,.35);color:#fff}
+
+/* RESPONSIVE */
+@media(max-width:600px){
+  .hero{height:55vh;min-height:380px}
+  .photo-row.two,.photo-row.three{grid-template-columns:1fr}
+  .stats{grid-template-columns:1fr}
+  .section{padding:2.5rem 0}
+}
+</style>
+</head>
+<body>
+
+<a href="index.html" class="back">← Portfolio</a>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-label">Case Study · Articulate Rise 360</div>
+        <h1>The Science of Coffee: From Bean to Brew</h1>
+        <p>A 15-minute microlesson that turns extraction chemistry into something you actually want to learn — built with six interactive block types in Rise 360.</p>
+    </div>
+</section>
+
+<!-- THE PROBLEM -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-num">01 — The Challenge</div>
+        <h2>Make science sticky without a classroom</h2>
+        <p>Most "fun topic" eLearning is just decorated text. I wanted to prove that even a casual subject like coffee could be built with <strong>real instructional rigor</strong> — needs analysis, deliberate interaction design, and measurable outcomes — while still being something you'd actually enjoy clicking through.</p>
+        <p>The constraint: build it entirely in Rise 360 (no Storyline, no custom code) and make it portfolio-ready in under a week.</p>
+
+        <div class="callout">
+            <p>The real design challenge wasn't the content — it was proving that Rise's built-in blocks can carry genuine instructional weight when you sequence them with intention.</p>
+        </div>
+    </div>
+</section>
+
+<!-- THOUGHT PROCESS -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-num">02 — Design Thinking</div>
+        <h2>Starting with behavior, not content</h2>
+        <p>Before touching Rise, I mapped the lesson around one question: <strong>what should the learner be able to DO after this?</strong> Not "know about extraction" — but troubleshoot a bad cup and fix it. That's a behavioral outcome, and it shaped every design decision.</p>
+
+        <div class="photo-row two">
+            <div>
+                <img src="https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?auto=format&fit=crop&w=600&q=80" alt="Person writing notes in a coffee shop">
+                <div class="caption">Mapping the learning objectives before opening Rise</div>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1611174275735-a0f38771be68?auto=format&fit=crop&w=600&q=80" alt="Sticky notes on a whiteboard">
+                <div class="caption">Storyboarding interaction types to objectives</div>
+            </div>
+        </div>
+
+        <div class="process-track">
+            <div class="process-step">
+                <div class="step-dot">1</div>
+                <div class="step-body">
+                    <h4>Defined behavioral objectives first</h4>
+                    <p>Not "understand extraction" but "diagnose and fix a sour, bitter, or weak cup." This drove the scenario block in Section 5.</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-dot">2</div>
+                <div class="step-body">
+                    <h4>Matched each objective to a Rise block type</h4>
+                    <p>Tabs for comparison (grind/temp/time). Sorting for classification (flavor → extraction zone). Scenario for application.</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-dot">3</div>
+                <div class="step-body">
+                    <h4>Sequenced from concrete to abstract</h4>
+                    <p>Start with something physical (the coffee cherry), build to the science (extraction), then apply it (troubleshooting). Cognitive load stays managed.</p>
+                </div>
+            </div>
+            <div class="process-step">
+                <div class="step-dot">4</div>
+                <div class="step-body">
+                    <h4>Designed the knowledge check last</h4>
+                    <p>Assessment questions written directly from the objectives — not from the content. If it's not in the objectives, it's not in the quiz.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- THE BUILD -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-num">03 — The Build</div>
+        <h2>Six interaction types, one scroll</h2>
+        <p>The lesson uses <strong>labeled graphics, tabs, flashcards, a sorting activity, a branching scenario, and a knowledge check</strong> — all native Rise blocks. No workarounds, no Storyline embeds. The goal was to show maximum instructional range within Rise's constraints.</p>
+
+        <div class="photo-row three">
+            <div>
+                <img src="https://images.unsplash.com/photo-1559525839-b184a4d698c7?auto=format&fit=crop&w=400&q=80" alt="Coffee beans on a scale">
+                <div class="caption">Labeled graphic: coffee cherry anatomy</div>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=400&q=80" alt="Pour over coffee brewing">
+                <div class="caption">Tabs: grind, temp, and time variables</div>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefda?auto=format&fit=crop&w=400&q=80" alt="Espresso being pulled">
+                <div class="caption">Flashcards: five brew methods compared</div>
+            </div>
+        </div>
+
+        <p>The <strong>branching scenario</strong> is the centerpiece. The learner brews a pour over, something goes wrong, and they diagnose it. Three branches — sour, bitter, or weak — each with targeted feedback tied directly to the extraction science taught earlier. It's Kirkpatrick Level 2 in a scroll.</p>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="num">7</div>
+                <div class="label">Sections</div>
+            </div>
+            <div class="stat">
+                <div class="num">6</div>
+                <div class="label">Interaction types</div>
+            </div>
+            <div class="stat">
+                <div class="num">~15m</div>
+                <div class="label">Completion time</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- VISUAL DESIGN -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-num">04 — Visual Strategy</div>
+        <h2>Moody, not corporate</h2>
+        <p>I deliberately avoided the bright, flat stock-photo look that plagues most eLearning. The visual language is <strong>warm, dark, and tactile</strong> — espresso browns, cream highlights, moody photography. It should feel like a specialty coffee shop, not a compliance module.</p>
+
+        <div class="photo-row two">
+            <div>
+                <img src="https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=600&q=80" alt="Dark roasted coffee beans closeup">
+                <div class="caption">Color palette pulled directly from the subject matter</div>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1511920170033-f8396924c348?auto=format&fit=crop&w=600&q=80" alt="Latte art from above">
+                <div class="caption">Consistent photo treatment: warm, close-up, atmospheric</div>
+            </div>
+        </div>
+
+        <div class="tags">
+            <span>Espresso brown #3E2723</span>
+            <span>Warm cream #FFF8E1</span>
+            <span>Burnt orange #E65100</span>
+            <span>Unsplash photography</span>
+            <span>Lato typeface</span>
+        </div>
+    </div>
+</section>
+
+<!-- REFLECTION -->
+<section class="section">
+    <div class="wrap">
+        <div class="section-num">05 — What I'd Do Differently</div>
+        <h2>Honest reflection</h2>
+        <p>Rise's scenario block is functional but shallow — you get one decision point, not true multi-path branching. If I rebuilt this, I'd <strong>embed a Storyline scenario</strong> for the troubleshooting section to allow deeper decision trees with cumulative consequences.</p>
+        <p>I'd also add <strong>spaced retrieval</strong> — a follow-up micro-quiz pushed 48 hours later — to test retention beyond the initial session. The knowledge check at the end measures immediate recall, not learning transfer.</p>
+
+        <div class="callout">
+            <p>The biggest lesson: Rise's constraints forced better design decisions. When you can't over-engineer, you have to be precise about which interaction earns its place. Every block had to justify itself against a learning objective.</p>
+        </div>
+    </div>
+</section>
+
+<!-- TOOLS -->
+<section class="section" style="padding-bottom:2rem">
+    <div class="wrap">
+        <div class="section-num">Tools & Frameworks</div>
+        <div class="tags">
+            <span>Articulate Rise 360</span>
+            <span>ADDIE</span>
+            <span>Kirkpatrick L1–L2</span>
+            <span>Behavioral Objectives</span>
+            <span>Canva (infographics)</span>
+            <span>Unsplash</span>
+            <span>GitHub Pages</span>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-block">
+    <h2>Experience the lesson yourself</h2>
+    <p>Click through the full interactive lesson — takes about 15 minutes.</p>
+    <a href="https://shrutikate22.github.io/science-of-coffee/index.html" class="cta-btn" target="_blank">Take the Course ↗</a>
+</section>
+
+</body>
+</html>
