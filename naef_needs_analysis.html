@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>NAEF L&D — Rapid Needs Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #f5f5f0;
+  --surface: #ffffff;
+  --surface2: #f0efe9;
+  --border: #ddd9d0;
+  --navy: #0f1b2d;
+  --teal: #0d9488;
+  --teal-light: #e0f7f4;
+  --orange: #c47500;
+  --orange-light: #fff6e0;
+  --text: #1a1a1a;
+  --muted: #5a5a5a;
+  --red-light: #fdeaea;
+  --red: #8b1a1a;
+  --green-light: #e6f4ec;
+  --green: #0f5c2e;
+  --yellow-light: #fffbe0;
+  --yellow: #7a5c00;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* ── HEADER ── */
+.doc-header {
+  background: var(--navy);
+  padding: 48px 60px;
+  position: relative;
+  overflow: hidden;
+}
+.doc-header::after {
+  content: '';
+  position: absolute; top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  background: var(--teal);
+  border-radius: 50%;
+  opacity: 0.1;
+}
+.doc-header::before {
+  content: '';
+  position: absolute; bottom: -60px; left: 30%;
+  width: 300px; height: 300px;
+  background: var(--orange);
+  border-radius: 50%;
+  opacity: 0.05;
+}
+.header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+.amz-badge {
+  background: var(--orange);
+  color: #fff;
+  font-weight: 700;
+  font-size: 11px;
+  letter-spacing: 0.09em;
+  padding: 4px 11px;
+  border-radius: 3px;
+}
+.doc-date {
+  font-size: 12px;
+  color: rgba(255,255,255,0.45);
+}
+.doc-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.2;
+  margin-bottom: 10px;
+  position: relative;
+  z-index: 1;
+}
+.doc-header .sub {
+  font-size: 14px;
+  color: rgba(255,255,255,0.55);
+  position: relative; z-index: 1;
+}
+.meta-row {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+  position: relative; z-index: 1;
+}
+.meta-chip {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: rgba(255,255,255,0.7);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 13px;
+  border-radius: 20px;
+}
+
+/* ── DISCLAIMER ── */
+.disclaimer {
+  background: var(--yellow-light);
+  border-left: 3px solid var(--orange);
+  padding: 14px 24px;
+  font-size: 13px;
+  color: var(--yellow);
+}
+.disclaimer strong { font-weight: 700; }
+
+/* ── BODY ── */
+.doc-body { max-width: 860px; margin: 0 auto; padding: 48px 32px 80px; }
+
+/* ── SECTION TITLES ── */
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.section-block { margin-bottom: 44px; }
+
+/* ── INFO CARD ── */
+.info-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 28px;
+  margin-bottom: 14px;
+}
+.info-label {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 6px;
+  display: block;
+}
+.info-value {
+  font-size: 15px;
+  color: var(--text);
+  font-weight: 500;
+}
+
+/* ── TWO COL ── */
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+/* ── GAP TABLE ── */
+.gap-table { width: 100%; border-collapse: collapse; }
+.gap-table th {
+  background: var(--navy);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  padding: 12px 16px;
+  text-align: left;
+}
+.gap-table th:first-child { border-radius: 8px 0 0 0; }
+.gap-table th:last-child { border-radius: 0 8px 0 0; }
+.gap-table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  background: var(--surface);
+}
+.gap-table tr:last-child td { border-bottom: none; }
+.gap-table tr:nth-child(even) td { background: var(--surface2); }
+.priority-high {
+  display: inline-block;
+  background: var(--red-light); color: var(--red);
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 20px;
+}
+.priority-med {
+  display: inline-block;
+  background: var(--orange-light); color: var(--orange);
+  font-size: 11px; font-weight: 700;
+  padding: 2px 8px; border-radius: 20px;
+}
+
+/* ── LEARNING OBJECTIVES ── */
+.obj-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.obj-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.obj-num {
+  width: 28px; height: 28px;
+  background: var(--teal);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+}
+.obj-text { font-size: 14px; color: var(--text); line-height: 1.6; }
+.obj-text strong { font-weight: 600; color: var(--navy); }
+
+/* ── SOLUTION CARDS ── */
+.solution-grid { display: flex; flex-direction: column; gap: 12px; }
+.solution-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.solution-card.highlight { border-color: var(--teal); border-width: 1.5px; }
+.sol-num {
+  background: var(--teal);
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.sol-num.built {
+  background: var(--orange);
+}
+.sol-body h4 { font-size: 15px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+.sol-body p { font-size: 13px; color: var(--muted); line-height: 1.6; margin: 0; }
+.built-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--green-light); color: var(--green);
+  font-size: 11px; font-weight: 700;
+  padding: 3px 10px; border-radius: 20px;
+  margin-top: 8px;
+}
+
+/* ── MEASUREMENT ── */
+.measurement-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.m-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 16px;
+  text-align: center;
+}
+.m-level {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 800;
+  color: var(--teal);
+  display: block;
+  line-height: 1;
+}
+.m-name {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--navy);
+  margin: 6px 0 8px;
+  display: block;
+}
+.m-how { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+/* ── CALLOUT ── */
+.callout {
+  background: var(--teal-light);
+  border-left: 3px solid var(--teal);
+  border-radius: 0 10px 10px 0;
+  padding: 16px 20px;
+  margin: 20px 0;
+  font-size: 14px;
+  color: #0a5c54;
+}
+.callout strong { font-weight: 700; }
+
+/* ── NEXT STEPS ── */
+.steps-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.step-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 16px 20px;
+}
+.step-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--orange);
+  flex-shrink: 0;
+  margin-top: 7px;
+}
+.step-item p { font-size: 14px; color: var(--text); margin: 0; }
+.step-item span { font-size: 12px; color: var(--muted); }
+
+/* ── FOOTER ── */
+.doc-footer {
+  background: var(--navy);
+  padding: 20px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.doc-footer p { font-size: 12px; color: rgba(255,255,255,0.4); }
+.doc-footer strong { color: rgba(255,255,255,0.7); }
+
+@media (max-width: 640px) {
+  .doc-header { padding: 32px 24px; }
+  .doc-body { padding: 32px 20px 60px; }
+  .two-col { grid-template-columns: 1fr; }
+  .measurement-row { grid-template-columns: 1fr 1fr; }
+  .doc-footer { padding: 16px 20px; flex-direction: column; gap: 6px; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="doc-header">
+  <div class="header-top">
+    <span class="amz-badge">AMAZON · NAEF L&D</span>
+    <span class="doc-date">May 2026 · Rapid Needs Analysis</span>
+  </div>
+  <h1>Leadership Training<br/>Needs Analysis</h1>
+  <p class="sub">Prepared by Shruti Kate · Based on SME intake conversation · NAEF L&D team</p>
+  <div class="meta-row">
+    <span class="meta-chip">⏱ Rapid intake · ~30 min</span>
+    <span class="meta-chip">👤 SME: Hiring Manager, NAEF L&D</span>
+    <span class="meta-chip">🎯 Audience: Amazon Leaders</span>
+    <span class="meta-chip">📋 LMS: Amazon Learn</span>
+  </div>
+</div>
+
+<div class="disclaimer">
+  <strong>Note:</strong> This analysis was built from a single intake conversation. All findings reflect what was shared during that session. Additional discovery sessions with team members, managers, and business stakeholders are recommended before full program development.
+</div>
+
+<div class="doc-body">
+
+  <!-- 1. INTAKE SUMMARY -->
+  <div class="section-block">
+    <div class="section-title">📋 1. Intake Summary — What I Heard</div>
+    <div class="two-col">
+      <div class="info-card">
+        <span class="info-label">Team Context</span>
+        <div class="info-value">New NAEF L&D team, currently being built. Support function serving the broader Amazon External Fulfillment network.</div>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Primary Training Need</span>
+        <div class="info-value">Leadership development training for Amazon leaders across the NAEF network. No existing structured program in place.</div>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Build Constraint</span>
+        <div class="info-value">Need to build quickly and at scale. Fast turnaround is a priority — team can't wait for a multi-month curriculum build.</div>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Delivery Platform</span>
+        <div class="info-value">Amazon Learn (internal LMS). Tracking completion and assessment scores is expected at a minimum.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. WHAT WE STILL NEED TO KNOW -->
+  <div class="section-block">
+    <div class="section-title">❓ 2. Open Questions — Next Discovery Session</div>
+    <table class="gap-table">
+      <thead>
+        <tr>
+          <th>Question</th>
+          <th>Why It Matters</th>
+          <th>Priority</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>What specific leadership behaviors are breaking down on the floor right now?</td>
+          <td>Defines the actual performance gap. Without this, we're building content, not solving problems.</td>
+          <td><span class="priority-high">High</span></td>
+        </tr>
+        <tr>
+          <td>Who exactly is the learner? (New managers, experienced leaders, specific levels?)</td>
+          <td>Audience determines scenario complexity, tone, and prior knowledge assumptions.</td>
+          <td><span class="priority-high">High</span></td>
+        </tr>
+        <tr>
+          <td>What does "leadership training" mean to business stakeholders vs. the L&D team?</td>
+          <td>Prevents misalignment between what gets built and what leadership expects.</td>
+          <td><span class="priority-high">High</span></td>
+        </tr>
+        <tr>
+          <td>What's the target completion timeline for the first program?</td>
+          <td>Determines whether we build a modular series, a single course, or a blended journey.</td>
+          <td><span class="priority-med">Medium</span></td>
+        </tr>
+        <tr>
+          <td>Are there existing materials — job aids, SOPs, past trainings — we can build from?</td>
+          <td>Reusing existing content significantly accelerates build time.</td>
+          <td><span class="priority-med">Medium</span></td>
+        </tr>
+        <tr>
+          <td>Who will reinforce the learning on the job? Is manager support available?</td>
+          <td>Behavior transfer requires on-the-job reinforcement. L3 measurement depends on this.</td>
+          <td><span class="priority-med">Medium</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 3. ASSUMED PERFORMANCE GAP -->
+  <div class="section-block">
+    <div class="section-title">🎯 3. Assumed Performance Gap</div>
+    <div class="callout">
+      <strong>Working hypothesis (to be validated):</strong> Amazon leaders in the NAEF network are not consistently demonstrating key leadership behaviors — including giving direct feedback, managing team performance, and building trust — because they lack a structured, scalable development resource they can access on demand.
+    </div>
+    <div class="two-col" style="margin-top:14px;">
+      <div class="info-card">
+        <span class="info-label">Current State</span>
+        <div class="info-value">No structured leadership training program exists for the NAEF L&D team's audience. Development is ad hoc or reliant on informal manager guidance.</div>
+      </div>
+      <div class="info-card">
+        <span class="info-label">Desired State</span>
+        <div class="info-value">Leaders can access bite-sized, behavior-focused training tied to Amazon's Leadership Principles, available on demand through Amazon Learn, with completion tracked.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. LEARNING OBJECTIVES -->
+  <div class="section-block">
+    <div class="section-title">📐 4. Draft Learning Objectives — Module 1</div>
+    <p style="color:var(--muted); font-size:13px; margin-bottom:16px;">Based on the intake, the first module would address <em>feedback delivery</em> — a foundational, high-frequency leadership behavior tied directly to the Earn Trust LP.</p>
+    <ul class="obj-list">
+      <li class="obj-item">
+        <div class="obj-num">1</div>
+        <div class="obj-text"><strong>Apply</strong> the SBI (Situation–Behavior–Impact) model to deliver specific, observable feedback in a real work conversation.</div>
+      </li>
+      <li class="obj-item">
+        <div class="obj-num">2</div>
+        <div class="obj-text"><strong>Distinguish</strong> between feedback that describes behavior versus feedback that judges character or intent.</div>
+      </li>
+      <li class="obj-item">
+        <div class="obj-num">3</div>
+        <div class="obj-text"><strong>Select</strong> the most effective response in a realistic feedback scenario involving a direct report.</div>
+      </li>
+      <li class="obj-item">
+        <div class="obj-num">4</div>
+        <div class="obj-text"><strong>Commit</strong> to a specific feedback conversation before the next 1:1 using a personal reflection prompt.</div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- 5. PROPOSED SOLUTION -->
+  <div class="section-block">
+    <div class="section-title">🏗️ 5. Proposed Solution — Modular Series</div>
+    <p style="color:var(--muted); font-size:13px; margin-bottom:16px;">Given the need to build fast and scale, the recommended approach is a <strong>modular micro-learning series</strong> — each module 5–8 minutes, standalone, deployable to Amazon Learn independently, and expandable over time.</p>
+    <div class="solution-grid">
+      <div class="solution-card highlight">
+        <span class="sol-num built">✓ Built</span>
+        <div class="sol-body">
+          <h4>Module 1 — Delivering Feedback That Sticks</h4>
+          <p>SBI model, Do/Don't comparison, branching scenario, personal reflection. Tied to Earn Trust LP.</p>
+          <span class="built-badge">✓ Live demo available</span>
+        </div>
+      </div>
+      <div class="solution-card">
+        <span class="sol-num">2</span>
+        <div class="sol-body">
+          <h4>Module 2 — Coaching Conversations (vs. Telling)</h4>
+          <p>Distinction between coaching and directing. GROW model. Scenario: redirecting a struggling team member without demotivating.</p>
+        </div>
+      </div>
+      <div class="solution-card">
+        <span class="sol-num">3</span>
+        <div class="sol-body">
+          <h4>Module 3 — Running a High-Signal 1:1</h4>
+          <p>Structure, agenda-setting, listening cues. Focus on building trust incrementally. Tied to Earn Trust + Are Right, A Lot LPs.</p>
+        </div>
+      </div>
+      <div class="solution-card">
+        <span class="sol-num">4</span>
+        <div class="sol-body">
+          <h4>Module 4 — Delegating with Clarity</h4>
+          <p>Defining done, giving context not just tasks. Scenario: first-time delegation with a new direct report under time pressure.</p>
+        </div>
+      </div>
+      <div class="solution-card">
+        <span class="sol-num">5</span>
+        <div class="sol-body">
+          <h4>Module 5 — Ownership vs. Blame Culture</h4>
+          <p>Leading through mistakes. Tied to Ownership LP. Scenario: team missed a deadline — how the leader responds.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. MEASUREMENT PLAN -->
+  <div class="section-block">
+    <div class="section-title">📊 6. Measurement Plan — Kirkpatrick L1–L4</div>
+    <div class="measurement-row">
+      <div class="m-card">
+        <span class="m-level">L1</span>
+        <span class="m-name">Reaction</span>
+        <span class="m-how">End-of-module 3-question pulse in Amazon Learn. Tracks learner sentiment and perceived relevance.</span>
+      </div>
+      <div class="m-card">
+        <span class="m-level">L2</span>
+        <span class="m-name">Learning</span>
+        <span class="m-how">Scenario-based knowledge check embedded in each module. Pass threshold tracked in Amazon Learn.</span>
+      </div>
+      <div class="m-card">
+        <span class="m-level">L3</span>
+        <span class="m-name">Behavior</span>
+        <span class="m-how">30-day follow-up survey: "Have you applied SBI feedback in the past 2 weeks? If not, what got in the way?"</span>
+      </div>
+      <div class="m-card">
+        <span class="m-level">L4</span>
+        <span class="m-name">Results</span>
+        <span class="m-how">Correlate with existing people metrics (engagement scores, 360 feedback) once baseline data is available.</span>
+      </div>
+    </div>
+    <div class="callout" style="margin-top:20px;">
+      <strong>Day-one tracking:</strong> Completion rate, assessment scores, and L1 reactions can be live in Amazon Learn from the first module launch. L3 measurement can be set up with a single Qualtrics survey linked post-completion.
+    </div>
+  </div>
+
+  <!-- 7. NEXT STEPS -->
+  <div class="section-block">
+    <div class="section-title">🚀 7. Recommended Next Steps</div>
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-dot"></div>
+        <div>
+          <p><strong>Schedule a 30-min follow-up discovery session</strong> to validate the performance gap and priority leadership behaviors with 2–3 additional stakeholders.</p>
+          <span>Estimated time: 1 week</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-dot"></div>
+        <div>
+          <p><strong>Publish Module 1 (Feedback) to Amazon Learn</strong> as a pilot. Collect L1 and L2 data from first cohort before building Modules 2–5.</p>
+          <span>Estimated time: 1–2 weeks from green light</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-dot"></div>
+        <div>
+          <p><strong>Identify 1–2 willing managers</strong> to act as pilot learners and provide candid feedback on content relevance and scenario realism.</p>
+          <span>Estimated time: Concurrent with Module 1 pilot</span>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-dot"></div>
+        <div>
+          <p><strong>Build modular content architecture</strong> — establish shared template, brand standards, and LP tagging system so future modules build faster on the same foundation.</p>
+          <span>Estimated time: Week 2–3</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="doc-footer">
+  <p>Prepared by <strong>Shruti Kate</strong> · Learning Scientist & Instructional Designer</p>
+  <p><strong>shrutikate22.github.io</strong> · May 2026</p>
+</div>
+
+</body>
+</html>
