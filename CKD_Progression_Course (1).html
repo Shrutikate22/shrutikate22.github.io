@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Communicating CKD Progression to Patients · L&D Demo Course</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,500;8..60,600;8..60,700&display=swap" rel="stylesheet" />
+
+<style>
+  /* ---------- Tokens ---------- */
+  :root {
+    --teal-50:  #effaf8;
+    --teal-100: #d4f1ec;
+    --teal-200: #a6e2da;
+    --teal-300: #6bccc1;
+    --teal-500: #0d9488;
+    --teal-600: #0b756d;
+    --teal-700: #075953;
+    --teal-900: #053f3a;
+
+    --ink:      #0d0f12;
+    --ink-soft: #2a2e34;
+    --slate-700:#3f444c;
+    --slate-500:#6b7280;
+    --slate-400:#9aa1ab;
+    --slate-300:#cdd2da;
+    --slate-200:#e5e8ec;
+    --slate-100:#eef0f3;
+    --slate-50: #f6f7f9;
+    --bone:     #fafaf7;
+    --paper:    #ffffff;
+
+    --warn:     #b54708;
+    --warn-bg:  #fef3e6;
+    --good:     #086354;
+    --good-bg:  #e8f6f2;
+    --bad:      #9b2c2c;
+    --bad-bg:   #fbecec;
+
+    --shadow-sm:  0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 1px rgba(15, 23, 42, 0.03);
+    --shadow-md:  0 6px 24px -8px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(15, 23, 42, 0.04);
+    --shadow-lg:  0 24px 60px -20px rgba(15, 23, 42, 0.18), 0 8px 24px -8px rgba(15, 23, 42, 0.06);
+
+    --radius-sm:  6px;
+    --radius-md:  10px;
+    --radius-lg:  16px;
+    --radius-xl:  22px;
+
+    --font-sans:  'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-serif: 'Source Serif 4', Georgia, 'Iowan Old Style', serif;
+  }
+
+  /* ---------- Reset ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: var(--font-sans);
+    color: var(--ink);
+    background: var(--bone);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    overflow: hidden; /* the stage scrolls, not the body */
+  }
+  button { font-family: inherit; cursor: pointer; }
+  button:focus-visible {
+    outline: 2px solid var(--teal-500);
+    outline-offset: 2px;
+  }
+  ::selection { background: var(--teal-200); color: var(--teal-900); }
+
+  /* ---------- Root layout ---------- */
+  #app { height: 100vh; }
+  .course-root {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    background: var(--bone);
+  }
+
+  /* ---------- Top bar / progress ---------- */
+  .topbar {
+    background: var(--paper);
+    border-bottom: 1px solid var(--slate-200);
+    padding: 14px 32px 0;
+    z-index: 10;
+  }
+  .topbar-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 12px;
+  }
+  .brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+  .brand-mark {
+    width: 36px; height: 36px;
+    border-radius: 9px;
+    display: grid; place-items: center;
+    background: var(--ink);
+    color: var(--teal-300);
+  }
+  .brand-text { min-width: 0; }
+  .brand-title {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 15px;
+    line-height: 1.25;
+    color: var(--ink);
+    letter-spacing: -0.005em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 44ch;
+  }
+  .brand-sub {
+    font-size: 12px;
+    color: var(--slate-500);
+    margin-top: 3px;
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .topbar-meta {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: 12px;
+    color: var(--slate-500);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+  .topbar-meta-screen {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .topbar-meta-progress {
+    color: var(--teal-600);
+    font-weight: 600;
+  }
+
+  /* progress track sits at the bottom of the topbar */
+  .progress-track {
+    position: relative;
+    height: 4px;
+    background: var(--slate-100);
+    border-radius: 999px;
+    margin-top: 0;
+    margin-bottom: 16px;
+  }
+  .progress-fill {
+    position: absolute; inset: 0 auto 0 0;
+    background: var(--teal-500);
+    border-radius: 999px;
+    transition: width 600ms cubic-bezier(.4, 0, .2, 1);
+  }
+  .progress-ticks {
+    position: absolute; inset: 0;
+  }
+  .progress-tick {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 26px; height: 26px;
+    background: var(--paper);
+    border: 2px solid var(--slate-200);
+    color: var(--slate-400);
+    border-radius: 50%;
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    display: grid; place-items: center;
+    padding: 0;
+    transition: all 200ms ease;
+  }
+  .progress-tick.is-unlocked {
+    border-color: var(--teal-500);
+    color: var(--teal-600);
+    cursor: pointer;
+  }
+  .progress-tick.is-current {
+    background: var(--teal-500);
+    color: var(--paper);
+    border-color: var(--teal-500);
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.18);
+  }
+  .progress-tick:disabled { cursor: not-allowed; }
+
+  /* ---------- Stage / screen transitions ---------- */
+  .stage {
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-gutter: stable;
+  }
+  .stage-inner {
+    min-height: 100%;
+    animation: slide-in 520ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .stage-dir-fwd { animation-name: slide-in-fwd; }
+  .stage-dir-back { animation-name: slide-in-back; }
+  @keyframes slide-in-fwd {
+    from { opacity: 0; transform: translate3d(28px, 0, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+  @keyframes slide-in-back {
+    from { opacity: 0; transform: translate3d(-28px, 0, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+  }
+
+  /* ---------- Screen layout ---------- */
+  .screen {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 40px 48px 24px;
+  }
+  .screen-grid {
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 56px;
+    align-items: start;
+  }
+  .screen-side { position: sticky; top: 24px; }
+  .screen-main { min-width: 0; }
+
+  .kicker {
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--teal-600);
+    margin-bottom: 14px;
+  }
+  .screen-title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 40px;
+    line-height: 1.12;
+    letter-spacing: -0.018em;
+    color: var(--ink);
+    margin: 0 0 18px;
+    text-wrap: pretty;
+  }
+  .screen-deck {
+    font-family: var(--font-serif);
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--slate-700);
+    margin: 0 0 32px;
+    max-width: 64ch;
+    font-weight: 400;
+  }
+
+  /* ---------- Dr. Maya panel ---------- */
+  .maya-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .maya-avatar-wrap {
+    width: 170px;
+    height: 200px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--slate-100), var(--paper));
+    display: grid; place-items: end center;
+    margin: 0 auto;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--slate-200);
+  }
+  .maya-avatar-wrap svg {
+    transform: translateY(8px);
+  }
+  .maya-bubble {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 18px 18px 18px;
+    box-shadow: var(--shadow-sm);
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--slate-700);
+  }
+  .maya-bubble-tail {
+    position: absolute;
+    top: -8px;
+    left: 32px;
+    width: 14px; height: 14px;
+    background: var(--paper);
+    border-left: 1px solid var(--slate-200);
+    border-top: 1px solid var(--slate-200);
+    transform: rotate(45deg);
+  }
+  .maya-bubble-name {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--teal-600);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .maya-bubble-body p { margin: 0 0 10px; }
+  .maya-bubble-body p:last-child { margin-bottom: 0; }
+  .maya-sign {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--ink);
+    margin-top: 14px !important;
+  }
+
+  /* ---------- Patient quote (screen 1) ---------- */
+  .patient-quote {
+    position: relative;
+    background: var(--paper);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 36px 40px 32px 64px;
+    margin: 0 0 36px;
+    box-shadow: var(--shadow-md);
+  }
+  .patient-quote-mark {
+    position: absolute;
+    top: 12px; left: 24px;
+    font-family: var(--font-serif);
+    font-size: 96px;
+    line-height: 1;
+    color: var(--teal-500);
+    font-weight: 700;
+  }
+  .patient-quote blockquote {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink);
+    margin: 0 0 18px;
+    font-weight: 400;
+    text-wrap: pretty;
+  }
+  .patient-quote blockquote em {
+    font-style: italic;
+    background: var(--warn-bg);
+    padding: 0 4px;
+    border-radius: 3px;
+  }
+  .patient-quote figcaption {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    border-top: 1px dashed var(--slate-200);
+    padding-top: 14px;
+  }
+  .patient-quote-name {
+    font-weight: 600;
+    color: var(--ink);
+    font-size: 14px;
+  }
+  .patient-quote-sub {
+    color: var(--slate-500);
+    font-size: 13px;
+  }
+
+  /* ---------- Prompt + option list ---------- */
+  .prompt { margin-top: 16px; }
+  .prompt-label {
+    text-transform: uppercase;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--teal-600);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .prompt-q {
+    font-family: var(--font-serif);
+    font-size: 26px;
+    line-height: 1.25;
+    color: var(--ink);
+    margin: 0 0 20px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .option-list {
+    display: grid;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .option {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    gap: 14px;
+    align-items: start;
+    text-align: left;
+    background: var(--paper);
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    font-family: inherit;
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    transition: all 180ms ease;
+  }
+  .option:not(:disabled):hover {
+    border-color: var(--teal-300);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .option-letter {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    color: var(--teal-600);
+    font-size: 18px;
+    background: var(--teal-50);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    line-height: 1;
+  }
+  .option-text { padding-top: 4px; }
+  .option-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 600;
+    color: var(--good);
+    background: var(--good-bg);
+    padding: 5px 9px;
+    border-radius: 999px;
+    align-self: center;
+    white-space: nowrap;
+  }
+  .option-tag--no {
+    color: var(--bad);
+    background: var(--bad-bg);
+  }
+  .option--correct {
+    border-color: var(--good);
+    background: linear-gradient(0deg, var(--good-bg), var(--paper));
+  }
+  .option--correct .option-letter {
+    background: var(--good);
+    color: var(--paper);
+  }
+  .option--incorrect {
+    border-color: var(--bad);
+  }
+  .option--incorrect .option-letter {
+    background: var(--bad-bg);
+    color: var(--bad);
+  }
+  .option--dim {
+    opacity: 0.55;
+  }
+  .option:disabled { cursor: default; }
+
+  /* ---------- Feedback block ---------- */
+  .feedback {
+    background: var(--paper);
+    border: 1px solid var(--slate-200);
+    border-left: 4px solid var(--teal-500);
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+    box-shadow: var(--shadow-sm);
+    animation: fade-rise 380ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .feedback--good { border-left-color: var(--good); }
+  .feedback--reflect { border-left-color: var(--warn); }
+  .feedback-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+  }
+  .feedback-header > svg {
+    border-radius: 50%;
+    background: var(--slate-100);
+    flex-shrink: 0;
+  }
+  .feedback-name {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--teal-600);
+    font-weight: 600;
+  }
+  .feedback-label {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .feedback p { margin: 0 0 10px; color: var(--ink-soft); font-size: 15.5px; line-height: 1.6; }
+  .feedback p:last-child { margin-bottom: 0; }
+  .feedback-bridge {
+    margin-top: 14px !important;
+    padding-top: 14px;
+    border-top: 1px dashed var(--slate-200);
+    font-size: 14.5px !important;
+    color: var(--slate-700) !important;
+    font-style: italic;
+  }
+  @keyframes fade-rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- Principles (screen 2) ---------- */
+  .principle-grid {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .principle-card {
+    background: var(--paper);
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: all 250ms ease;
+  }
+  .principle-card.is-open {
+    border-color: var(--teal-300);
+    box-shadow: var(--shadow-md);
+  }
+  .principle-head {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 56px 1fr 24px;
+    align-items: center;
+    gap: 16px;
+    background: transparent;
+    border: none;
+    padding: 18px 22px;
+    text-align: left;
+  }
+  .principle-num {
+    font-family: var(--font-serif);
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--teal-500);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .principle-card.is-open .principle-num {
+    color: var(--teal-700);
+  }
+  .principle-title {
+    font-family: var(--font-serif);
+    font-size: 21px;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.01em;
+  }
+  .principle-chev {
+    transition: transform 200ms ease;
+    color: var(--slate-500);
+  }
+  .principle-card.is-open .principle-chev { transform: rotate(180deg); color: var(--teal-600); }
+  .principle-hint {
+    font-size: 14.5px;
+    color: var(--slate-500);
+    padding: 0 22px 18px 78px;
+    line-height: 1.5;
+    margin-top: -10px;
+  }
+  .principle-body {
+    padding: 4px 22px 24px 78px;
+    animation: fade-rise 320ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .principle-body p {
+    font-size: 15.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+    margin: 0 0 18px;
+  }
+  .principle-body p em {
+    color: var(--teal-700);
+    font-style: italic;
+  }
+  .example-block {
+    display: grid;
+    gap: 10px;
+    margin-top: 14px;
+  }
+  .example-row {
+    display: grid;
+    grid-template-columns: 92px 1fr;
+    gap: 16px;
+    align-items: start;
+    background: var(--slate-50);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+  }
+  .example-row--bad {
+    background: var(--bad-bg);
+  }
+  .example-row--good {
+    background: var(--good-bg);
+  }
+  .example-tag {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-weight: 700;
+    color: var(--slate-500);
+    padding-top: 3px;
+  }
+  .example-row--bad .example-tag { color: var(--bad); }
+  .example-row--good .example-tag { color: var(--good); }
+  .example-text {
+    font-family: var(--font-serif);
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: var(--ink);
+    font-style: italic;
+  }
+
+  .progress-pips {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--slate-500);
+    font-size: 13px;
+  }
+  .pip {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    border: 1.5px solid var(--slate-300);
+    background: transparent;
+    transition: all 200ms ease;
+  }
+  .pip--filled {
+    background: var(--teal-500);
+    border-color: var(--teal-500);
+  }
+  .progress-pips-label {
+    margin-left: 6px;
+    letter-spacing: 0.02em;
+  }
+
+  /* ---------- Scenario (screen 3) ---------- */
+  .patient-card {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 16px;
+    align-items: center;
+    background: var(--paper);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    box-shadow: var(--shadow-sm);
+    margin-bottom: 24px;
+  }
+  .patient-card-avatar svg { display: block; border-radius: 50%; }
+  .patient-card-name {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .patient-card-meta {
+    font-size: 13px;
+    color: var(--slate-500);
+    margin-top: 2px;
+  }
+  .patient-card-labs {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+  }
+  .lab-pill {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    background: var(--slate-50);
+    border: 1px solid var(--slate-200);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 12.5px;
+  }
+  .lab-pill-k {
+    font-weight: 600;
+    color: var(--slate-500);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    font-size: 10.5px;
+  }
+  .lab-pill-v {
+    color: var(--ink);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+  .lab-pill-d {
+    color: var(--warn);
+    font-size: 11.5px;
+    font-style: italic;
+  }
+  .scene {
+    background: var(--slate-50);
+    border-radius: var(--radius-md);
+    padding: 18px 22px;
+    margin-bottom: 20px;
+  }
+  .scene-stage {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 16.5px;
+    line-height: 1.55;
+    color: var(--slate-700);
+  }
+  .dialogue {
+    display: grid;
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+  .dialogue-narration {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--slate-500);
+    font-size: 14.5px;
+    padding: 4px 8px;
+    border-left: 2px solid var(--slate-200);
+  }
+  .dialogue-line {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    gap: 14px;
+    align-items: start;
+    animation: fade-rise 380ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .dialogue-tag {
+    font-family: var(--font-sans);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--slate-500);
+    padding-top: 14px;
+    text-align: right;
+  }
+  .dialogue-line--elena .dialogue-tag {
+    color: var(--ink);
+  }
+  .dialogue-body {
+    font-family: var(--font-serif);
+    font-size: 17.5px;
+    line-height: 1.5;
+    background: var(--paper);
+    border: 1px solid var(--slate-200);
+    border-radius: 16px;
+    padding: 14px 18px;
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+  .dialogue-line--elena .dialogue-body {
+    background: var(--slate-50);
+    border-radius: 4px 16px 16px 16px;
+  }
+  .dialogue-line--you .dialogue-body {
+    background: var(--paper);
+    border-radius: 16px 4px 16px 16px;
+  }
+  .dialogue-line.choice-good .dialogue-body {
+    border-color: var(--good);
+    background: linear-gradient(0deg, var(--good-bg), var(--paper));
+  }
+  .dialogue-line.choice-less-good .dialogue-body {
+    border-color: var(--warn);
+    background: linear-gradient(0deg, var(--warn-bg), var(--paper));
+  }
+  .dialogue-line.mood-anxious .dialogue-body { border-color: var(--bad); }
+  .dialogue-line.mood-relieved .dialogue-body { border-color: var(--good); }
+
+  .reaction-note {
+    background: var(--warn-bg);
+    border: 1px solid #f4d3a8;
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    font-size: 14.5px;
+    line-height: 1.55;
+    color: var(--slate-700);
+    animation: fade-rise 380ms cubic-bezier(.16, 1, .3, 1) both;
+    margin-left: 78px;
+  }
+  .reaction-note strong { color: var(--ink); font-weight: 600; }
+  .reaction-note em { color: var(--ink); font-weight: 600; font-style: italic; }
+  .reaction-note--good {
+    background: var(--good-bg);
+    border-color: #b8ddd1;
+  }
+  .time-marker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: var(--slate-500);
+    font-size: 12.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    margin: 18px 0 4px;
+    font-weight: 600;
+  }
+  .time-marker::before, .time-marker::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--slate-200);
+  }
+  .decision-block {
+    background: var(--paper);
+    border: 2px dashed var(--teal-300);
+    border-radius: var(--radius-md);
+    padding: 18px 20px;
+    animation: fade-rise 380ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .decision-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--teal-600);
+    font-weight: 700;
+    margin-bottom: 14px;
+  }
+  .decision-options {
+    display: grid;
+    gap: 10px;
+  }
+  .decision-option {
+    display: grid;
+    grid-template-columns: 36px 1fr;
+    gap: 14px;
+    align-items: start;
+    text-align: left;
+    background: var(--paper);
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    padding: 14px 18px;
+    font-family: var(--font-serif);
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink);
+    transition: all 180ms ease;
+  }
+  .decision-option:hover {
+    border-color: var(--teal-500);
+    background: var(--teal-50);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .decision-letter {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    color: var(--teal-600);
+    font-size: 18px;
+    background: var(--teal-50);
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    line-height: 1;
+  }
+  .scenario-step .btn-primary { margin-top: 12px; }
+
+  /* ---------- Knowledge check (screen 4) ---------- */
+  .quiz-q {
+    background: var(--paper);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+  }
+  .quiz-q-num {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--slate-500);
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .quiz-q-kind {
+    color: var(--teal-600);
+    padding: 3px 9px;
+    border-radius: 999px;
+    background: var(--teal-50);
+    font-size: 10.5px;
+  }
+  .quiz-stem {
+    font-family: var(--font-serif);
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--ink);
+    line-height: 1.3;
+    margin: 0 0 22px;
+    letter-spacing: -0.01em;
+  }
+  .quiz-options {
+    display: grid;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .quiz-option {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 14px;
+    text-align: left;
+    background: var(--paper);
+    border: 1.5px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    transition: all 180ms ease;
+  }
+  .quiz-option:not(:disabled):hover {
+    border-color: var(--teal-500);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .quiz-letter {
+    font-weight: 700;
+    color: var(--teal-600);
+    font-size: 14px;
+    background: var(--teal-50);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    display: grid; place-items: center;
+    margin-top: 1px;
+  }
+  .quiz-option--correct {
+    border-color: var(--good);
+    background: var(--good-bg);
+  }
+  .quiz-option--correct .quiz-letter {
+    background: var(--good); color: var(--paper);
+  }
+  .quiz-option--incorrect {
+    border-color: var(--bad);
+  }
+  .quiz-option--incorrect .quiz-letter {
+    background: var(--bad-bg); color: var(--bad);
+  }
+  .quiz-option--dim { opacity: 0.55; }
+  .quiz-option:disabled { cursor: default; }
+  .quiz-rationale {
+    border-radius: var(--radius-md);
+    padding: 16px 18px;
+    margin-top: 8px;
+    border: 1px solid var(--slate-200);
+    background: var(--slate-50);
+    animation: fade-rise 360ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .quiz-rationale--good {
+    border-color: #b8ddd1;
+    background: var(--good-bg);
+  }
+  .quiz-rationale--no {
+    border-color: #f4d3a8;
+    background: var(--warn-bg);
+  }
+  .quiz-rationale-head {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-weight: 700;
+    color: var(--good);
+    margin-bottom: 6px;
+  }
+  .quiz-rationale--no .quiz-rationale-head { color: var(--warn); }
+  .quiz-rationale p { margin: 0 0 8px; font-size: 14.5px; line-height: 1.55; color: var(--slate-700); }
+  .quiz-rationale p:last-child { margin-bottom: 0; }
+  .quiz-rationale-correct {
+    padding-top: 8px;
+    border-top: 1px dashed rgba(0,0,0,0.08);
+    color: var(--ink) !important;
+  }
+
+  /* score card */
+  .score-card {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: var(--radius-lg);
+    padding: 30px 34px;
+    margin-top: 8px;
+    animation: fade-rise 420ms cubic-bezier(.16, 1, .3, 1) both;
+  }
+  .score-card-bar {
+    height: 6px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-bottom: 22px;
+  }
+  .score-card-fill {
+    height: 100%;
+    background: var(--teal-300);
+    border-radius: 999px;
+    transition: width 800ms cubic-bezier(.16, 1, .3, 1);
+  }
+  .score-card-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 32px;
+    align-items: center;
+  }
+  .score-card-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--teal-300);
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .score-card-num {
+    font-family: var(--font-serif);
+    font-size: 64px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .score-card-num span {
+    font-size: 28px;
+    color: var(--slate-400);
+  }
+  .score-card-msg {
+    font-family: var(--font-serif);
+    font-size: 18px;
+    line-height: 1.5;
+    color: var(--slate-300);
+    max-width: 50ch;
+  }
+  .score-card-actions {
+    margin-top: 22px;
+    display: flex;
+    gap: 12px;
+  }
+
+  /* ---------- Buttons ---------- */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--ink);
+    color: var(--paper);
+    border: 1px solid var(--ink);
+    border-radius: 999px;
+    padding: 13px 22px 13px 24px;
+    font-size: 14.5px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    transition: all 200ms ease;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .btn-primary:not(:disabled):hover {
+    background: var(--teal-700);
+    border-color: var(--teal-700);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+  .btn-primary--big {
+    padding: 16px 28px 16px 30px;
+    font-size: 15.5px;
+  }
+  .btn-primary--disabled, .btn-primary:disabled {
+    background: var(--slate-200);
+    color: var(--slate-500);
+    border-color: var(--slate-200);
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  .btn-arrow {
+    transition: transform 200ms ease;
+    font-size: 17px;
+    line-height: 1;
+  }
+  .btn-primary:not(:disabled):hover .btn-arrow { transform: translateX(3px); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--paper);
+    border: 1px solid rgba(255,255,255,0.25);
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 180ms ease;
+  }
+  .btn-ghost:hover {
+    border-color: var(--teal-300);
+    color: var(--teal-300);
+  }
+
+  /* ---------- Screen footer / nav ---------- */
+  .screen-footer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 18px;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--slate-200);
+  }
+  .screen-hint {
+    font-size: 13px;
+    color: var(--slate-500);
+    font-style: italic;
+  }
+  .nav-rail {
+    background: var(--paper);
+    border-top: 1px solid var(--slate-200);
+    padding: 14px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 -2px 8px rgba(0,0,0,0.03);
+  }
+  .nav-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: transparent;
+    border: 1px solid var(--slate-200);
+    border-radius: 999px;
+    padding: 8px 16px;
+    color: var(--slate-700);
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: all 180ms ease;
+  }
+  .nav-btn:not(:disabled):hover {
+    border-color: var(--ink);
+    color: var(--ink);
+    transform: translateY(-1px);
+  }
+  .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .nav-meta {
+    font-family: var(--font-serif);
+    font-size: 15px;
+    color: var(--slate-500);
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+  }
+  .nav-meta-num { color: var(--ink); font-weight: 600; }
+  .nav-meta-divider { margin: 0 6px; }
+
+  /* ---------- Title card ---------- */
+  .title-card {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 56px 32px;
+  }
+  .title-card-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 64px;
+    align-items: center;
+  }
+  .title-card-h {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: 56px;
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    margin: 4px 0 22px;
+    text-wrap: balance;
+  }
+  .title-card-deck {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    line-height: 1.5;
+    color: var(--slate-700);
+    margin: 0 0 32px;
+    max-width: 58ch;
+  }
+  .title-card-meta {
+    border-top: 1px solid var(--slate-200);
+    border-bottom: 1px solid var(--slate-200);
+    padding: 20px 0;
+    margin-bottom: 28px;
+    display: grid;
+    gap: 14px;
+  }
+  .meta-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 24px;
+    align-items: baseline;
+  }
+  .meta-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--slate-500);
+    font-weight: 600;
+  }
+  .meta-val {
+    font-size: 14.5px;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .title-card-modules {
+    margin-top: 32px;
+    display: grid;
+    gap: 1px;
+    background: var(--slate-200);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .module-row {
+    display: grid;
+    grid-template-columns: 50px 1fr auto;
+    gap: 16px;
+    padding: 14px 18px;
+    background: var(--paper);
+    align-items: center;
+    font-size: 14.5px;
+  }
+  .module-num {
+    font-family: var(--font-serif);
+    color: var(--teal-600);
+    font-weight: 600;
+    font-size: 17px;
+  }
+  .module-title { color: var(--ink); font-weight: 500; }
+  .module-dur { color: var(--slate-500); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+
+  .title-card-art {
+    position: relative;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+  .title-maya-wrap {
+    width: 320px; height: 360px;
+    border-radius: 50% / 56%;
+    background: radial-gradient(ellipse at center, var(--teal-50), var(--bone) 70%);
+    display: grid;
+    place-items: end center;
+    overflow: hidden;
+    border: 1px solid var(--slate-200);
+    position: relative;
+    box-shadow: var(--shadow-md);
+  }
+  .title-maya-wrap svg { transform: translateY(12px); }
+  .title-bubble {
+    position: absolute;
+    bottom: 20px;
+    right: -14px;
+    max-width: 290px;
+    background: var(--paper);
+    border: 1px solid var(--slate-200);
+    border-radius: var(--radius-lg);
+    padding: 16px 18px;
+    box-shadow: var(--shadow-lg);
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--slate-700);
+  }
+  .title-bubble::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    bottom: 24px;
+    width: 14px; height: 14px;
+    background: var(--paper);
+    border-left: 1px solid var(--slate-200);
+    border-bottom: 1px solid var(--slate-200);
+    transform: rotate(45deg);
+  }
+  .title-bubble-name {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--teal-600);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .title-bubble p { margin: 0; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 1024px) {
+    .screen-grid { grid-template-columns: 260px 1fr; gap: 36px; }
+    .title-card-grid { grid-template-columns: 1fr; gap: 32px; }
+    .title-card-h { font-size: 44px; }
+    .screen-title { font-size: 32px; }
+    .reaction-note { margin-left: 0; }
+    .principle-hint, .principle-body { padding-left: 22px; }
+  }
+  @media (max-width: 720px) {
+    .topbar { padding: 12px 18px 0; }
+    .brand-title { font-size: 13.5px; }
+    .topbar-meta { display: none; }
+    .screen { padding: 28px 22px 18px; }
+    .title-card { padding: 36px 22px 18px; }
+    .screen-grid { grid-template-columns: 1fr; gap: 28px; }
+    .screen-side { position: static; }
+    .maya-avatar-wrap { width: 140px; height: 160px; }
+    .nav-rail { padding: 12px 18px; }
+  }
+</style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+const { useState, useEffect, useRef } = React;
+
+<script type="text/babel">
+// Dr. Maya — illustrated guide character for the course.
+// One consistent face/body; expression + gesture vary per scene.
+// Style: flat illustration with light shading, friendly proportions.
+
+const MAYA_COLORS = {
+  skin: '#e6b48f',
+  skinShade: '#c9966f',
+  hair: '#2b1d12',
+  hairHi: '#3d2a1b',
+  scrub: '#0d9488',     // teal accent — anchors her in the palette
+  scrubShade: '#0b756d',
+  scrubLine: '#075953',
+  white: '#fafaf8',
+  ink: '#1a1a1a',
+  stethoSteel: '#9aa0a6',
+  stethoBlack: '#2a2a2a',
+  blush: '#e08a7a',
+};
+
+// Expression variants: just the mouth + brows change.
+// Gesture variants: change the arm/hand on her right side (viewer's left).
+const EXPRESSIONS = {
+  warm: { // gentle smile — default
+    mouth: <path d="M88,118 Q100,127 112,118" stroke={MAYA_COLORS.ink} fill="none" strokeWidth="2.2" strokeLinecap="round" />,
+    browL: <path d="M75,82 Q82,79 90,82" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+    browR: <path d="M110,82 Q117,79 125,82" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+  },
+  bright: { // wider smile — encouraging / celebrating
+    mouth: (
+      <g>
+        <path d="M86,116 Q100,131 114,116 Q100,124 86,116 Z" fill={MAYA_COLORS.ink} />
+        <path d="M89,119 Q100,125 111,119" stroke={MAYA_COLORS.white} fill="none" strokeWidth="1.5" strokeLinecap="round" />
+      </g>
+    ),
+    browL: <path d="M74,80 Q82,76 90,80" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+    browR: <path d="M110,80 Q118,76 126,80" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+  },
+  thoughtful: { // slight closed-mouth smile — thinking / coaching
+    mouth: <path d="M90,119 Q100,124 110,119" stroke={MAYA_COLORS.ink} fill="none" strokeWidth="2.2" strokeLinecap="round" />,
+    browL: <path d="M75,84 Q82,80 90,82" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+    browR: <path d="M110,82 Q117,80 125,84" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+  },
+  concerned: { // gentle, empathetic — for harder moments
+    mouth: <path d="M89,120 Q100,123 111,120" stroke={MAYA_COLORS.ink} fill="none" strokeWidth="2.2" strokeLinecap="round" />,
+    browL: <path d="M74,85 Q82,80 90,79" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+    browR: <path d="M110,79 Q118,80 126,85" stroke={MAYA_COLORS.hair} strokeWidth="2.8" fill="none" strokeLinecap="round" />,
+  },
+};
+
+// Right arm (viewer's left) — different gestures
+const GESTURES = {
+  neutral: ( // arm at side, hand resting
+    <g>
+      <path d="M52,180 C45,200 44,220 48,240 L66,240 C64,220 65,200 70,182 Z" fill={MAYA_COLORS.scrub} />
+      <path d="M52,180 C45,200 44,220 48,240" stroke={MAYA_COLORS.scrubLine} strokeWidth="1" fill="none" opacity="0.5" />
+      <circle cx="50" cy="232" r="7" fill={MAYA_COLORS.skin} />
+    </g>
+  ),
+  welcome: ( // arm raised, open palm — welcoming
+    <g>
+      <path d="M58,180 C40,178 22,170 18,150 C16,140 22,134 30,134 C38,134 48,150 60,164 Z" fill={MAYA_COLORS.scrub} />
+      <path d="M58,180 C40,178 22,170 18,150" stroke={MAYA_COLORS.scrubLine} strokeWidth="1" fill="none" opacity="0.5" />
+      {/* hand — open, palm facing forward */}
+      <circle cx="20" cy="138" r="10" fill={MAYA_COLORS.skin} />
+      <path d="M14,130 L13,122 M19,128 L19,118 M24,128 L25,118 M28,131 L31,123" stroke={MAYA_COLORS.skinShade} strokeWidth="2.2" strokeLinecap="round" fill="none" />
+    </g>
+  ),
+  point: ( // arm extended forward, index finger up — explaining
+    <g>
+      <path d="M58,178 C70,168 84,150 92,138 C96,132 100,134 100,140 C100,148 88,168 76,182 Z" fill={MAYA_COLORS.scrub} />
+      <circle cx="98" cy="138" r="8" fill={MAYA_COLORS.skin} />
+      <path d="M97,131 L97,118" stroke={MAYA_COLORS.skin} strokeWidth="4.5" strokeLinecap="round" />
+      <path d="M97,131 L97,118" stroke={MAYA_COLORS.skinShade} strokeWidth="1" strokeLinecap="round" opacity="0.5" />
+    </g>
+  ),
+  chin: ( // hand near chin — thoughtful
+    <g>
+      <path d="M58,180 C50,170 50,150 60,138 C66,131 76,132 78,142 C80,150 72,168 70,182 Z" fill={MAYA_COLORS.scrub} />
+      <circle cx="72" cy="138" r="9" fill={MAYA_COLORS.skin} />
+      <path d="M72,130 Q76,126 80,128" stroke={MAYA_COLORS.skinShade} strokeWidth="1.5" fill="none" />
+    </g>
+  ),
+};
+
+function MayaAvatar({ expression = 'warm', gesture = 'neutral', size = 200 }) {
+  const e = EXPRESSIONS[expression] || EXPRESSIONS.warm;
+  const g = GESTURES[gesture] || GESTURES.neutral;
+  return (
+    <svg viewBox="0 0 200 240" width={size} height={size * 1.2} xmlns="http://www.w3.org/2000/svg" aria-label="Dr. Maya, your guide" role="img" style={{ display: 'block' }}>
+      {/* Body / scrubs — drawn first so head sits on top */}
+      <path d="M30,240 L30,200 C30,170 55,148 100,148 C145,148 170,170 170,200 L170,240 Z" fill={MAYA_COLORS.scrub} />
+      {/* scrub shoulder shading */}
+      <path d="M30,240 L30,200 C30,180 42,162 60,154 L60,240 Z" fill={MAYA_COLORS.scrubShade} opacity="0.35" />
+      {/* V-neck */}
+      <path d="M82,148 L100,180 L118,148 Z" fill={MAYA_COLORS.white} />
+      <path d="M82,148 L100,180 L118,148" stroke={MAYA_COLORS.scrubLine} strokeWidth="1.5" fill="none" />
+
+      {/* Stethoscope — around neck */}
+      <path d="M78,150 C70,160 65,175 70,195 L80,205" stroke={MAYA_COLORS.stethoBlack} strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      <path d="M122,150 C130,160 135,175 130,195 L120,205" stroke={MAYA_COLORS.stethoBlack} strokeWidth="3.5" fill="none" strokeLinecap="round" />
+      <circle cx="100" cy="210" r="8" fill={MAYA_COLORS.stethoSteel} stroke={MAYA_COLORS.stethoBlack} strokeWidth="1.5" />
+      <circle cx="100" cy="210" r="3.5" fill={MAYA_COLORS.stethoBlack} />
+
+      {/* ID badge */}
+      <rect x="128" y="178" width="28" height="14" rx="1.5" fill={MAYA_COLORS.white} stroke={MAYA_COLORS.scrubLine} strokeWidth="0.5" />
+      <rect x="130" y="180" width="24" height="3" fill={MAYA_COLORS.scrub} />
+      <text x="142" y="190" textAnchor="middle" fontSize="5" fontFamily="IBM Plex Sans, sans-serif" fontWeight="700" fill={MAYA_COLORS.ink}>DR. MAYA</text>
+
+      {/* Neck */}
+      <path d="M88,138 L88,155 Q100,160 112,155 L112,138 Z" fill={MAYA_COLORS.skin} />
+      <path d="M88,138 L88,150 Q100,153 112,150 L112,138 Z" fill={MAYA_COLORS.skinShade} opacity="0.3" />
+
+      {/* Hair — back/long */}
+      <path d="M58,90 C58,52 142,52 142,90 C142,118 148,158 132,160 L120,148 L80,148 L68,160 C52,158 58,118 58,90 Z" fill={MAYA_COLORS.hair} />
+
+      {/* Face / head */}
+      <ellipse cx="100" cy="95" rx="36" ry="42" fill={MAYA_COLORS.skin} />
+      {/* gentle face shading on right side */}
+      <path d="M100,53 Q136,55 136,95 Q136,127 116,135 Q130,120 132,95 Q130,65 100,57 Z" fill={MAYA_COLORS.skinShade} opacity="0.25" />
+
+      {/* Hair — front bangs (side-swept, soft) */}
+      <path d="M64,76 C70,58 96,52 126,58 C138,62 140,76 138,84 C130,72 110,68 92,74 C82,77 72,82 66,90 C63,86 62,80 64,76 Z" fill={MAYA_COLORS.hair} />
+      {/* small wisp on forehead */}
+      <path d="M88,68 Q96,76 110,72" stroke={MAYA_COLORS.hairHi} strokeWidth="1.2" fill="none" opacity="0.6" />
+
+      {/* Ears */}
+      <ellipse cx="63" cy="98" rx="4.5" ry="7" fill={MAYA_COLORS.skin} />
+      <ellipse cx="137" cy="98" rx="4.5" ry="7" fill={MAYA_COLORS.skin} />
+      <path d="M62,97 Q64,99 62,102" stroke={MAYA_COLORS.skinShade} strokeWidth="1" fill="none" />
+      <path d="M138,97 Q136,99 138,102" stroke={MAYA_COLORS.skinShade} strokeWidth="1" fill="none" />
+      {/* tiny earring studs */}
+      <circle cx="64" cy="103" r="1.2" fill={MAYA_COLORS.stethoSteel} />
+      <circle cx="136" cy="103" r="1.2" fill={MAYA_COLORS.stethoSteel} />
+
+      {/* Brows */}
+      {e.browL}
+      {e.browR}
+
+      {/* Eyes */}
+      <ellipse cx="83" cy="95" rx="3.2" ry="4" fill={MAYA_COLORS.ink} />
+      <ellipse cx="117" cy="95" rx="3.2" ry="4" fill={MAYA_COLORS.ink} />
+      <circle cx="84.2" cy="93.5" r="0.9" fill={MAYA_COLORS.white} />
+      <circle cx="118.2" cy="93.5" r="0.9" fill={MAYA_COLORS.white} />
+      {/* lashes hint */}
+      <path d="M79,91 L80,90 M87,91 L86,90" stroke={MAYA_COLORS.ink} strokeWidth="1" strokeLinecap="round" />
+      <path d="M113,91 L114,90 M121,91 L120,90" stroke={MAYA_COLORS.ink} strokeWidth="1" strokeLinecap="round" />
+
+      {/* Nose */}
+      <path d="M98,104 Q98,112 102,113" stroke={MAYA_COLORS.skinShade} strokeWidth="1.5" fill="none" strokeLinecap="round" />
+
+      {/* Cheeks — subtle blush */}
+      <ellipse cx="74" cy="110" rx="6" ry="3" fill={MAYA_COLORS.blush} opacity="0.28" />
+      <ellipse cx="126" cy="110" rx="6" ry="3" fill={MAYA_COLORS.blush} opacity="0.28" />
+
+      {/* Mouth */}
+      {e.mouth}
+
+      {/* Gesture (arm) drawn LAST so it sits in front of body */}
+      {g}
+    </svg>
+  );
+}
+
+// Speech bubble + Maya combined. Anchored layout: avatar left, bubble right.
+function MayaPanel({ expression, gesture, children, size = 'md' }) {
+  const avatarSize = size === 'lg' ? 220 : size === 'sm' ? 130 : 170;
+  return (
+    <div className={`maya-panel maya-panel--${size}`}>
+      <div className="maya-avatar-wrap">
+        <MayaAvatar expression={expression} gesture={gesture} size={avatarSize} />
+      </div>
+      <div className="maya-bubble">
+        <div className="maya-bubble-tail" aria-hidden="true"></div>
+        <div className="maya-bubble-name">Dr. Maya</div>
+        <div className="maya-bubble-body">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { MayaAvatar, MayaPanel, MAYA_COLORS });
+
+</script>
+<script type="text/babel">
+// Four screens of the course. Each is a self-contained component.
+// Screens manage their own internal interaction state (which option clicked,
+// which card revealed, etc). The shell handles navigation between screens.
+
+// ============================================================
+// SCREEN 1 — Hook
+// A real patient quote + diagnostic "what went wrong" question.
+// ============================================================
+function ScreenHook({ onComplete }) {
+  const [picked, setPicked] = useState(null);
+
+  const options = [
+    {
+      id: 'patient',
+      label: 'Robert wasn’t paying close enough attention during his appointment.',
+      correct: false,
+      feedback: 'This places the burden on the patient — but research on health literacy is clear: up to 9 in 10 adults struggle with health information at some point. The responsibility for clear communication sits with us.',
+    },
+    {
+      id: 'clinician',
+      label: 'The clinician used clinical terms like "GFR" and "stages" without checking that Robert understood them.',
+      correct: true,
+      feedback: 'Exactly. Unchecked jargon is the most common reason patients leave appointments confused. Robert nodded because he didn’t want to seem uninformed — a pattern clinicians see every day. The fix isn’t simpler patients; it’s clearer communication.',
+    },
+  ];
+
+  const ready = picked !== null;
+  const pickedOpt = options.find(o => o.id === picked);
+
+  return (
+    <div className="screen screen-hook">
+      <div className="screen-grid">
+        <aside className="screen-side">
+          <MayaPanel expression="concerned" gesture="welcome">
+            <p>Welcome. Before we get into frameworks, I want you to meet Robert.</p>
+            <p>He came home from his nephrologist last week and said this to his wife. Read it slowly. <strong>What do you notice?</strong></p>
+          </MayaPanel>
+        </aside>
+
+        <main className="screen-main">
+          <div className="kicker">Scenario 01 — The Hook</div>
+          <h1 className="screen-title">What happens after the appointment ends.</h1>
+
+          <figure className="patient-quote">
+            <div className="patient-quote-mark" aria-hidden="true">&ldquo;</div>
+            <blockquote>
+              He said something about my <em>GFR</em> going down, and stages, and that I might need&hellip; I don’t know what. I just nodded. I didn’t want to seem stupid.
+              <br /><br />
+              Now I’m scared and I have no idea what’s actually happening to me.
+            </blockquote>
+            <figcaption>
+              <span className="patient-quote-name">Robert, 64</span>
+              <span className="patient-quote-sub">two days after his nephrology appointment</span>
+            </figcaption>
+          </figure>
+
+          <div className="prompt">
+            <div className="prompt-label">Your turn</div>
+            <h2 className="prompt-q">What went wrong here?</h2>
+            <div className="option-list">
+              {options.map(opt => {
+                const isPicked = picked === opt.id;
+                const showState = picked !== null;
+                const cls = ['option',
+                  showState && opt.correct ? 'option--correct' : '',
+                  showState && isPicked && !opt.correct ? 'option--incorrect' : '',
+                  showState && !isPicked ? 'option--dim' : '',
+                ].filter(Boolean).join(' ');
+                return (
+                  <button
+                    key={opt.id}
+                    className={cls}
+                    disabled={picked !== null}
+                    onClick={() => setPicked(opt.id)}
+                  >
+                    <span className="option-letter">{opt.id === 'patient' ? 'A' : 'B'}</span>
+                    <span className="option-text">{opt.label}</span>
+                    {showState && opt.correct && <span className="option-tag">Best answer</span>}
+                    {showState && isPicked && !opt.correct && <span className="option-tag option-tag--no">Not quite</span>}
+                  </button>
+                );
+              })}
+            </div>
+
+            {pickedOpt && (
+              <div className={`feedback ${pickedOpt.correct ? 'feedback--good' : 'feedback--reflect'}`}>
+                <div className="feedback-header">
+                  <MayaAvatar expression={pickedOpt.correct ? 'bright' : 'thoughtful'} gesture="neutral" size={70} />
+                  <div>
+                    <div className="feedback-name">Dr. Maya</div>
+                    <div className="feedback-label">{pickedOpt.correct ? 'You’ve got it.' : 'Let’s reframe.'}</div>
+                  </div>
+                </div>
+                <p>{pickedOpt.feedback}</p>
+                <p className="feedback-bridge">In the next section, we’ll look at three evidence-informed principles that prevent moments like Robert’s from happening.</p>
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+
+      <ScreenFooter ready={ready} onNext={onComplete} nextLabel="Continue to the principles" />
+    </div>
+  );
+}
+
+// ============================================================
+// SCREEN 2 — Core Concept: Three Principles
+// Click each card to reveal its content. After all three are explored,
+// Maya reacts and Next unlocks.
+// ============================================================
+function ScreenPrinciples({ onComplete }) {
+  const [opened, setOpened] = useState(new Set());
+
+  const principles = [
+    {
+      id: 'plain',
+      num: '01',
+      title: 'Use plain language',
+      hint: 'Translate clinical terms into the words your patient already uses.',
+      body: 'Patients can’t act on information they don’t understand. Replace clinical shorthand with everyday phrasing — even when it feels less precise to you. Precision means nothing if the patient leaves the room confused.',
+      example: {
+        bad: '“Your eGFR has declined to 44, placing you in stage 3b. We’ll need to monitor your albuminuria.”',
+        good: '“Your kidneys are working at about 44% of normal. That’s in a range we call ‘stage 3b.’ I want to keep an eye on a sign of stress in your kidneys called protein in the urine — we’ll check it again in three months.”',
+      },
+    },
+    {
+      id: 'teachback',
+      num: '02',
+      title: 'Use teach-back to confirm understanding',
+      hint: 'Ask the patient to explain it back in their own words.',
+      body: '“Do you understand?” almost always gets a yes — patients don’t want to seem uninformed. Teach-back surfaces what the patient actually heard, gives you a chance to clarify gaps, and signals that <em>you</em> are responsible for the explanation, not them.',
+      example: {
+        bad: '“Does that all make sense?”',
+        good: '“I gave you a lot just now. To make sure I explained it well — can you tell me, in your own words, what stage 3 means for you and what we’re doing about it?”',
+      },
+    },
+    {
+      id: 'emotion',
+      num: '03',
+      title: 'Acknowledge emotion first',
+      hint: 'Name the feeling before you deliver more information.',
+      body: 'A patient hearing “your kidney function is declining” is often not in a state to absorb clinical detail. Acknowledging emotion isn’t a soft skill — it is what makes the rest of the conversation possible. Skip this step and the next ten minutes of education will not land.',
+      example: {
+        bad: '“The good news is dialysis isn’t something we’re considering right now. Your eGFR is…”',
+        good: '“I can hear that this has been weighing on you. Before we go through the numbers, I want to make sure I understand what’s worrying you most.”',
+      },
+    },
+  ];
+
+  const toggle = (id) => {
+    setOpened(prev => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+
+  const allOpen = principles.every(p => opened.has(p.id));
+
+  return (
+    <div className="screen screen-principles">
+      <div className="screen-grid">
+        <aside className="screen-side">
+          <MayaPanel expression={allOpen ? 'bright' : 'warm'} gesture={allOpen ? 'neutral' : 'point'}>
+            {!allOpen ? (
+              <>
+                <p>There are dozens of communication frameworks for clinicians. These three are the ones I come back to most when I&rsquo;m coaching staff on CKD conversations.</p>
+                <p><strong>Tap each card to explore it.</strong> All three before you move on.</p>
+              </>
+            ) : (
+              <>
+                <p>Good. Notice that these aren&rsquo;t three separate skills &mdash; they work together. Plain language gives the patient something to grasp. Teach-back confirms they actually grasped it. And acknowledging emotion is what makes either of those possible.</p>
+                <p>Let&rsquo;s see you put them to use.</p>
+              </>
+            )}
+          </MayaPanel>
+        </aside>
+
+        <main className="screen-main">
+          <div className="kicker">Section 02 — Core Concept</div>
+          <h1 className="screen-title">Three principles for talking about CKD progression.</h1>
+          <p className="screen-deck">Each is well-supported in the patient communication literature. Each is also small enough to use in your next conversation.</p>
+
+          <div className="principle-grid">
+            {principles.map(p => {
+              const isOpen = opened.has(p.id);
+              return (
+                <article key={p.id} className={`principle-card ${isOpen ? 'is-open' : ''}`}>
+                  <button className="principle-head" onClick={() => toggle(p.id)} aria-expanded={isOpen}>
+                    <span className="principle-num">{p.num}</span>
+                    <span className="principle-title">{p.title}</span>
+                    <span className="principle-chev" aria-hidden="true">
+                      <svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 6 L8 11 L13 6" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>
+                    </span>
+                  </button>
+                  {!isOpen && (
+                    <div className="principle-hint">{p.hint}</div>
+                  )}
+                  {isOpen && (
+                    <div className="principle-body">
+                      <p dangerouslySetInnerHTML={{ __html: p.body }} />
+                      <div className="example-block">
+                        <div className="example-row example-row--bad">
+                          <div className="example-tag">Avoid</div>
+                          <div className="example-text">{p.example.bad}</div>
+                        </div>
+                        <div className="example-row example-row--good">
+                          <div className="example-tag">Try instead</div>
+                          <div className="example-text">{p.example.good}</div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+
+          <div className="progress-pips">
+            {principles.map(p => (
+              <span key={p.id} className={`pip ${opened.has(p.id) ? 'pip--filled' : ''}`} aria-label={opened.has(p.id) ? 'Explored' : 'Not yet explored'} />
+            ))}
+            <span className="progress-pips-label">
+              {opened.size} of 3 explored
+            </span>
+          </div>
+        </main>
+      </div>
+
+      <ScreenFooter ready={allOpen} onNext={onComplete} nextLabel="Practice in a real conversation" hint={allOpen ? null : 'Explore all three principles to continue.'} />
+    </div>
+  );
+}
+
+// ============================================================
+// SCREEN 3 — Branching Scenario
+// You play a care coordinator with Mrs. Elena Reyes (Stage 3 CKD).
+// Two decision points; consequences shown via her reaction.
+// ============================================================
+function ScreenScenario({ onComplete }) {
+  const [step, setStep] = useState(0); // 0..4
+  const [choice1, setChoice1] = useState(null);
+  const [choice2, setChoice2] = useState(null);
+
+  // Step 0: intro -> 1: decision1 -> 2: feedback1 -> 3: decision2 -> 4: feedback2/end
+  const goto = (n) => setStep(n);
+
+  return (
+    <div className="screen screen-scenario">
+      <div className="screen-grid">
+        <aside className="screen-side">
+          <MayaPanel
+            expression={step === 0 ? 'warm' : step === 2 ? 'thoughtful' : step === 4 ? 'bright' : 'thoughtful'}
+            gesture={step === 0 ? 'welcome' : step === 4 ? 'neutral' : 'chin'}
+          >
+            {step === 0 && <>
+              <p>Time to step into the room. You&rsquo;re the care coordinator. Your patient is <strong>Elena Reyes</strong>, 58, with stage 3 CKD. Her latest labs came back this morning.</p>
+              <p>Read carefully. Your words matter here.</p>
+            </>}
+            {step === 1 && <>
+              <p>Elena&rsquo;s first words tell you what she&rsquo;s most afraid of. <strong>What you say next will shape the rest of the visit.</strong></p>
+            </>}
+            {step === 2 && choice1 && <>
+              {choice1 === 'numbers' ? (
+                <p>Notice what happened. You answered her question accurately, but you led with numbers and used the word she&rsquo;s most afraid of. Let&rsquo;s try the next moment differently.</p>
+              ) : (
+                <p>That&rsquo;s the move. You named the worry, slowed the room down, and put a boundary on the fear before delivering information. Watch how this changes everything that follows.</p>
+              )}
+            </>}
+            {step === 3 && <>
+              <p>You&rsquo;ve explained stage 3 in plain language. Elena&rsquo;s quiet, processing. <strong>How will you check that what you said actually landed?</strong></p>
+            </>}
+            {step === 4 && <>
+              <p>That&rsquo;s a wrap on Elena&rsquo;s visit. The same three principles, used in one short conversation. You won&rsquo;t do this perfectly every time &mdash; nobody does. The goal is to notice your patterns, and choose intentionally.</p>
+            </>}
+          </MayaPanel>
+        </aside>
+
+        <main className="screen-main">
+          <div className="kicker">Section 03 — Scenario Practice</div>
+          <h1 className="screen-title">A conversation with Elena.</h1>
+
+          <PatientCard />
+
+          {step === 0 && (
+            <div className="scenario-step">
+              <div className="scene">
+                <div className="scene-stage">The waiting room intake is done. You walk Elena back to the exam room. She sits down, holding a printed copy of her lab results, and looks up at you.</div>
+              </div>
+              <button className="btn-primary" onClick={() => goto(1)}>Begin the conversation</button>
+            </div>
+          )}
+
+          {step >= 1 && (
+            <div className="dialogue">
+              <DialogueLine who="elena">The nurse said my numbers got worse. Am I going to need dialysis?</DialogueLine>
+
+              {step === 1 && (
+                <DecisionBlock
+                  label="Decision 01 — Your response"
+                  options={[
+                    { id: 'numbers', text: '"Your eGFR went from 52 to 44, which is still in stage 3. Dialysis isn’t typically considered until much later."' },
+                    { id: 'emotion', text: '"I can hear that’s been weighing on you. Let’s slow down — I’ll walk you through what changed and what it means. Most people at this stage are nowhere near needing dialysis."' },
+                  ]}
+                  onPick={(id) => { setChoice1(id); goto(2); }}
+                />
+              )}
+
+              {step >= 2 && choice1 && (
+                <DialogueLine who="you" choice={choice1 === 'numbers' ? 'less-good' : 'good'}>
+                  {choice1 === 'numbers'
+                    ? '"Your eGFR went from 52 to 44, which is still in stage 3. Dialysis isn’t typically considered until much later."'
+                    : '"I can hear that’s been weighing on you. Let’s slow down — I’ll walk you through what changed and what it means. Most people at this stage are nowhere near needing dialysis."'
+                  }
+                </DialogueLine>
+              )}
+
+              {step >= 2 && choice1 === 'numbers' && (
+                <>
+                  <DialogueLine who="elena" mood="anxious">"Oh. Okay."</DialogueLine>
+                  <div className="reaction-note">
+                    <strong>What you saw:</strong> Elena nods, looks down at her paper, and goes quiet. She heard the word she was afraid of and a string of numbers. She didn&rsquo;t hear reassurance.
+                  </div>
+                </>
+              )}
+              {step >= 2 && choice1 === 'emotion' && (
+                <>
+                  <DialogueLine who="elena" mood="relieved">"Thank you. I&rsquo;ve been worrying about that since the lab called me back. I didn&rsquo;t sleep."</DialogueLine>
+                  <div className="reaction-note reaction-note--good">
+                    <strong>What you saw:</strong> Elena&rsquo;s shoulders drop. She makes eye contact. You&rsquo;ve given her permission to be scared, and you&rsquo;ve given her a number to hold onto: <em>not now, not soon</em>.
+                  </div>
+                </>
+              )}
+
+              {step >= 2 && step < 3 && (
+                <button className="btn-primary" onClick={() => goto(3)}>Continue</button>
+              )}
+
+              {step >= 3 && (
+                <>
+                  <div className="time-marker">A few minutes later — you&rsquo;ve walked through what stage 3 means in plain language.</div>
+                  <DialogueLine who="you" narration>You set down the diagram you&rsquo;ve been drawing. Elena is quiet.</DialogueLine>
+
+                  {step === 3 && (
+                    <DecisionBlock
+                      label="Decision 02 — Checking understanding"
+                      options={[
+                        { id: 'closed', text: '"Does that all make sense?"' },
+                        { id: 'teach', text: '"I just gave you a lot. To make sure I explained it well — can you tell me, in your own words, what stage 3 means for you?"' },
+                      ]}
+                      onPick={(id) => { setChoice2(id); goto(4); }}
+                    />
+                  )}
+
+                  {step >= 4 && choice2 && (
+                    <DialogueLine who="you" choice={choice2 === 'closed' ? 'less-good' : 'good'}>
+                      {choice2 === 'closed'
+                        ? '"Does that all make sense?"'
+                        : '"I just gave you a lot. To make sure I explained it well — can you tell me, in your own words, what stage 3 means for you?"'
+                      }
+                    </DialogueLine>
+                  )}
+
+                  {step >= 4 && choice2 === 'closed' && (
+                    <>
+                      <DialogueLine who="elena">"Yeah, I think so."</DialogueLine>
+                      <div className="reaction-note">
+                        <strong>What you saw:</strong> Elena says yes. She almost always will. You don&rsquo;t actually know what she understood, what she misheard, or what she&rsquo;ll be Googling at 11 p.m. tonight. The teach-back method exists exactly to surface that gap.
+                      </div>
+                    </>
+                  )}
+                  {step >= 4 && choice2 === 'teach' && (
+                    <>
+                      <DialogueLine who="elena" mood="relieved">"It means my kidneys are working at about half&hellip; and I should keep an eye on my blood pressure. And what I eat. Right?"</DialogueLine>
+                      <div className="reaction-note reaction-note--good">
+                        <strong>What you saw:</strong> Two sentences just told you exactly what landed. The salt piece landed. The protein piece didn&rsquo;t make it in. You now know what to revisit before she walks out the door &mdash; without making her feel quizzed.
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          )}
+        </main>
+      </div>
+
+      <ScreenFooter ready={step >= 4} onNext={onComplete} nextLabel="Take the knowledge check" />
+    </div>
+  );
+}
+
+function PatientCard() {
+  return (
+    <div className="patient-card">
+      <div className="patient-card-avatar" aria-hidden="true">
+        {/* abstract avatar — no stock photo */}
+        <svg viewBox="0 0 60 60" width="60" height="60">
+          <circle cx="30" cy="30" r="30" fill="#e5e7eb" />
+          <circle cx="30" cy="24" r="9" fill="#9ca3af" />
+          <path d="M10,55 C10,42 22,38 30,38 C38,38 50,42 50,55 Z" fill="#9ca3af" />
+        </svg>
+      </div>
+      <div className="patient-card-info">
+        <div className="patient-card-name">Elena Reyes</div>
+        <div className="patient-card-meta">58 years old &middot; Stage 3 CKD &middot; Visit type: lab follow-up</div>
+        <div className="patient-card-labs">
+          <span className="lab-pill"><span className="lab-pill-k">eGFR</span><span className="lab-pill-v">44</span><span className="lab-pill-d">was 52</span></span>
+          <span className="lab-pill"><span className="lab-pill-k">BP</span><span className="lab-pill-v">138/86</span></span>
+          <span className="lab-pill"><span className="lab-pill-k">UACR</span><span className="lab-pill-v">38</span></span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DialogueLine({ who, children, mood, choice, narration }) {
+  if (narration) {
+    return <div className="dialogue-narration">{children}</div>;
+  }
+  return (
+    <div className={`dialogue-line dialogue-line--${who} ${mood ? `mood-${mood}` : ''} ${choice ? `choice-${choice}` : ''}`}>
+      <div className="dialogue-tag">{who === 'elena' ? 'Elena' : 'You'}</div>
+      <div className="dialogue-body">{children}</div>
+    </div>
+  );
+}
+
+function DecisionBlock({ label, options, onPick }) {
+  return (
+    <div className="decision-block">
+      <div className="decision-label">{label}</div>
+      <div className="decision-options">
+        {options.map((o, i) => (
+          <button key={o.id} className="decision-option" onClick={() => onPick(o.id)}>
+            <span className="decision-letter">{i === 0 ? 'A' : 'B'}</span>
+            <span className="decision-text">{o.text}</span>
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// SCREEN 4 — Knowledge Check
+// 2 questions, immediate rationale, score + Maya closing.
+// ============================================================
+function ScreenCheck({ onComplete, onRestart }) {
+  const [answers, setAnswers] = useState({}); // {q1: 'b', q2: 'b'}
+  const [done, setDone] = useState(false);
+
+  const questions = [
+    {
+      id: 'q1',
+      kind: 'mc',
+      stem: 'Which response is the strongest example of the teach-back method?',
+      options: [
+        { id: 'a', text: '"Do you have any questions for me?"', correct: false, rationale: 'A reasonable invitation — but it doesn’t reveal what the patient understood. Many patients say "no questions" even when they’re confused.' },
+        { id: 'b', text: '"Just to make sure I explained that well — can you tell me in your own words what we just talked about?"', correct: true, rationale: 'Yes. Notice the framing: you, not the patient, are responsible for the explanation. That phrasing protects the patient from feeling tested.' },
+        { id: 'c', text: '"Does that all make sense?"', correct: false, rationale: 'A yes/no question. Almost every patient says yes — not because they understood, but because they don’t want to seem uninformed.' },
+        { id: 'd', text: '"I’ll send you home with a pamphlet that covers all of this."', correct: false, rationale: 'Print materials are useful as a supplement, but they don’t confirm understanding in the room with you. Teach-back happens face to face.' },
+      ],
+    },
+    {
+      id: 'q2',
+      kind: 'scenario',
+      stem: 'A patient pauses, looks down, and says quietly, "I just feel like I can’t keep up with all of this." What’s your best next response?',
+      options: [
+        { id: 'a', text: '"Don’t worry, we’ll get through this together."', correct: false, rationale: 'Well-intentioned, but it skips past the feeling she just shared. "Don’t worry" is a polite way to say "stop telling me how you feel."' },
+        { id: 'b', text: '"That’s a really common reaction. What feels most overwhelming right now?"', correct: true, rationale: 'You named the feeling, normalized it, and opened a question that lets her tell you exactly where to focus. Acknowledgment first, then information.' },
+        { id: 'c', text: '"Let me walk you through the next steps so it feels more manageable."', correct: false, rationale: 'Jumping straight to action skips the emotional acknowledgment she signaled she needed. The information won’t land while she’s still flooded.' },
+        { id: 'd', text: '"Here’s a brochure that breaks all of this down."', correct: false, rationale: 'Defers the conversation onto paper. She told you she’s overwhelmed; more text won’t fix that.' },
+      ],
+    },
+  ];
+
+  const pick = (qid, oid) => {
+    if (answers[qid]) return; // lock once chosen
+    setAnswers(prev => ({ ...prev, [qid]: oid }));
+  };
+
+  const score = questions.filter(q => {
+    const a = answers[q.id];
+    return a && q.options.find(o => o.id === a)?.correct;
+  }).length;
+
+  const bothAnswered = questions.every(q => answers[q.id]);
+
+  return (
+    <div className="screen screen-check">
+      <div className="screen-grid">
+        <aside className="screen-side">
+          <MayaPanel
+            expression={done ? 'bright' : 'warm'}
+            gesture={done ? 'welcome' : 'point'}
+          >
+            {!done && !bothAnswered && <>
+              <p>Two questions. There&rsquo;s no time pressure &mdash; this isn&rsquo;t about getting them right on the first try. It&rsquo;s about noticing which option you reach for.</p>
+            </>}
+            {!done && bothAnswered && <>
+              <p>You&rsquo;ve answered both. Take a moment with the rationale, then close out below when you&rsquo;re ready.</p>
+            </>}
+            {done && <>
+              <p>That&rsquo;s a wrap.</p>
+              <p>Whatever your score, the goal isn&rsquo;t a perfect record. It&rsquo;s noticing your own patterns and choosing, on purpose, the words your patient needs to hear.</p>
+              <p>The conversations you have with patients like Robert and Elena will shape how they live with this diagnosis. Thank you for the care you bring to this work.</p>
+              <p className="maya-sign">&mdash; Dr. Maya</p>
+            </>}
+          </MayaPanel>
+        </aside>
+
+        <main className="screen-main">
+          <div className="kicker">Section 04 — Knowledge Check</div>
+          <h1 className="screen-title">Two quick checks before you go.</h1>
+
+          {questions.map((q, qi) => {
+            const userAns = answers[q.id];
+            const userOpt = userAns ? q.options.find(o => o.id === userAns) : null;
+            return (
+              <div key={q.id} className="quiz-q">
+                <div className="quiz-q-num">Question {qi + 1} of 2 <span className="quiz-q-kind">{q.kind === 'mc' ? 'Multiple choice' : 'Scenario'}</span></div>
+                <h2 className="quiz-stem">{q.stem}</h2>
+                <div className="quiz-options">
+                  {q.options.map(opt => {
+                    const isPicked = userAns === opt.id;
+                    const showState = !!userAns;
+                    const cls = ['quiz-option',
+                      showState && opt.correct ? 'quiz-option--correct' : '',
+                      showState && isPicked && !opt.correct ? 'quiz-option--incorrect' : '',
+                      showState && !isPicked && !opt.correct ? 'quiz-option--dim' : '',
+                    ].filter(Boolean).join(' ');
+                    return (
+                      <button
+                        key={opt.id}
+                        className={cls}
+                        disabled={!!userAns}
+                        onClick={() => pick(q.id, opt.id)}
+                      >
+                        <span className="quiz-letter">{opt.id.toUpperCase()}</span>
+                        <span className="quiz-text">{opt.text}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+                {userOpt && (
+                  <div className={`quiz-rationale ${userOpt.correct ? 'quiz-rationale--good' : 'quiz-rationale--no'}`}>
+                    <div className="quiz-rationale-head">{userOpt.correct ? 'Correct' : 'Worth a second look'}</div>
+                    <p>{userOpt.rationale}</p>
+                    {!userOpt.correct && (
+                      <p className="quiz-rationale-correct"><strong>Best answer:</strong> <em>{q.options.find(o => o.correct).text}</em></p>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {bothAnswered && !done && (
+            <button className="btn-primary btn-primary--big" onClick={() => setDone(true)}>See my results</button>
+          )}
+
+          {done && (
+            <div className="score-card">
+              <div className="score-card-bar">
+                <div className="score-card-fill" style={{ width: `${(score / 2) * 100}%` }} />
+              </div>
+              <div className="score-card-row">
+                <div>
+                  <div className="score-card-label">Your score</div>
+                  <div className="score-card-num">{score} <span>/ 2</span></div>
+                </div>
+                <div className="score-card-msg">
+                  {score === 2 && 'Both correct. You’ve internalized the moves — now bring them into your next CKD conversation this week.'}
+                  {score === 1 && 'One out of two. Look back at the rationale; pick one principle to deliberately use this week.'}
+                  {score === 0 && 'Re-read the rationale carefully. These are habits, not facts — they’ll take a few real conversations to settle in.'}
+                </div>
+              </div>
+              <div className="score-card-actions">
+                <button className="btn-ghost" onClick={onRestart}>Restart course</button>
+              </div>
+            </div>
+          )}
+        </main>
+      </div>
+    </div>
+  );
+}
+
+// ============================================================
+// Shared screen footer (Next button)
+// ============================================================
+function ScreenFooter({ ready, onNext, nextLabel, hint }) {
+  return (
+    <div className="screen-footer">
+      {hint && !ready && <div className="screen-hint">{hint}</div>}
+      <button className={`btn-primary ${!ready ? 'btn-primary--disabled' : ''}`} disabled={!ready} onClick={onNext}>
+        {nextLabel}
+        <span className="btn-arrow" aria-hidden="true">&rarr;</span>
+      </button>
+    </div>
+  );
+}
+
+Object.assign(window, { ScreenHook, ScreenPrinciples, ScreenScenario, ScreenCheck });
+
+</script>
+<script type="text/babel">
+// App shell — progress bar, screen transitions, prev/next navigation.
+// Each screen advances via its own internal completion handler.
+
+
+const SCREENS = [
+  { id: 'hook',        title: 'The Hook',          short: '01' },
+  { id: 'principles',  title: 'Core Principles',   short: '02' },
+  { id: 'scenario',    title: 'Scenario Practice', short: '03' },
+  { id: 'check',       title: 'Knowledge Check',   short: '04' },
+];
+
+function CourseApp() {
+  // 0 = title card, 1..4 = screens, 5 = completion (handled inside screen 4)
+  const [idx, setIdx] = useState(0);
+  const [furthest, setFurthest] = useState(0); // gate forward jumps to what's been unlocked
+  const [direction, setDirection] = useState(1); // for transition direction
+  const stageRef = useRef(null);
+
+  const total = SCREENS.length;
+
+  const goNext = () => {
+    setDirection(1);
+    const next = Math.min(idx + 1, total);
+    setIdx(next);
+    setFurthest(f => Math.max(f, next));
+    // scroll the screen pane to top
+    requestAnimationFrame(() => {
+      if (stageRef.current) stageRef.current.scrollTop = 0;
+    });
+  };
+  const goPrev = () => {
+    setDirection(-1);
+    setIdx(i => Math.max(0, i - 1));
+    requestAnimationFrame(() => {
+      if (stageRef.current) stageRef.current.scrollTop = 0;
+    });
+  };
+  const jumpTo = (n) => {
+    if (n > furthest) return;
+    setDirection(n > idx ? 1 : -1);
+    setIdx(n);
+    requestAnimationFrame(() => {
+      if (stageRef.current) stageRef.current.scrollTop = 0;
+    });
+  };
+  const restart = () => {
+    setDirection(-1);
+    setIdx(0);
+    setFurthest(0);
+  };
+
+  // progress: 0% on title, then 25/50/75/100
+  const progressPct = idx === 0 ? 0 : (idx / total) * 100;
+
+  return (
+    <div className="course-root">
+      <TopBar idx={idx} total={total} progressPct={progressPct} furthest={furthest} onJump={jumpTo} />
+
+      <div className="stage" ref={stageRef}>
+        <div className={`stage-inner stage-dir-${direction > 0 ? 'fwd' : 'back'}`} key={idx}>
+          {idx === 0 && <TitleCard onStart={goNext} />}
+          {idx === 1 && <ScreenHook onComplete={goNext} />}
+          {idx === 2 && <ScreenPrinciples onComplete={goNext} />}
+          {idx === 3 && <ScreenScenario onComplete={goNext} />}
+          {idx === 4 && <ScreenCheck onComplete={() => {}} onRestart={restart} />}
+        </div>
+      </div>
+
+      {idx > 0 && (
+        <div className="nav-rail">
+          <button className="nav-btn nav-btn--prev" onClick={goPrev} disabled={idx === 0}>
+            <span className="nav-arrow" aria-hidden="true">←</span>
+            <span className="nav-btn-label">Previous</span>
+          </button>
+          <div className="nav-meta">
+            <span className="nav-meta-num">{String(idx).padStart(2, '0')}</span>
+            <span className="nav-meta-divider">/</span>
+            <span className="nav-meta-total">{String(total).padStart(2, '0')}</span>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function TopBar({ idx, total, progressPct, furthest, onJump }) {
+  return (
+    <header className="topbar">
+      <div className="topbar-row">
+        <div className="brand">
+          <div className="brand-mark" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22"><path d="M12 3 C 8 8, 5 12, 5 16 a 7 7 0 0 0 14 0 C 19 12, 16 8, 12 3 Z" fill="currentColor"/></svg>
+          </div>
+          <div className="brand-text">
+            <div className="brand-title">Communicating CKD Progression to Patients</div>
+            <div className="brand-sub">A short course for care team members &middot; ~10 min</div>
+          </div>
+        </div>
+        <div className="topbar-meta">
+          {idx > 0 ? (
+            <>
+              <span className="topbar-meta-screen">{SCREENS[idx - 1].title}</span>
+              <span className="topbar-meta-progress">{Math.round(progressPct)}% complete</span>
+            </>
+          ) : (
+            <span className="topbar-meta-screen">Welcome</span>
+          )}
+        </div>
+      </div>
+      <div className="progress-track" role="progressbar" aria-valuenow={Math.round(progressPct)} aria-valuemin="0" aria-valuemax="100">
+        <div className="progress-fill" style={{ width: `${progressPct}%` }} />
+        <div className="progress-ticks">
+          {SCREENS.map((s, i) => {
+            const unlocked = i + 1 <= furthest;
+            const current = idx === i + 1;
+            return (
+              <button
+                key={s.id}
+                className={`progress-tick ${unlocked ? 'is-unlocked' : ''} ${current ? 'is-current' : ''}`}
+                style={{ left: `${((i + 1) / total) * 100}%` }}
+                onClick={() => onJump(i + 1)}
+                disabled={!unlocked}
+                aria-label={`Jump to ${s.title}`}
+                title={s.title}
+              >
+                <span className="progress-tick-num">{s.short}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </header>
+  );
+}
+
+function TitleCard({ onStart }) {
+  return (
+    <div className="title-card">
+      <div className="title-card-grid">
+        <div className="title-card-text">
+          <div className="kicker">A short interactive course &middot; ~10 minutes</div>
+          <h1 className="title-card-h">Communicating CKD progression<br/>to patients.</h1>
+          <p className="title-card-deck">
+            Most patients leave a kidney appointment understanding less than half of what they were told. This course is about closing that gap &mdash; in the conversations you have this week, not in theory.
+          </p>
+
+          <div className="title-card-meta">
+            <div className="meta-row">
+              <div className="meta-label">For</div>
+              <div className="meta-val">Nurses, care coordinators, and other clinical care team members</div>
+            </div>
+            <div className="meta-row">
+              <div className="meta-label">You will</div>
+              <div className="meta-val">Recognize the moments where CKD conversations fail &middot; apply three evidence-informed principles &middot; practice in a branching scenario &middot; check your own decision-making</div>
+            </div>
+            <div className="meta-row">
+              <div className="meta-label">Guide</div>
+              <div className="meta-val">Dr. Maya, a senior nephrology educator</div>
+            </div>
+          </div>
+
+          <button className="btn-primary btn-primary--big" onClick={onStart}>
+            Begin the course
+            <span className="btn-arrow" aria-hidden="true">→</span>
+          </button>
+
+          <div className="title-card-modules">
+            {SCREENS.map((s, i) => (
+              <div key={s.id} className="module-row">
+                <span className="module-num">{s.short}</span>
+                <span className="module-title">{s.title}</span>
+                <span className="module-dur">{['2 min', '3 min', '3 min', '2 min'][i]}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="title-card-art">
+          <div className="title-maya-wrap">
+            <MayaAvatar expression="warm" gesture="welcome" size={300} />
+          </div>
+          <div className="title-bubble">
+            <div className="title-bubble-name">Dr. Maya</div>
+            <p>I&rsquo;m here to walk you through this. We&rsquo;ll spend most of our time on real conversations &mdash; one with a patient named Robert, another with Elena. By the end, you&rsquo;ll have three small moves you can use in your next CKD visit.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// Mount
+const root = ReactDOM.createRoot(document.getElementById('app'));
+root.render(<CourseApp />);
+
+</script>
+
+</body>
+</html>
