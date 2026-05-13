@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Communicating CKD Progression to Patients · L&D Demo Course</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;background:#f6f7f9;color:#0d0f12;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer;border:none;background:none}
+button:focus-visible{outline:2px solid #0d9488;outline-offset:2px}
+
+/* Layout */
+#app{display:grid;grid-template-rows:auto 1fr auto;height:100vh;overflow:hidden}
+.stage{overflow-y:auto;padding:2rem 1rem 1rem}
+.inner{max-width:960px;margin:0 auto}
+
+/* Topbar */
+.topbar{background:#fff;border-bottom:1px solid #e5e8ec;padding:14px 24px 0;z-index:10}
+.topbar-row{display:flex;align-items:center;justify-content:space-between;padding-bottom:10px;gap:16px}
+.brand-title{font-size:.85rem;font-weight:700;color:#0d0f12;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brand-sub{font-size:.72rem;color:#6b7280}
+.topbar-meta{font-size:.78rem;color:#6b7280;text-align:right;white-space:nowrap}
+.topbar-meta strong{color:#0d0f12}
+.prog-track{height:4px;background:#e5e8ec;border-radius:2px;position:relative;margin-top:2px}
+.prog-fill{height:100%;background:#0d9488;border-radius:2px;transition:width .4s ease}
+.prog-ticks{position:absolute;top:-7px;left:0;right:0}
+.prog-tick{position:absolute;transform:translateX(-50%);width:18px;height:18px;border-radius:50%;background:#e5e8ec;border:2px solid #fff;font-size:.6rem;font-weight:700;color:#6b7280;display:flex;align-items:center;justify-content:center;transition:background .3s,color .3s;cursor:default}
+.prog-tick.done{background:#0d9488;color:#fff;cursor:pointer}
+.prog-tick.active{background:#0d0f12;color:#fff;border:2px solid #0d0f12}
+
+/* Nav */
+.nav-rail{background:#fff;border-top:1px solid #e5e8ec;padding:12px 24px;display:flex;align-items:center;gap:16px}
+.nav-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:8px;font-size:.85rem;font-weight:600;border:1.5px solid #e5e8ec;color:#0d0f12;background:#fff;transition:background .15s,border-color .15s}
+.nav-btn:hover:not(:disabled){background:#f6f7f9;border-color:#cdd2da}
+.nav-btn:disabled{opacity:.35;cursor:not-allowed}
+.nav-meta{margin-left:auto;font-size:.8rem;color:#9aa1ab;font-variant-numeric:tabular-nums}
+
+/* Cards / sections */
+.kicker{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0d9488;margin-bottom:.5rem}
+.screen-title{font-size:1.55rem;font-weight:800;line-height:1.25;margin-bottom:.75rem}
+.screen-deck{color:#3f444c;line-height:1.6;margin-bottom:1.5rem}
+
+/* Screen grid */
+.screen-grid{display:grid;grid-template-columns:220px 1fr;gap:2rem;align-items:start}
+@media(max-width:680px){.screen-grid{grid-template-columns:1fr}}
+
+/* Maya panel */
+.maya-panel{display:flex;gap:12px;align-items:flex-start;margin-bottom:1.5rem}
+.maya-panel svg{flex-shrink:0}
+.maya-bubble{background:#fff;border:1.5px solid #e5e8ec;border-radius:12px;padding:12px 14px;position:relative;font-size:.82rem;line-height:1.55;color:#2a2e34}
+.maya-bubble::before{content:'';position:absolute;left:-9px;top:18px;width:0;height:0;border-top:6px solid transparent;border-bottom:6px solid transparent;border-right:9px solid #e5e8ec}
+.maya-bubble::after{content:'';position:absolute;left:-7px;top:19px;width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:8px solid #fff}
+.maya-bubble .maya-name{font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0d9488;margin-bottom:4px}
+.maya-bubble p{margin-bottom:.5rem}
+.maya-bubble p:last-child{margin-bottom:0}
+
+/* Title card */
+.title-card{max-width:700px;margin:0 auto;padding:2rem 0}
+.title-card h1{font-size:2rem;font-weight:800;line-height:1.2;margin:1rem 0}
+.title-card-kicker{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0d9488}
+.title-deck{font-size:1rem;color:#3f444c;line-height:1.65;margin-bottom:1.5rem}
+.title-meta{background:#fff;border:1.5px solid #e5e8ec;border-radius:12px;padding:1rem 1.25rem;margin-bottom:1.5rem}
+.meta-row{display:flex;gap:12px;padding:.5rem 0;border-bottom:1px solid #f0f2f4;font-size:.82rem}
+.meta-row:last-child{border-bottom:none}
+.meta-label{font-weight:700;color:#0d0f12;min-width:72px;flex-shrink:0}
+.meta-val{color:#3f444c;line-height:1.5}
+.module-list{margin:1rem 0 1.5rem}
+.module-row{display:flex;align-items:center;gap:10px;padding:.4rem 0;font-size:.82rem;border-bottom:1px solid #f0f2f4}
+.module-num{font-weight:800;font-size:.7rem;color:#0d9488;background:#effaf8;border-radius:4px;padding:2px 6px;font-variant-numeric:tabular-nums}
+.module-title{flex:1;color:#0d0f12;font-weight:500}
+.module-dur{color:#9aa1ab;font-size:.75rem}
+
+/* Buttons */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:#0d9488;color:#fff;padding:10px 20px;border-radius:8px;font-size:.88rem;font-weight:700;transition:background .15s,opacity .15s}
+.btn-primary:hover:not(:disabled){background:#0b756d}
+.btn-primary:disabled,.btn-primary.disabled{opacity:.4;cursor:not-allowed}
+.btn-primary.big{padding:13px 26px;font-size:.95rem}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:#fff;color:#0d0f12;padding:9px 18px;border-radius:8px;font-size:.85rem;font-weight:600;border:1.5px solid #e5e8ec;transition:background .15s}
+.btn-ghost:hover{background:#f6f7f9}
+.btn-arrow{font-size:1rem}
+
+/* Patient quote */
+.patient-quote{background:#fff;border:1.5px solid #e5e8ec;border-radius:12px;padding:1.25rem 1.5rem;margin:1.25rem 0;position:relative}
+.patient-quote-mark{font-size:3.5rem;color:#e5e8ec;line-height:.8;font-family:Georgia,serif;margin-bottom:.25rem}
+.patient-quote blockquote{font-size:.95rem;line-height:1.7;color:#2a2e34;font-style:italic}
+.patient-quote figcaption{margin-top:.75rem;display:flex;flex-direction:column;gap:2px}
+.quote-name{font-size:.8rem;font-weight:700;color:#0d0f12}
+.quote-sub{font-size:.73rem;color:#9aa1ab}
+
+/* Options */
+.prompt-label{font-size:.7rem;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:#6b7280;margin-bottom:.4rem}
+.prompt-q{font-size:1.1rem;font-weight:700;margin-bottom:1rem}
+.option-list{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
+.option{display:flex;align-items:flex-start;gap:12px;padding:12px 14px;border-radius:10px;border:1.5px solid #e5e8ec;background:#fff;text-align:left;font-size:.85rem;line-height:1.5;transition:border-color .15s,background .15s;width:100%}
+.option:hover:not(:disabled){border-color:#0d9488;background:#effaf8}
+.option:disabled{cursor:default}
+.option.correct{border-color:#0d9488;background:#effaf8}
+.option.incorrect{border-color:#dc2626;background:#fef2f2}
+.option.dim{opacity:.4}
+.option-letter{font-weight:800;font-size:.75rem;color:#9aa1ab;background:#f0f2f4;border-radius:4px;padding:1px 6px;flex-shrink:0;margin-top:1px}
+.option.correct .option-letter{background:#0d9488;color:#fff}
+.option.incorrect .option-letter{background:#dc2626;color:#fff}
+.option-text{flex:1}
+.option-tag{margin-left:auto;font-size:.7rem;font-weight:700;padding:2px 8px;border-radius:99px;flex-shrink:0}
+.option.correct .option-tag{background:#0d9488;color:#fff}
+.option.incorrect .option-tag{background:#dc2626;color:#fff}
+
+/* Feedback */
+.feedback{border-radius:12px;padding:1rem 1.25rem;margin-top:.5rem;font-size:.85rem;line-height:1.6}
+.feedback.good{background:#e8f6f2;border:1.5px solid #a6e2da}
+.feedback.reflect{background:#fef9ec;border:1.5px solid #fcd34d}
+.feedback-head{display:flex;align-items:center;gap:10px;margin-bottom:.6rem}
+.feedback-name{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#0d9488}
+.feedback-label{font-size:.85rem;font-weight:700;color:#0d0f12}
+.feedback p{margin-bottom:.5rem}
+.feedback p:last-child{margin-bottom:0}
+.feedback-bridge{font-style:italic;color:#3f444c}
+
+/* Principles */
+.principle-grid{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1rem}
+.principle-card{background:#fff;border:1.5px solid #e5e8ec;border-radius:12px;overflow:hidden;transition:border-color .2s}
+.principle-card.open{border-color:#0d9488}
+.principle-head{display:flex;align-items:center;gap:12px;padding:14px 16px;width:100%;text-align:left;cursor:pointer;transition:background .15s}
+.principle-head:hover{background:#f6f7f9}
+.principle-card.open .principle-head{background:#effaf8}
+.principle-num{font-size:.68rem;font-weight:800;color:#0d9488;background:#effaf8;border-radius:4px;padding:2px 7px;flex-shrink:0}
+.principle-card.open .principle-num{background:#0d9488;color:#fff}
+.principle-title-text{flex:1;font-weight:700;font-size:.88rem;color:#0d0f12}
+.principle-chev{color:#9aa1ab;transition:transform .25s;flex-shrink:0}
+.principle-card.open .principle-chev{transform:rotate(180deg)}
+.principle-hint{padding:0 16px 14px 44px;font-size:.8rem;color:#6b7280;line-height:1.5}
+.principle-body{padding:0 16px 14px 16px;font-size:.85rem;line-height:1.6;color:#2a2e34}
+.principle-body p{margin-bottom:.75rem}
+.example-block{display:flex;flex-direction:column;gap:.5rem;margin-top:.25rem}
+.example-row{border-radius:8px;padding:.6rem .8rem;font-size:.8rem;line-height:1.5}
+.example-row.bad{background:#fef2f2;border-left:3px solid #dc2626}
+.example-row.good{background:#e8f6f2;border-left:3px solid #0d9488}
+.example-tag{font-size:.65rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px}
+.example-row.bad .example-tag{color:#dc2626}
+.example-row.good .example-tag{color:#0d9488}
+.example-text{color:#2a2e34;font-style:italic}
+.pips{display:flex;align-items:center;gap:8px;margin-top:.5rem}
+.pip{width:10px;height:10px;border-radius:50%;background:#e5e8ec;border:1.5px solid #cdd2da;transition:background .2s}
+.pip.filled{background:#0d9488;border-color:#0d9488}
+.pips-label{font-size:.75rem;color:#6b7280;margin-left:4px}
+
+/* Patient card */
+.patient-card{display:flex;align-items:center;gap:14px;background:#fff;border:1.5px solid #e5e8ec;border-radius:12px;padding:12px 16px;margin-bottom:1.25rem}
+.patient-card-name{font-weight:800;font-size:.92rem;margin-bottom:3px}
+.patient-card-meta{font-size:.75rem;color:#6b7280;margin-bottom:6px}
+.lab-pills{display:flex;flex-wrap:wrap;gap:6px}
+.lab-pill{display:inline-flex;align-items:center;background:#f0f2f4;border-radius:99px;overflow:hidden;font-size:.72rem}
+.lab-k{padding:2px 6px;font-weight:700;color:#0d0f12}
+.lab-v{padding:2px 6px;background:#0d9488;color:#fff;font-weight:700}
+.lab-d{padding:2px 5px;color:#9aa1ab;font-size:.68rem}
+
+/* Dialogue */
+.dialogue{display:flex;flex-direction:column;gap:.6rem;margin-bottom:1rem}
+.dialogue-line{display:flex;flex-direction:column;gap:3px}
+.dia-tag{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em}
+.dialogue-line.elena .dia-tag{color:#6b7280}
+.dialogue-line.you .dia-tag{color:#0d9488}
+.dia-body{padding:10px 14px;border-radius:10px;font-size:.88rem;line-height:1.55;max-width:90%}
+.dialogue-line.elena .dia-body{background:#f0f2f4;color:#0d0f12;align-self:flex-start}
+.dialogue-line.you .dia-body{background:#effaf8;border:1.5px solid #a6e2da;color:#053f3a;align-self:flex-end;max-width:90%}
+.dialogue-line.you.less-good .dia-body{background:#fef9ec;border:1.5px solid #fcd34d}
+.dia-narration{font-size:.8rem;color:#9aa1ab;font-style:italic;text-align:center;padding:.25rem 0}
+.reaction-note{background:#fef9ec;border:1.5px solid #fcd34d;border-radius:10px;padding:.8rem 1rem;font-size:.8rem;line-height:1.55;color:#2a2e34}
+.reaction-note.good{background:#e8f6f2;border-color:#a6e2da}
+.reaction-note strong{display:block;margin-bottom:.25rem;font-size:.75rem;text-transform:uppercase;letter-spacing:.07em;color:#6b7280}
+.time-marker{font-size:.73rem;color:#9aa1ab;text-align:center;font-style:italic;padding:.3rem 0;border-top:1px dashed #e5e8ec;margin:.5rem 0}
+.scene-stage{background:#fff;border:1.5px solid #e5e8ec;border-radius:10px;padding:.9rem 1rem;font-size:.85rem;line-height:1.6;color:#2a2e34;margin-bottom:1rem;font-style:italic}
+.decision-block{background:#fff;border:1.5px dashed #cdd2da;border-radius:12px;padding:1rem;margin:.5rem 0}
+.decision-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.75rem}
+.decision-options{display:flex;flex-direction:column;gap:.5rem}
+.decision-option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:8px;border:1.5px solid #e5e8ec;background:#f6f7f9;text-align:left;font-size:.83rem;line-height:1.5;transition:border-color .15s,background .15s;width:100%}
+.decision-option:hover{border-color:#0d9488;background:#effaf8}
+.decision-letter{font-weight:800;font-size:.72rem;color:#9aa1ab;background:#e5e8ec;border-radius:4px;padding:1px 5px;flex-shrink:0}
+.decision-text{flex:1}
+
+/* Quiz */
+.quiz-q{background:#fff;border:1.5px solid #e5e8ec;border-radius:14px;padding:1.25rem;margin-bottom:1.25rem}
+.quiz-q-num{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.5rem}
+.quiz-q-kind{background:#f0f2f4;border-radius:4px;padding:1px 7px;margin-left:6px;text-transform:none;letter-spacing:0;font-weight:600}
+.quiz-stem{font-size:.95rem;font-weight:700;line-height:1.45;margin-bottom:1rem;color:#0d0f12}
+.quiz-options{display:flex;flex-direction:column;gap:.5rem}
+.quiz-option{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;border-radius:9px;border:1.5px solid #e5e8ec;background:#fff;text-align:left;font-size:.83rem;line-height:1.5;transition:border-color .15s,background .15s;width:100%}
+.quiz-option:hover:not(:disabled){border-color:#0d9488;background:#effaf8}
+.quiz-option:disabled{cursor:default}
+.quiz-option.correct{border-color:#0d9488;background:#effaf8}
+.quiz-option.incorrect{border-color:#dc2626;background:#fef2f2}
+.quiz-option.dim{opacity:.35}
+.quiz-letter{font-weight:800;font-size:.72rem;background:#f0f2f4;border-radius:4px;padding:1px 6px;flex-shrink:0;color:#6b7280;margin-top:1px}
+.quiz-option.correct .quiz-letter{background:#0d9488;color:#fff}
+.quiz-option.incorrect .quiz-letter{background:#dc2626;color:#fff}
+.quiz-rationale{margin-top:.75rem;border-radius:10px;padding:.8rem 1rem;font-size:.82rem;line-height:1.55}
+.quiz-rationale.good{background:#e8f6f2;border:1.5px solid #a6e2da}
+.quiz-rationale.no{background:#fef2f2;border:1.5px solid #fecaca}
+.quiz-rationale-head{font-weight:800;margin-bottom:.35rem;font-size:.8rem}
+.quiz-rationale.good .quiz-rationale-head{color:#065f46}
+.quiz-rationale.no .quiz-rationale-head{color:#dc2626}
+.quiz-rationale p{margin-bottom:.35rem;color:#2a2e34}
+.quiz-rationale p:last-child{margin-bottom:0}
+.quiz-best{font-style:italic;margin-top:.35rem}
+
+/* Score */
+.score-card{background:#fff;border:1.5px solid #e5e8ec;border-radius:14px;padding:1.5rem;margin-top:1rem}
+.score-bar-track{height:6px;background:#e5e8ec;border-radius:3px;margin-bottom:1rem}
+.score-bar-fill{height:100%;background:#0d9488;border-radius:3px;transition:width .6s ease}
+.score-row{display:flex;align-items:flex-start;gap:1.5rem;margin-bottom:1rem}
+.score-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#6b7280;margin-bottom:.2rem}
+.score-num{font-size:2rem;font-weight:800;color:#0d0f12}
+.score-num span{font-size:1rem;color:#9aa1ab;font-weight:500}
+.score-msg{font-size:.85rem;line-height:1.55;color:#2a2e34;padding-top:.4rem}
+
+/* Footer */
+.screen-footer{padding:1.25rem 0 .25rem;display:flex;flex-direction:column;align-items:flex-start;gap:.5rem}
+.screen-hint{font-size:.78rem;color:#9aa1ab;font-style:italic}
+
+/* Maya sign */
+.maya-sign{font-style:italic;color:#0d9488;font-weight:600}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="topbar-row">
+      <div>
+        <div class="brand-title">Communicating CKD Progression to Patients</div>
+        <div class="brand-sub">A short course for care team members · ~10 min</div>
+      </div>
+      <div class="topbar-meta" id="topbar-meta">Welcome</div>
+    </div>
+    <div class="prog-track">
+      <div class="prog-fill" id="prog-fill" style="width:0%"></div>
+      <div class="prog-ticks" id="prog-ticks"></div>
+    </div>
+  </header>
+
+  <div class="stage" id="stage">
+    <div class="inner" id="screen-content"></div>
+  </div>
+
+  <div class="nav-rail" id="nav-rail" style="display:none">
+    <button class="nav-btn" id="btn-prev" onclick="goPrev()">← Previous</button>
+    <div class="nav-meta" id="nav-meta"></div>
+  </div>
+</div>
+
+<script>
+// ─── State ───────────────────────────────────────────────────
+const state = {
+  idx: 0,           // 0=title, 1-4=screens
+  furthest: 0,
+  // S1
+  s1_picked: null,
+  // S2
+  s2_opened: new Set(),
+  // S3
+  s3_step: 0,
+  s3_c1: null,
+  s3_c2: null,
+  // S4
+  s4_answers: {},
+  s4_done: false,
+};
+const TOTAL = 4;
+
+// ─── Navigation ──────────────────────────────────────────────
+function goNext() {
+  if (state.idx < TOTAL) {
+    state.idx++;
+    state.furthest = Math.max(state.furthest, state.idx);
+    render();
+    document.getElementById('stage').scrollTop = 0;
+  }
+}
+function goPrev() {
+  if (state.idx > 0) { state.idx--; render(); document.getElementById('stage').scrollTop = 0; }
+}
+function jumpTo(n) {
+  if (n <= state.furthest) { state.idx = n; render(); document.getElementById('stage').scrollTop = 0; }
+}
+
+// ─── Top bar ─────────────────────────────────────────────────
+function updateTopBar() {
+  const titles = ['Welcome','The Hook','Core Principles','Scenario Practice','Knowledge Check'];
+  const pct = state.idx === 0 ? 0 : (state.idx / TOTAL) * 100;
+  document.getElementById('prog-fill').style.width = pct + '%';
+  const meta = document.getElementById('topbar-meta');
+  if (state.idx > 0) {
+    meta.innerHTML = `<strong>${titles[state.idx]}</strong><br>${Math.round(pct)}% complete`;
+  } else {
+    meta.textContent = 'Welcome';
+  }
+  // Ticks
+  const ticks = document.getElementById('prog-ticks');
+  ticks.innerHTML = ['01','02','03','04'].map((n,i) => {
+    const sIdx = i+1;
+    const cls = sIdx < state.idx ? 'prog-tick done' : sIdx === state.idx ? 'prog-tick active' : 'prog-tick';
+    const clickable = sIdx <= state.furthest;
+    return `<button class="${cls}" style="left:${(sIdx/TOTAL)*100}%" ${clickable?`onclick="jumpTo(${sIdx})"`:''} title="${titles[sIdx]}">${n}</button>`;
+  }).join('');
+  // Nav
+  const nav = document.getElementById('nav-rail');
+  if (state.idx > 0) {
+    nav.style.display = 'flex';
+    document.getElementById('btn-prev').disabled = state.idx <= 1;
+    document.getElementById('nav-meta').textContent = `${String(state.idx).padStart(2,'0')} / ${String(TOTAL).padStart(2,'0')}`;
+  } else {
+    nav.style.display = 'none';
+  }
+}
+
+// ─── Maya SVG ────────────────────────────────────────────────
+function mayaSVG(expr, size) {
+  size = size||160;
+  const c = {skin:'#e6b48f',skinS:'#c9966f',hair:'#2b1d12',hairH:'#3d2a1b',scrub:'#0d9488',scrubS:'#0b756d',scrubL:'#075953',white:'#fafaf8',ink:'#1a1a1a',steel:'#9aa0a6',blush:'#e08a7a'};
+  const exprs = {
+    warm: {mouth:`<path d="M88,118 Q100,127 112,118" stroke="${c.ink}" fill="none" stroke-width="2.2" stroke-linecap="round"/>`,browL:`<path d="M75,82 Q82,79 90,82" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`,browR:`<path d="M110,82 Q117,79 125,82" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`},
+    bright:{mouth:`<g><path d="M86,116 Q100,131 114,116 Q100,124 86,116 Z" fill="${c.ink}"/><path d="M89,119 Q100,125 111,119" stroke="${c.white}" fill="none" stroke-width="1.5" stroke-linecap="round"/></g>`,browL:`<path d="M74,80 Q82,76 90,80" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`,browR:`<path d="M110,80 Q118,76 126,80" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`},
+    thoughtful:{mouth:`<path d="M90,119 Q100,124 110,119" stroke="${c.ink}" fill="none" stroke-width="2.2" stroke-linecap="round"/>`,browL:`<path d="M75,84 Q82,80 90,82" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`,browR:`<path d="M110,82 Q117,80 125,84" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`},
+    concerned:{mouth:`<path d="M89,120 Q100,123 111,120" stroke="${c.ink}" fill="none" stroke-width="2.2" stroke-linecap="round"/>`,browL:`<path d="M74,85 Q82,80 90,79" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`,browR:`<path d="M110,79 Q118,80 126,85" stroke="${c.hair}" stroke-width="2.8" fill="none" stroke-linecap="round"/>`},
+  };
+  const e = exprs[expr]||exprs.warm;
+  const h = Math.round(size*1.2);
+  return `<svg viewBox="0 0 200 240" width="${size}" height="${h}" xmlns="http://www.w3.org/2000/svg" aria-label="Dr. Maya" role="img" style="flex-shrink:0">
+    <path d="M30,240 L30,200 C30,170 55,148 100,148 C145,148 170,170 170,200 L170,240 Z" fill="${c.scrub}"/>
+    <path d="M30,240 L30,200 C30,180 42,162 60,154 L60,240 Z" fill="${c.scrubS}" opacity=".35"/>
+    <path d="M82,148 L100,180 L118,148 Z" fill="${c.white}"/>
+    <path d="M82,148 L100,180 L118,148" stroke="${c.scrubL}" stroke-width="1.5" fill="none"/>
+    <path d="M78,150 C70,160 65,175 70,195 L80,205" stroke="${c.ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <path d="M122,150 C130,160 135,175 130,195 L120,205" stroke="${c.ink}" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+    <circle cx="100" cy="210" r="8" fill="${c.steel}" stroke="${c.ink}" stroke-width="1.5"/>
+    <circle cx="100" cy="210" r="3.5" fill="${c.ink}"/>
+    <rect x="128" y="178" width="28" height="14" rx="1.5" fill="${c.white}" stroke="${c.scrubL}" stroke-width="0.5"/>
+    <rect x="130" y="180" width="24" height="3" fill="${c.scrub}"/>
+    <text x="142" y="190" text-anchor="middle" font-size="5" font-family="system-ui,sans-serif" font-weight="700" fill="${c.ink}">DR. MAYA</text>
+    <path d="M88,138 L88,155 Q100,160 112,155 L112,138 Z" fill="${c.skin}"/>
+    <path d="M58,90 C58,52 142,52 142,90 C142,118 148,158 132,160 L120,148 L80,148 L68,160 C52,158 58,118 58,90 Z" fill="${c.hair}"/>
+    <ellipse cx="100" cy="95" rx="36" ry="42" fill="${c.skin}"/>
+    <path d="M64,76 C70,58 96,52 126,58 C138,62 140,76 138,84 C130,72 110,68 92,74 C82,77 72,82 66,90 C63,86 62,80 64,76 Z" fill="${c.hair}"/>
+    <ellipse cx="63" cy="98" rx="4.5" ry="7" fill="${c.skin}"/>
+    <ellipse cx="137" cy="98" rx="4.5" ry="7" fill="${c.skin}"/>
+    ${e.browL}${e.browR}
+    <ellipse cx="83" cy="95" rx="3.2" ry="4" fill="${c.ink}"/>
+    <ellipse cx="117" cy="95" rx="3.2" ry="4" fill="${c.ink}"/>
+    <circle cx="84.2" cy="93.5" r=".9" fill="${c.white}"/>
+    <circle cx="118.2" cy="93.5" r=".9" fill="${c.white}"/>
+    <path d="M98,104 Q98,112 102,113" stroke="${c.skinS}" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="74" cy="110" rx="6" ry="3" fill="${c.blush}" opacity=".28"/>
+    <ellipse cx="126" cy="110" rx="6" ry="3" fill="${c.blush}" opacity=".28"/>
+    ${e.mouth}
+  </svg>`;
+}
+
+function mayaPanel(expr, text, size) {
+  return `<div class="maya-panel">${mayaSVG(expr, size||100)}<div class="maya-bubble"><div class="maya-name">Dr. Maya</div>${text}</div></div>`;
+}
+
+// ─── Screen 0: Title ─────────────────────────────────────────
+function renderTitle() {
+  return `
+  <div class="title-card">
+    <div class="title-card-kicker">A short interactive course · ~10 minutes</div>
+    <h1>Communicating CKD progression<br>to patients.</h1>
+    <p class="title-deck">Most patients leave a kidney appointment understanding less than half of what they were told. This course is about closing that gap — in the conversations you have this week, not in theory.</p>
+    ${mayaPanel('warm', '<p>I\'m Dr. Maya, and I\'ll walk you through this. We\'ll spend most of our time on real conversations — one with a patient named Robert, another with Elena. By the end, you\'ll have three moves you can use in your next CKD visit.</p>', 90)}
+    <div class="title-meta">
+      <div class="meta-row"><div class="meta-label">For</div><div class="meta-val">Nurses, care coordinators, and other clinical care team members</div></div>
+      <div class="meta-row"><div class="meta-label">You will</div><div class="meta-val">Recognize where CKD conversations fail · apply three evidence-informed principles · practice in a branching scenario · check your own decision-making</div></div>
+    </div>
+    <div class="module-list">
+      <div class="module-row"><span class="module-num">01</span><span class="module-title">The Hook</span><span class="module-dur">2 min</span></div>
+      <div class="module-row"><span class="module-num">02</span><span class="module-title">Core Principles</span><span class="module-dur">3 min</span></div>
+      <div class="module-row"><span class="module-num">03</span><span class="module-title">Scenario Practice</span><span class="module-dur">3 min</span></div>
+      <div class="module-row"><span class="module-num">04</span><span class="module-title">Knowledge Check</span><span class="module-dur">2 min</span></div>
+    </div>
+    <button class="btn-primary big" onclick="goNext()">Begin the course <span class="btn-arrow">→</span></button>
+  </div>`;
+}
+
+// ─── Screen 1: Hook ──────────────────────────────────────────
+function renderS1() {
+  const p = state.s1_picked;
+  const opts = [
+    {id:'patient', label:'Robert wasn\'t paying close enough attention during his appointment.', correct:false,
+     feedback:'This places the burden on the patient — but research on health literacy is clear: up to 9 in 10 adults struggle with health information at some point. The responsibility for clear communication sits with us.'},
+    {id:'clinician', label:'The clinician used clinical terms like "GFR" and "stages" without checking that Robert understood them.', correct:true,
+     feedback:'Exactly. Unchecked jargon is the most common reason patients leave appointments confused. Robert nodded because he didn\'t want to seem uninformed — a pattern clinicians see every day. The fix isn\'t simpler patients; it\'s clearer communication.'},
+  ];
+  const mayaText = p
+    ? '<p>Good. You\'ve spotted the root of Robert\'s confusion.</p><p>In the next section, we\'ll look at three evidence-informed principles that prevent moments like this from happening.</p>'
+    : '<p>Welcome. Before we get into frameworks, I want you to meet Robert.</p><p>He came home from his nephrologist last week and said this to his wife. Read it slowly. <strong>What do you notice?</strong></p>';
+
+  const optionsHTML = opts.map((o,i) => {
+    let cls = 'option';
+    if (p !== null) {
+      if (o.correct) cls += ' correct';
+      else if (p === o.id) cls += ' incorrect';
+      else cls += ' dim';
+    }
+    const tag = p !== null ? (o.correct ? '<span class="option-tag">Best answer</span>' : (p===o.id ? '<span class="option-tag">Not quite</span>' : '')) : '';
+    return `<button class="${cls}" ${p!==null?'disabled':''} onclick="s1Pick('${o.id}')">
+      <span class="option-letter">${['A','B'][i]}</span>
+      <span class="option-text">${o.label}</span>${tag}
+    </button>`;
+  }).join('');
+
+  const picked = opts.find(o=>o.id===p);
+  const feedbackHTML = picked ? `
+    <div class="feedback ${picked.correct?'good':'reflect'}">
+      <div class="feedback-head">
+        ${mayaSVG(picked.correct?'bright':'thoughtful', 60)}
+        <div><div class="feedback-name">Dr. Maya</div><div class="feedback-label">${picked.correct?'You\'ve got it.':'Let\'s reframe.'}</div></div>
+      </div>
+      <p>${picked.feedback}</p>
+      <p class="feedback-bridge">In the next section, we'll look at three evidence-informed principles that prevent moments like Robert's from happening.</p>
+    </div>` : '';
+
+  return `
+  <div class="screen-grid">
+    <aside>${mayaPanel(p?'bright':'concerned', mayaText)}</aside>
+    <main>
+      <div class="kicker">Section 01 — The Hook</div>
+      <h1 class="screen-title">What happens after the appointment ends.</h1>
+      <figure class="patient-quote">
+        <div class="patient-quote-mark">&ldquo;</div>
+        <blockquote>He said something about my <em>GFR</em> going down, and stages, and that I might need&hellip; I don't know what. I just nodded. I didn't want to seem stupid.<br><br>Now I'm scared and I have no idea what's actually happening to me.</blockquote>
+        <figcaption><span class="quote-name">Robert, 64</span><span class="quote-sub">two days after his nephrology appointment</span></figcaption>
+      </figure>
+      <div class="prompt-label">Your turn</div>
+      <h2 class="prompt-q">What went wrong here?</h2>
+      <div class="option-list">${optionsHTML}</div>
+      ${feedbackHTML}
+      <div class="screen-footer">
+        ${!p ? '<p class="screen-hint">Select an option to continue.</p>' : ''}
+        <button class="btn-primary ${!p?'disabled':''}" ${!p?'disabled':''} onclick="goNext()">Continue to the principles <span class="btn-arrow">→</span></button>
+      </div>
+    </main>
+  </div>`;
+}
+
+function s1Pick(id) { state.s1_picked = id; render(); }
+
+// ─── Screen 2: Principles ────────────────────────────────────
+const PRINCIPLES = [
+  {id:'plain',num:'01',title:'Use plain language',hint:'Translate clinical terms into the words your patient already uses.',
+   body:'Patients can\'t act on information they don\'t understand. Replace clinical shorthand with everyday phrasing — even when it feels less precise to you. Precision means nothing if the patient leaves the room confused.',
+   bad:'"Your eGFR has declined to 44, placing you in stage 3b. We\'ll need to monitor your albuminuria."',
+   good:'"Your kidneys are working at about 44% of normal. That\'s in a range we call \'stage 3b.\' I want to keep an eye on a sign of stress in your kidneys called protein in the urine — we\'ll check it again in three months."'},
+  {id:'teachback',num:'02',title:'Use teach-back to confirm understanding',hint:'Ask the patient to explain it back in their own words.',
+   body:'"Do you understand?" almost always gets a yes — patients don\'t want to seem uninformed. Teach-back surfaces what the patient actually heard, gives you a chance to clarify gaps, and signals that you are responsible for the explanation, not them.',
+   bad:'"Does that all make sense?"',
+   good:'"I gave you a lot just now. To make sure I explained it well — can you tell me, in your own words, what stage 3 means for you and what we\'re doing about it?"'},
+  {id:'emotion',num:'03',title:'Acknowledge emotion first',hint:'Name the feeling before you deliver more information.',
+   body:'A patient hearing "your kidney function is declining" is often not in a state to absorb clinical detail. Acknowledging emotion isn\'t a soft skill — it is what makes the rest of the conversation possible. Skip this step and the next ten minutes of education will not land.',
+   bad:'"The good news is dialysis isn\'t something we\'re considering right now. Your eGFR is…"',
+   good:'"I can hear that this has been weighing on you. Before we go through the numbers, I want to make sure I understand what\'s worrying you most."'},
+];
+
+function renderS2() {
+  const opened = state.s2_opened;
+  const allOpen = PRINCIPLES.every(p => opened.has(p.id));
+  const mayaText = allOpen
+    ? '<p>Good. Notice that these aren\'t three separate skills — they work together. Plain language gives the patient something to grasp. Teach-back confirms they actually grasped it. And acknowledging emotion is what makes either of those possible.</p><p>Let\'s see you put them to use.</p>'
+    : '<p>There are dozens of communication frameworks for clinicians. These three are the ones I come back to most when coaching staff on CKD conversations.</p><p><strong>Tap each card to explore it.</strong> All three before you move on.</p>';
+
+  const cards = PRINCIPLES.map(p => {
+    const isOpen = opened.has(p.id);
+    return `<article class="principle-card ${isOpen?'open':''}">
+      <button class="principle-head" onclick="s2Toggle('${p.id}')" aria-expanded="${isOpen}">
+        <span class="principle-num">${p.num}</span>
+        <span class="principle-title-text">${p.title}</span>
+        <span class="principle-chev"><svg viewBox="0 0 16 16" width="16" height="16"><path d="M3 6 L8 11 L13 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+      </button>
+      ${isOpen ? `
+      <div class="principle-body">
+        <p>${p.body}</p>
+        <div class="example-block">
+          <div class="example-row bad"><div class="example-tag">Avoid</div><div class="example-text">${p.bad}</div></div>
+          <div class="example-row good"><div class="example-tag">Try instead</div><div class="example-text">${p.good}</div></div>
+        </div>
+      </div>` : `<div class="principle-hint">${p.hint}</div>`}
+    </article>`;
+  }).join('');
+
+  const pips = PRINCIPLES.map(p =>
+    `<span class="pip ${opened.has(p.id)?'filled':''}"></span>`
+  ).join('') + `<span class="pips-label">${opened.size} of 3 explored</span>`;
+
+  return `
+  <div class="screen-grid">
+    <aside>${mayaPanel(allOpen?'bright':'warm', mayaText)}</aside>
+    <main>
+      <div class="kicker">Section 02 — Core Concept</div>
+      <h1 class="screen-title">Three principles for talking about CKD progression.</h1>
+      <p class="screen-deck">Each is well-supported in the patient communication literature. Each is also small enough to use in your next conversation.</p>
+      <div class="principle-grid">${cards}</div>
+      <div class="pips">${pips}</div>
+      <div class="screen-footer">
+        ${!allOpen ? '<p class="screen-hint">Explore all three principles to continue.</p>' : ''}
+        <button class="btn-primary ${!allOpen?'disabled':''}" ${!allOpen?'disabled':''} onclick="goNext()">Practice in a real conversation <span class="btn-arrow">→</span></button>
+      </div>
+    </main>
+  </div>`;
+}
+
+function s2Toggle(id) {
+  const o = new Set(state.s2_opened);
+  o.has(id) ? o.delete(id) : o.add(id);
+  state.s2_opened = o;
+  render();
+}
+
+// ─── Screen 3: Scenario ──────────────────────────────────────
+function renderS3() {
+  const {s3_step:step, s3_c1:c1, s3_c2:c2} = state;
+  const mayaExprs = {0:'warm',1:'thoughtful',2:'thoughtful',3:'thoughtful',4:'bright'};
+  const mayaTexts = {
+    0:'<p>Time to step into the room. You\'re the care coordinator. Your patient is <strong>Elena Reyes</strong>, 58, with stage 3 CKD. Her latest labs came back this morning.</p><p>Read carefully. Your words matter here.</p>',
+    1:'<p>Elena\'s first words tell you what she\'s most afraid of. <strong>What you say next will shape the rest of the visit.</strong></p>',
+    2: c1==='numbers' ? '<p>Notice what happened. You answered accurately, but you led with numbers and used the word she\'s most afraid of. Let\'s try the next moment differently.</p>'
+                      : '<p>That\'s the move. You named the worry, slowed the room down, and put a boundary on the fear before delivering information. Watch how this changes what follows.</p>',
+    3:'<p>You\'ve explained stage 3 in plain language. Elena\'s quiet, processing. <strong>How will you check that what you said actually landed?</strong></p>',
+    4:'<p>That\'s a wrap on Elena\'s visit. The same three principles, used in one short conversation. You won\'t do this perfectly every time — nobody does. The goal is to notice your patterns and choose intentionally.</p>',
+  };
+
+  const patientCard = `<div class="patient-card">
+    <svg viewBox="0 0 60 60" width="52" height="52"><circle cx="30" cy="30" r="30" fill="#e5e7eb"/><circle cx="30" cy="24" r="9" fill="#9ca3af"/><path d="M10,55 C10,42 22,38 30,38 C38,38 50,42 50,55 Z" fill="#9ca3af"/></svg>
+    <div><div class="patient-card-name">Elena Reyes</div><div class="patient-card-meta">58 years old · Stage 3 CKD · Visit type: lab follow-up</div>
+    <div class="lab-pills"><span class="lab-pill"><span class="lab-k">eGFR</span><span class="lab-v">44</span><span class="lab-d">was 52</span></span><span class="lab-pill"><span class="lab-k">BP</span><span class="lab-v">138/86</span></span><span class="lab-pill"><span class="lab-k">UACR</span><span class="lab-v">38</span></span></div></div>
+  </div>`;
+
+  let mainContent = `<div class="kicker">Section 03 — Scenario Practice</div>
+    <h1 class="screen-title">A conversation with Elena.</h1>
+    ${patientCard}`;
+
+  if (step === 0) {
+    mainContent += `<div class="scene-stage">The waiting room intake is done. You walk Elena back to the exam room. She sits down, holding a printed copy of her lab results, and looks up at you.</div>
+    <button class="btn-primary" onclick="s3Go(1)">Begin the conversation <span class="btn-arrow">→</span></button>`;
+  }
+
+  if (step >= 1) {
+    mainContent += `<div class="dialogue">
+      <div class="dialogue-line elena"><div class="dia-tag">Elena</div><div class="dia-body">"The nurse said my numbers got worse. Am I going to need dialysis?"</div></div>`;
+
+    if (step === 1) {
+      mainContent += decisionBlock('Decision 01 — Your response', [
+        {id:'numbers', text:'"Your eGFR went from 52 to 44, which is still in stage 3. Dialysis isn\'t typically considered until much later."'},
+        {id:'emotion', text:'"I can hear that\'s been weighing on you. Let\'s slow down — I\'ll walk you through what changed and what it means. Most people at this stage are nowhere near needing dialysis."'},
+      ], 's3Pick1');
+    }
+
+    if (step >= 2 && c1) {
+      const goodChoice = c1 === 'emotion';
+      mainContent += `<div class="dialogue-line you ${goodChoice?'':'less-good'}"><div class="dia-tag">You</div><div class="dia-body">${c1==='numbers' ? '"Your eGFR went from 52 to 44, which is still in stage 3. Dialysis isn\'t typically considered until much later."' : '"I can hear that\'s been weighing on you. Let\'s slow down — I\'ll walk you through what changed and what it means. Most people at this stage are nowhere near needing dialysis."'}</div></div>`;
+
+      if (c1 === 'numbers') {
+        mainContent += `<div class="dialogue-line elena"><div class="dia-tag">Elena</div><div class="dia-body">"Oh. Okay."</div></div>
+        <div class="reaction-note"><strong>What you saw:</strong> Elena nods, looks down at her paper, and goes quiet. She heard the word she was afraid of and a string of numbers. She didn't hear reassurance.</div>`;
+      } else {
+        mainContent += `<div class="dialogue-line elena"><div class="dia-tag">Elena</div><div class="dia-body">"Thank you. I've been worrying about that since the lab called me back. I didn't sleep."</div></div>
+        <div class="reaction-note good"><strong>What you saw:</strong> Elena's shoulders drop. She makes eye contact. You've given her permission to be scared, and given her a number to hold onto: <em>not now, not soon</em>.</div>`;
+      }
+
+      if (step === 2) {
+        mainContent += `<button class="btn-primary" style="margin-top:1rem" onclick="s3Go(3)">Continue <span class="btn-arrow">→</span></button>`;
+      }
+    }
+
+    if (step >= 3) {
+      mainContent += `<div class="time-marker">A few minutes later — you've walked through what stage 3 means in plain language.</div>
+      <div class="dia-narration">You set down the diagram you've been drawing. Elena is quiet.</div>`;
+
+      if (step === 3) {
+        mainContent += decisionBlock('Decision 02 — Checking understanding', [
+          {id:'closed', text:'"Does that all make sense?"'},
+          {id:'teach', text:'"I just gave you a lot. To make sure I explained it well — can you tell me, in your own words, what stage 3 means for you?"'},
+        ], 's3Pick2');
+      }
+
+      if (step >= 4 && c2) {
+        const good2 = c2 === 'teach';
+        mainContent += `<div class="dialogue-line you ${good2?'':'less-good'}"><div class="dia-tag">You</div><div class="dia-body">${c2==='closed' ? '"Does that all make sense?"' : '"I just gave you a lot. To make sure I explained it well — can you tell me, in your own words, what stage 3 means for you?"'}</div></div>`;
+        if (c2 === 'closed') {
+          mainContent += `<div class="dialogue-line elena"><div class="dia-tag">Elena</div><div class="dia-body">"Yeah, I think so."</div></div>
+          <div class="reaction-note"><strong>What you saw:</strong> Elena says yes. She almost always will. You don't actually know what she understood, what she misheard, or what she'll be Googling at 11 pm tonight. Teach-back exists exactly to surface that gap.</div>`;
+        } else {
+          mainContent += `<div class="dialogue-line elena"><div class="dia-tag">Elena</div><div class="dia-body">"It means my kidneys are working at about half… and I should keep an eye on my blood pressure. And what I eat. Right?"</div></div>
+          <div class="reaction-note good"><strong>What you saw:</strong> Two sentences just told you exactly what landed. The salt piece landed. The protein piece didn't make it in. You now know what to revisit before she walks out the door — without making her feel quizzed.</div>`;
+        }
+      }
+    }
+
+    mainContent += `</div>`; // close .dialogue
+  }
+
+  mainContent += `<div class="screen-footer">
+    ${step < 4 ? '<p class="screen-hint">Work through the scenario to continue.</p>' : ''}
+    <button class="btn-primary ${step < 4 ? 'disabled' : ''}" ${step < 4 ? 'disabled' : ''} onclick="goNext()">Take the knowledge check <span class="btn-arrow">→</span></button>
+  </div>`;
+
+  return `<div class="screen-grid">
+    <aside>${mayaPanel(mayaExprs[step]||'warm', mayaTexts[step]||'')}</aside>
+    <main>${mainContent}</main>
+  </div>`;
+}
+
+function decisionBlock(label, opts, fn) {
+  return `<div class="decision-block"><div class="decision-label">${label}</div><div class="decision-options">
+    ${opts.map((o,i)=>`<button class="decision-option" onclick="${fn}('${o.id}')">
+      <span class="decision-letter">${['A','B'][i]}</span>
+      <span class="decision-text">${o.text}</span>
+    </button>`).join('')}
+  </div></div>`;
+}
+
+function s3Go(n) { state.s3_step = n; render(); }
+function s3Pick1(id) { state.s3_c1 = id; state.s3_step = 2; render(); }
+function s3Pick2(id) { state.s3_c2 = id; state.s3_step = 4; render(); }
+
+// ─── Screen 4: Knowledge Check ───────────────────────────────
+const QUESTIONS = [
+  {id:'q1', kind:'Multiple choice', stem:'Which response is the strongest example of the teach-back method?',
+   opts:[
+    {id:'a', text:'"Do you have any questions for me?"', correct:false, rat:'A reasonable invitation — but it doesn\'t reveal what the patient understood. Many patients say "no questions" even when they\'re confused.'},
+    {id:'b', text:'"Just to make sure I explained that well — can you tell me in your own words what we just talked about?"', correct:true, rat:'Yes. Notice the framing: you, not the patient, are responsible for the explanation. That phrasing protects the patient from feeling tested.'},
+    {id:'c', text:'"Does that all make sense?"', correct:false, rat:'A yes/no question. Almost every patient says yes — not because they understood, but because they don\'t want to seem uninformed.'},
+    {id:'d', text:'"I\'ll send you home with a pamphlet that covers all of this."', correct:false, rat:'Print materials are useful as a supplement, but they don\'t confirm understanding in the room with you. Teach-back happens face to face.'},
+  ]},
+  {id:'q2', kind:'Scenario', stem:'A patient pauses, looks down, and says quietly, "I just feel like I can\'t keep up with all of this." What\'s your best next response?',
+   opts:[
+    {id:'a', text:'"Don\'t worry, we\'ll get through this together."', correct:false, rat:'"Don\'t worry" is a polite way to say "stop telling me how you feel." It skips past the feeling she just shared.'},
+    {id:'b', text:'"That\'s a really common reaction. What feels most overwhelming right now?"', correct:true, rat:'You named the feeling, normalized it, and opened a question that lets her tell you exactly where to focus. Acknowledgment first, then information.'},
+    {id:'c', text:'"Let me walk you through the next steps so it feels more manageable."', correct:false, rat:'Jumping straight to action skips the emotional acknowledgment she signaled she needed. The information won\'t land while she\'s still flooded.'},
+    {id:'d', text:'"Here\'s a brochure that breaks all of this down."', correct:false, rat:'Defers the conversation onto paper. She told you she\'s overwhelmed; more text won\'t fix that.'},
+  ]},
+];
+
+function renderS4() {
+  const {s4_answers:ans, s4_done:done} = state;
+  const bothAnswered = QUESTIONS.every(q => ans[q.id]);
+  const score = QUESTIONS.filter(q => {
+    const a = ans[q.id];
+    return a && q.opts.find(o=>o.id===a)?.correct;
+  }).length;
+
+  const mayaExpr = done ? 'bright' : 'warm';
+  const mayaText = done
+    ? `<p>That's a wrap.</p><p>Whatever your score, the goal isn't a perfect record. It's noticing your own patterns and choosing, on purpose, the words your patient needs to hear.</p><p>The conversations you have with patients like Robert and Elena will shape how they live with this diagnosis. Thank you for the care you bring to this work.</p><p class="maya-sign">— Dr. Maya</p>`
+    : (bothAnswered
+        ? '<p>You\'ve answered both. Take a moment with the rationale, then close out below.</p>'
+        : '<p>Two questions. No time pressure — this isn\'t about getting them right on the first try. It\'s about noticing which option you reach for.</p>');
+
+  const qs = QUESTIONS.map((q,qi) => {
+    const userAns = ans[q.id];
+    const userOpt = userAns ? q.opts.find(o=>o.id===userAns) : null;
+    const opts = q.opts.map(o => {
+      let cls = 'quiz-option';
+      if (userAns) {
+        if (o.correct) cls += ' correct';
+        else if (o.id === userAns) cls += ' incorrect';
+        else cls += ' dim';
+      }
+      return `<button class="${cls}" ${userAns?'disabled':''} onclick="s4Pick('${q.id}','${o.id}')">
+        <span class="quiz-letter">${o.id.toUpperCase()}</span>
+        <span class="quiz-text">${o.text}</span>
+      </button>`;
+    }).join('');
+    const rationale = userOpt ? `<div class="quiz-rationale ${userOpt.correct?'good':'no'}">
+      <div class="quiz-rationale-head">${userOpt.correct?'Correct':'Worth a second look'}</div>
+      <p>${userOpt.rat}</p>
+      ${!userOpt.correct ? `<p class="quiz-best"><strong>Best answer:</strong> <em>${q.opts.find(o=>o.correct).text}</em></p>` : ''}
+    </div>` : '';
+    return `<div class="quiz-q">
+      <div class="quiz-q-num">Question ${qi+1} of 2 <span class="quiz-q-kind">${q.kind}</span></div>
+      <h2 class="quiz-stem">${q.stem}</h2>
+      <div class="quiz-options">${opts}</div>
+      ${rationale}
+    </div>`;
+  }).join('');
+
+  let scoreCard = '';
+  if (done) {
+    const msg = score===2 ? 'Both correct. You\'ve internalized the moves — now bring them into your next CKD conversation this week.'
+      : score===1 ? 'One out of two. Look back at the rationale; pick one principle to deliberately use this week.'
+      : 'Re-read the rationale carefully. These are habits, not facts — they\'ll take a few real conversations to settle in.';
+    scoreCard = `<div class="score-card">
+      <div class="score-bar-track"><div class="score-bar-fill" style="width:${(score/2)*100}%"></div></div>
+      <div class="score-row">
+        <div><div class="score-label">Your score</div><div class="score-num">${score} <span>/ 2</span></div></div>
+        <div class="score-msg">${msg}</div>
+      </div>
+      <button class="btn-ghost" onclick="restart()">↺ Restart course</button>
+    </div>`;
+  }
+
+  const footer = bothAnswered && !done
+    ? `<div class="screen-footer"><button class="btn-primary big" onclick="s4Finish()">See my results <span class="btn-arrow">→</span></button></div>` : '';
+
+  return `<div class="screen-grid">
+    <aside>${mayaPanel(mayaExpr, mayaText)}</aside>
+    <main>
+      <div class="kicker">Section 04 — Knowledge Check</div>
+      <h1 class="screen-title">Two quick checks before you go.</h1>
+      ${qs}
+      ${scoreCard}
+      ${footer}
+    </main>
+  </div>`;
+}
+
+function s4Pick(qid, oid) { if (!state.s4_answers[qid]) { state.s4_answers[qid] = oid; render(); } }
+function s4Finish() { state.s4_done = true; render(); }
+function restart() {
+  Object.assign(state, {idx:0,furthest:0,s1_picked:null,s2_opened:new Set(),s3_step:0,s3_c1:null,s3_c2:null,s4_answers:{},s4_done:false});
+  render();
+}
+
+// ─── Main render ─────────────────────────────────────────────
+function render() {
+  updateTopBar();
+  const el = document.getElementById('screen-content');
+  const screens = [renderTitle, renderS1, renderS2, renderS3, renderS4];
+  el.innerHTML = screens[state.idx]();
+}
+
+render();
+</script>
+</body>
+</html>
